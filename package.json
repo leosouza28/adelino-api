@@ -1,0 +1,52 @@
+{
+  "name": "estreladalva-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel lib --extensions \".ts,.tsx\" --out-dir dist ; node copy-files.js",
+    "dev": "cross-env DEV=1 TZ=utc ts-node-dev --respawn --files lib/index.ts",
+    "type-check": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/nodemailer": "^6.4.17",
+    "@types/qrcode": "^1.5.5",
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.1",
+    "firebase-admin": "^13.2.0",
+    "handlebars": "^4.7.8",
+    "jimp": "^1.6.0",
+    "jwt-simple": "^0.5.6",
+    "mongoose": "^8.13.1",
+    "nodemailer": "^7.0.3",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.27.0",
+    "@types/axios": "^0.14.4",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/express-fileupload": "^1.5.1",
+    "@types/jwt-simple": "^0.5.36",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.14",
+    "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0",
+    "glob": "^11.0.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                  // Alvo de saída do JavaScript
+    "module": "CommonJS",               // Sistema de módulos
+    "resolveJsonModule": true,
+    "moduleResolution": "node",               // Sistema de módulos
+    "strict": true,                   // Ativa verificações rigorosas
+    "esModuleInterop": true,          // Permite interoperabilidade com módulos ES6
+    "skipLibCheck": true,             // Ignora verificação de tipos em arquivos de biblioteca
+    "outDir": "./dist"
+  },
+  "include": ["lib"],                 // Arquivos a serem incluídos
+  "exclude": ["node_modules", "dist"] // Arquivos a serem excluídos
+}
