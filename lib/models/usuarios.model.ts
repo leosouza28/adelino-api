@@ -100,6 +100,12 @@ const ModelSchema = new mongoose.Schema({
         estado: String
     },
 
+    tokens: [String],
+
+    ultimo_acesso: String,
+    ultimo_ip: String,
+    ultimo_user_agent: String,
+
     criado_por: {
         data_hora: Date,
         usuario: {

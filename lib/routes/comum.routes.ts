@@ -12,5 +12,7 @@ router.get('/public/cidades', comumController.getCidades);
 router.get('/public/cep', comumController.getConsultaCEP);
 router.get('/public/default-values', comumController.getDefaultValues);
 
+router.get('/v1/admin/dashboard/admin', autenticar, comumController.getDashboardAdmin);
+
 
 export default router;

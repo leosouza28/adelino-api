@@ -8,4 +8,7 @@ const router = Router();
 router.get('/v1/admin/recebimentos', autenticar, recebimentosController.getRecebimentos);
 router.put('/v1/admin/recebimentos', autenticar, recebimentosController.atualizarRecebimento);
 
+router.get('/v1/admin/pix', autenticar, recebimentosController.getPixs);
+router.post('/v1/admin/pix', autenticar, recebimentosController.createPix);
+
 export default router;

@@ -13,7 +13,15 @@ const scopes = {
     "usuarios.leitura": "Ler usuários",
     "usuarios.editar": "Editar usuários",
 
+    "pix.leitura": "Ler pix gerados pelo sistema",
+    "pix.editar": "Gerar pix pelo sistema",
+
     "monitoramento.pix_leitura": "Permite acessar o monitoramento de PIX",
+    
+    "relatorio.pix_recebidos": "Permite acessar o relatório de pix recebidos",
+    
+    "notificacao.pix_recebido": "Habilita notificações de PIX recebidos",
+
 }
 
 function getAllAvailableScopes(): Scope[] {

@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express"
-import { RECEBIMENTO_CLASSIFICACAO, RecebimentosPixModel } from "../models/recebimentos-pix.model"
+import { GATEWAYS_PIX, RECEBIMENTO_CLASSIFICACAO, RecebimentosPixModel } from "../models/recebimentos-pix.model"
 import { errorHandler } from "../util";
 import dayjs from "dayjs";
+import { PixModel } from "../models/pix.model";
+import { SicoobIntegration } from "../integrations/sicoob";
 
 export default {
     atualizarRecebimento: async (req: Request, res: Response, next: NextFunction) => {
@@ -164,7 +166,8 @@ export default {
             let total_caixa_data = await RecebimentosPixModel.aggregate([
                 {
                     $match: {
-                        data_caixa: dayjs(data).toDate()
+                        data_caixa: dayjs(data).toDate(),
+                        classificacao: RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO
                     }
                 },
                 {
@@ -182,6 +185,83 @@ export default {
                 total_caixa_data: total_caixa_data[0]?.total || 0,
                 total_pendentes_processamento_data: await getRecebimentosPendentesStepsByDate(data!)
             });
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getPixs: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let lista = [], total = 0;
+            let perpage = Number(req.query.perpage) || 10;
+            let page = Number(req.query.page) || 1;
+            let skip = (perpage * page) - perpage;
+
+            let filter: any = {
+
+            }
+
+            total = await PixModel.countDocuments(filter);
+            lista = await PixModel.find(filter)
+                .sort({ _id: -1 })
+                .skip(skip)
+                .limit(perpage)
+                .lean();
+
+            res.json({
+                lista,
+                total
+            });
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    createPix: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let payload_pix: any = {
+                calendario: {
+                    expiracao: req.body.expiracao || 3600
+                }
+            }
+            if (!req.body?.valor) {
+                throw new Error("Valor do PIX é obrigatório");
+            }
+            payload_pix.valor = {
+                original: req.body.valor.toFixed(2)
+            }
+            if (!!req.body?.cpf_cliente) {
+                if (!req.body?.cpf_cliente) throw new Error("CPF do cliente é obrigatório");
+                payload_pix.devedor = {
+                    nome: req.body.nome_cliente,
+                    cpf: req.body.cpf_cliente
+                }
+            }
+            if (!!req.body?.cnpj_cliente) {
+                if (!req.body?.cnpj_cliente) throw new Error("CNPJ do cliente é obrigatório");
+                payload_pix.devedor = {
+                    nome: req.body.nome_cliente,
+                    cnpj: req.body.cnpj_cliente
+                }
+            }
+            if (!!req.body?.descricao) {
+                payload_pix.solicitacaoPagador = req.body.descricao;
+            }
+
+
+            let sicoob = new SicoobIntegration();
+            await sicoob.authorize();
+            let data = await sicoob.gerarPix(payload_pix);
+            let novoPix = new PixModel({
+                ...data,
+                expira_em: dayjs().add(payload_pix.calendario.expiracao, 'second').toDate(),
+                gateway: GATEWAYS_PIX.SICOOB
+            });
+            await novoPix.save();
+            console.log(
+                JSON.stringify({
+                    ...novoPix.toObject()
+                }, null, 2)
+            );
+            res.json(novoPix);
         } catch (error) {
             errorHandler(error, res);
         }

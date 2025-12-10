@@ -65,6 +65,16 @@ async function autenticar(req: any, res: Response, next: NextFunction) {
             req.usuario = await UsuariosModel.findOne({ _id: decoded._id }, { senha: 0, createdAt: 0, updatedAt: 0 }).lean();
             if (req.usuario?.status == USUARIO_MODEL_STATUS.BLOQUEADO) throw NAO_AUTORIZADO;
             req.logado = true;
+
+            try {
+                await UsuariosModel.updateOne({ _id: req.usuario._id }, {
+                    $set: {
+                        ultimo_acesso: dayjs().toDate(),
+                        ultimo_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                        ultimo_user_agent: req.headers['user-agent'],
+                    }
+                });
+            } catch (error) { }
         }
         next()
     } catch (error) {

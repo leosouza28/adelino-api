@@ -3,7 +3,7 @@ import cronjobsController from '../controllers/cronjobs.controller';
 
 const router = Router();
 
-router.get('/sync-sicoob', (req, res) => {
+router.get('/cron/sync-sicoob', (req, res) => {
     cronjobsController.syncSicoobPixRecebidos().then()
     res.json(true);
 });

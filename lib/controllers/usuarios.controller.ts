@@ -19,6 +19,34 @@ const USER_ERRORS = {
 }
 
 export default {
+    registerFcmToken: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { token } = req.body;
+            console.log(req.usuario, token);
+            if (!token) throw new Error("Token FCM é obrigatório.");
+            if (req.usuario && !req.usuario._id) throw NAO_AUTORIZADO;
+            let _usuario = await UsuariosModel.findOneAndUpdate(
+                {
+                    // @ts-ignore
+                    _id: req.usuario._id
+
+                },
+                {
+                    $addToSet: {
+                        tokens: token
+                    }
+                },
+                {
+                    new: true,
+                    upsert: true
+                }
+            )
+            logDev("Token FCM registrado para o usuário:", _usuario?.documento);
+            res.json(true);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
     me: async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req?.usuario?._id && !req?.logado) throw NAO_AUTORIZADO;
@@ -282,7 +310,7 @@ export default {
                 if (has_user_doc) throw new Error("Documento já cadastrado!");
                 let has_username = await UsuariosModel.findOne({ username: req.body.username }).lean();
                 if (has_username) throw new Error("Nome de usuário já cadastrado!");
-                
+
                 payload.origem_cadastro = 'ADM';
                 doc = new UsuariosModel(payload).save()
                 doc = (await doc).toJSON()

@@ -21,4 +21,6 @@ router.post('/v1/admin/usuarios/simples', autenticar, usuariosController.addUsua
 // Permissões
 router.get("/v1/admin/usuarios/permissoes", autenticar, usuariosController.getPermissoes);
 
+router.post('/v1/register-fcm-token', autenticar, usuariosController.registerFcmToken);
+
 export default router;

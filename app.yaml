@@ -1,5 +1,5 @@
 service: adelino-api
-runtime: nodejs22
+runtime: nodejs24
 
 automatic_scaling:
   min_instances: 0

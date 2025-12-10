@@ -8,6 +8,7 @@ import fileUpload from "express-fileupload";
 import { storage } from "../integrations/firebase";
 import { USUARIO_NIVEL, UsuariosModel } from "../models/usuarios.model";
 import { isScopeAuthorized } from "../oauth/permissions";
+import { RecebimentosPixModel } from "../models/recebimentos-pix.model";
 
 export default {
     admin: {
@@ -203,5 +204,144 @@ export default {
             errorHandler(error, res)
         }
     },
+    getDashboardAdmin: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let response: any = {};
+            if (isScopeAuthorized('pagina_inicial.dashboard_admin_geral', req.usuario?.scopes || [])) {
+                // Montar dados do dashboard geral do admin
+
+                let di = dayjs(req.query.data_inicial as string).startOf('day').add(3, 'hour').toDate();
+                let df = dayjs(req.query.data_final as string).endOf('day').add(3, 'hour').toDate();
+
+                let total_pixs_periodo = 0,
+                    total_valor_pixs_periodo = 0,
+                    ticket_medio_periodo = 0,
+                    maior_transacao_periodo = 0,
+                    menor_transacao_periodo = 0,
+                    ranking_pagadores = [],
+                    pagamentos_diario = [];
+
+                let totais1 = await RecebimentosPixModel.aggregate([
+                    {
+                        $match: {
+                            horario: {
+                                $gte: di,
+                                $lte: df
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            total_pixs: { $sum: 1 },
+                            total_valor_pixs: { $sum: "$valor" },
+                            ticket_medio: { $avg: "$valor" },
+                            maior_transacao: { $max: "$valor" },
+                            menor_transacao: { $min: "$valor" }
+                        }
+                    }
+                ])
+
+                if (totais1.length > 0) {
+                    total_pixs_periodo = totais1[0].total_pixs;
+                    total_valor_pixs_periodo = totais1[0].total_valor_pixs;
+                    ticket_medio_periodo = totais1[0].ticket_medio;
+                    maior_transacao_periodo = totais1[0].maior_transacao;
+                    menor_transacao_periodo = totais1[0].menor_transacao;
+                }
+
+                // Ranking dos maiores pagadores
+                let ranking = await RecebimentosPixModel.aggregate([
+                    {
+                        $match: {
+                            horario: {
+                                $gte: di,
+                                $lte: df
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            // agrupado pode ser pagador.cpf ou pagador.cnpj
+                            _id: {
+                                $cond: [
+                                    { $ifNull: ["$pagador.cpf", false] },
+                                    "$pagador.cpf",
+                                    "$pagador.cnpj"
+                                ]
+                            },
+                            nomePagador: { $first: "$nomePagador" },
+                            total_valor: { $sum: "$valor" },
+                            total_pixs: { $sum: 1 }
+                        }
+                    },
+                    { $sort: { total_valor: -1 } },
+                    { $limit: 10 }
+                ]);
+
+                ranking_pagadores = ranking.map(r => ({
+                    nomePagador: r.nomePagador,
+                    documento: r._id,
+                    total_valor: r.total_valor,
+                    total_pixs: r.total_pixs
+                }));
+
+                // Ranking diario de pagamentos, tem que levar em consideração a data -3 horas
+                let pagamentos_dia = await RecebimentosPixModel.aggregate([
+                    {
+                        $match: {
+                            horario: {
+                                $gte: di,
+                                $lte: df
+                            }
+                        }
+                    },
+                    {
+                        $addFields: {
+                            horario_ajustado: {
+                                $dateSubtract: {
+                                    startDate: "$horario",
+                                    unit: "hour",
+                                    amount: 3
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: {
+                                $dateToString: { format: "%Y-%m-%d", date: "$horario_ajustado" }
+                            },
+                            total_valor: { $sum: "$valor" },
+                            total_pixs: { $sum: 1 }
+                        }
+                    },
+                    { $sort: { _id: 1 } }
+                ]);
+
+                pagamentos_diario = pagamentos_dia.map(p => ({
+                    data: p._id,
+                    total_valor: p.total_valor,
+                    total_pixs: p.total_pixs
+                }));
+
+                response.dashboard_admin = {
+                    total_pixs_periodo,
+                    total_valor_pixs_periodo,
+                    ticket_medio_periodo,
+                    maior_transacao_periodo,
+                    menor_transacao_periodo,
+                    ranking_pagadores,
+                    pagamentos_diario
+                }
+
+            }
+            res.json(response);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    }
 
 }
+
+

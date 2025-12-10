@@ -1,5 +1,6 @@
-import { initializeApp, cert, getApps, getApp } from "firebase-admin/app";
+import { initializeApp, getApps, getApp } from "firebase-admin/app";
 import { getStorage } from "firebase-admin/storage";
+import { getMessaging } from "firebase-admin/messaging";
 import { logDev } from "../../util";
 import { credential } from "firebase-admin";
 
@@ -23,8 +24,9 @@ const app = !getApps().length ? initializeApp({
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 }) : getApp();
 const storage = getStorage(app).bucket();
+const messaging = getMessaging(app);
 
 logDev("Firebase initialized");
 logDev("Apps", getApps().length);
 
-export { app, storage };
+export { app, messaging, storage };

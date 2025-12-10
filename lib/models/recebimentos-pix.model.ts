@@ -50,6 +50,7 @@ const ModelSchema = new mongoose.Schema({
         },
         data_hora: Date,
     },
+    notificado: Boolean,
 }, {
     timestamps: {
         createdAt: 'createdAt',

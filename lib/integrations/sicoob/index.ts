@@ -4,6 +4,7 @@ import fs from 'fs';
 import dayjs from 'dayjs';
 import { response } from 'express';
 import { logDev } from '../../util';
+import { v4 } from 'uuid';
 export class SicoobIntegration {
 
     client_id: string;
@@ -13,6 +14,7 @@ export class SicoobIntegration {
     bearer_token: string = "";
     authorized: boolean = false;
     scopes = "pix.write payloadlocation.write pix.read webhook.write cob.write lotecobv.write cob.read webhook.read cobv.read cobv.write lotecobv.read payloadlocation.read";
+    chave_pix = '42156259000176';
 
     constructor() {
         const pathCerts = __dirname + '/cert-adelino';
@@ -86,6 +88,85 @@ export class SicoobIntegration {
                 console.log("Erro ao consultar Pix recebidos:", error.response.data);
             }
             // console.error("Erro ao consultar Pix recebidos:", error);
+        }
+    }
+
+    async gerarPix(data: any) {
+        try {
+            let txid = v4().split('-').join('');
+            let response = await axios({
+                method: "PUT",
+                url: `${this.server_url}/pix/api/v2/cob/${txid}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'client_id': this.client_id,
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({ ...data, chave: this.chave_pix })
+            })
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async consultaPix(txid: string) {
+        try {
+            let response = await axios({
+                method: "GET",
+                url: `${this.server_url}/pix/api/v2/cob/${txid}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'client_id': this.client_id,
+                    'authorization': this.bearer_token
+                }
+            })
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async devolverPix(e2eid: String, valor: number) {
+        try {
+            let txid = v4().split('-').join('');
+            let response = await axios({
+                method: "PUT",
+                url: `${this.server_url}/pix/api/v2/pix/${e2eid}/devolucao/${txid}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'client_id': this.client_id,
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    valor: valor.toFixed(2)
+                })
+            })
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async setWebhook(url: string = 'https://adelino-api.lsdevelopers.dev/webhook/sicoob/pix') {
+        try {
+            let response = await axios({
+                method: "PUT",
+                url: `${this.server_url}/pix/api/v2/webhook/${this.chave_pix}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'client_id': this.client_id,
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    webhookUrl: url
+                })
+            })
+            console.log(response.status, response.data);
+        } catch (error) {
+            throw error;
         }
     }
 

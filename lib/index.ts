@@ -11,6 +11,8 @@ import routes from './routes';
 import { logDev } from './util';
 import { SicoobIntegration } from './integrations/sicoob';
 import cronjobsController from './controllers/cronjobs.controller';
+import { messaging } from './integrations/firebase';
+import { UsuariosModel } from './models/usuarios.model';
 
 dayjs.locale('pt-br');
 
@@ -39,8 +41,11 @@ async function start() {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
+
             // startDB();
-            // let resultado = await cronjobsController.syncSicoobPixRecebidos("2025-12-05");
+            // await cronjobsController.syncSicoobPixRecebidos('2025-12-10');
+            
+            
             // console.log(`  > Sucesso! Total de ${resultado.total} registros sincronizados.`);
             // let dias_pra_tras = 36;
             // let data_limite = "2025-12-06"
