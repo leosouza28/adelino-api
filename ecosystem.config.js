@@ -14,7 +14,7 @@ module.exports = {
             script: "dist/webhook-server/webhook-server.js",
             env: {
                 DEV: 0,
-                PORT: 3010,
+                PORT: 3011,
             },
             log_date_format: "DD/MM HH:mm"
         },
