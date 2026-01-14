@@ -44,7 +44,6 @@ export class EfiIntegration {
             this.auth_url = ''
             this.url = 'https://pix.api.efipay.com.br';
             let pfxPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.p12');
-            console.log(pfxPath);
             this.httpsAgent = new https.Agent({
                 pfx: fs.readFileSync(pfxPath),
                 rejectUnauthorized: false
