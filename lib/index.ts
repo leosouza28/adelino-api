@@ -22,6 +22,7 @@ import { INTEGRACOES_BANCOS, IntegracoesModel } from './models/integracoes.model
 import { BradescoIntegration } from './integrations/bradesco';
 import { ItauIntegration } from './integrations/itau';
 import bcrypt from 'bcrypt';
+import { EfiIntegration } from './integrations/efi';
 
 dayjs.locale('pt-br');
 
@@ -122,6 +123,14 @@ async function start() {
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
             
+            // try {
+            //     let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
+            //     let efi = new EfiIntegration();
+            //     let response = await efi.init(integracao!._id.toString());
+            // } catch (error) {
+            //     console.log('@@@', error);
+            // }
+
             
             // await criarEmpresaNova(
             //     'CENTER NORTH',
