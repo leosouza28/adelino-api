@@ -123,13 +123,14 @@ async function start() {
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
             
-            // try {
-            //     let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
-            //     let efi = new EfiIntegration();
-            //     let response = await efi.init(integracao!._id.toString());
-            // } catch (error) {
-            //     console.log('@@@', error);
-            // }
+            try {
+                let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
+                let efi = new EfiIntegration();
+                let response = await efi.init(integracao!._id.toString());
+                await efi.setWebhook();
+            } catch (error) {
+                console.log('@@@', error);
+            }
 
             
             // await criarEmpresaNova(

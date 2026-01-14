@@ -127,4 +127,24 @@ export class EfiIntegration {
             throw error;
         }
     }
+
+    async setWebhook(url: string = 'https://efi.webhook.trackpix.com.br/pix') {
+        try {
+            let response = await axios({
+                method: "PUT",
+                url: `${this.url}/v2/webhook/${this.chave_pix}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    webhookUrl: url
+                })
+            })
+            console.log(response.status, response.data);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
