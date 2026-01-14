@@ -8,8 +8,8 @@ import path from "path";
 
 const app = express();
 
-const pem_cert = "/etc/letsencrypt/live/";
-const key_cert = "/etc/letsencrypt/live/";
+const pem_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/fullchain1.pem";
+const key_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/privkey1.pem";
 
 var options: any = {};
 
