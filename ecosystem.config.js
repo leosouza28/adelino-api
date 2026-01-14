@@ -6,7 +6,8 @@ module.exports = {
             env: {
                 DEV: 0,
                 PORT: 3010,
-                PROD_CERT_PATH: "/certificates/cert.crt"
+                PROD_CERT_PATH: "/certificates/cert.crt",
+                LOG_LEVEL: "ITAU"
             },
             log_date_format: "DD/MM HH:mm"
         },

@@ -13,6 +13,18 @@ const key_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/privkey1.pem";
 
 var options: any = {};
 
+// config process.env.LOG_LEVEL, modificando o console
+const LOG_LEVEL = process.env.LOG_LEVEL || "DEFAULT";
+if (LOG_LEVEL === "ITAU") {
+    const originalLog = console.log;
+    console.log = (...args: any[]) => {
+        if (args.length > 0 && typeof args[0] === "string" && args[0].includes("SUCCESS_BODY:")) {
+            // Filtra logs específicos do Itau
+            originalLog.apply(console, args);
+        }
+    };
+}
+
 if (process.env.DEV !== "1") {
     let path_to_prod_cert: string = '';
     if (process.env.PROD_CERT_PATH !== undefined) {
