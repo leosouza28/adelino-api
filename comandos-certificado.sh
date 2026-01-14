@@ -9,3 +9,9 @@ openssl pkcs12 -in certificado.pfx -clcerts -nokeys -out client.crt
 
 # Extrair a cadeia de certificação (CA) em .crt
 openssl pkcs12 -in certificado.pfx -cacerts -nokeys -chain -out chain-client.crt
+
+# Extrair o key.pem
+openssl pkcs12 -in certificado.pfx -nocerts -nodes -out key.pem
+
+# Extrair certificado.pem
+openssl pkcs12 -in certificado.pfx -clcerts -nokeys -out cert.pem

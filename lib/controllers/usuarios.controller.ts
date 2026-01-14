@@ -8,6 +8,7 @@ import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, Usuar
 import { gerarSessao, NAO_AUTORIZADO, UNAUTH_SCOPE } from "../oauth";
 import { getAllAvailableScopes, isScopeAuthorized } from '../oauth/permissions';
 import { errorHandler, isValidCPF, isValidTelefone, logDev, mascaraCPFouCNPJ, mascaraTelefone } from "../util";
+import { PerfisModel } from '../models/perfis.model';
 
 
 const USER_ERRORS = {
@@ -67,27 +68,30 @@ export default {
     },
     login: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            let { documento, senha, scope } = req.body;
+            if (!req.headers['empresa']) {
+                throw new Error("Empresa não identificada, verifique a requisição.");
+            }
+            let { documento, senha } = req.body;
             if (!documento || !senha) throw new Error('Documento e senha são obrigatórios.')
-            let usuario = await UsuariosModel.findOne({
-                $or: [
-                    {
-                        documento: documento
-                    },
-                    {
-                        username: documento
-                    }
-                ]
-            }).lean();
+
+            let find_usuario = {
+                '$or': [
+                    { documento: documento },
+                    { username: documento }
+                ],
+                'empresas._id': req.headers['empresa']
+            }
+            let usuario = await UsuariosModel.findOne(find_usuario).lean();
             if (!usuario) throw new Error(USER_ERRORS.USER_NOT_FOUND);
-            if (!usuario.niveis.includes(scope)) throw new Error("Usuário não autorizado para este escopo.");
             if (!usuario?.senha) throw new Error(USER_ERRORS.USER_WITHOUT_PASSWORD);
             if (usuario.status != USUARIO_MODEL_STATUS.ATIVO) throw new Error(USER_ERRORS.USER_BLOCKED);
-            // @ts-ignore
+            // // @ts-ignore
             if (process.env.DEV !== '1') if (!bcrypt.compareSync(senha, usuario.senha)) throw new Error(USER_ERRORS.INCORRECT_PASSWORD);
-
+            let _empresa = usuario.empresas?.find(e => e._id == req.headers['empresa']);
+            if (!_empresa) throw new Error("Usuário não pertence a empresa informada.");
+            // @ts-ignore
+            if (!_empresa?.ativo) throw new Error("Usuário não está ativo na empresa informada.");
             let sessao = await gerarSessao(usuario._id);
-
             res.json(sessao);
         } catch (error: any) {
             if (error?.message == USER_ERRORS.USER_NOT_FOUND) {
@@ -98,7 +102,7 @@ export default {
     getUsuario: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let { id, busca_por, tipo_documento, documento } = req.query;
-            let usuario = null;
+            let usuario: any = null;
             if (!!busca_por) {
                 if (busca_por == 'cliente' && !!documento) {
                     usuario = await UsuariosModel.findOne({ documento: documento, niveis: USUARIO_NIVEL.CLIENTE }).lean();
@@ -111,6 +115,7 @@ export default {
             if (!usuario) throw new Error('Usuário não encontrado.');
             if (usuario?.senha) delete usuario.senha;
             if (!usuario?.doc_type) usuario.doc_type = 'cpf';
+            usuario.empresa = usuario.empresas.find((item: any) => item._id == String(req.empresa._id));
             res.json(usuario);
         } catch (error) {
             errorHandler(error, res);
@@ -167,7 +172,8 @@ export default {
                     { nome: { $regex: busca, $options: 'i' } },
                     { email: { $regex: busca, $options: 'i' } }
                 ],
-                username: { $ne: 'admin' }
+                username: { $ne: 'admin' },
+                'empresas._id': String(req.empresa._id)
             }
 
             if (status != 'TODOS') find['status'] = status
@@ -180,6 +186,13 @@ export default {
                 .sort({ createdAt: -1 })
                 .lean();
 
+            lista.forEach((usuario: any) => {
+                try {
+                    usuario.empresa = usuario.empresas.find((item: any) => item._id == String(req.empresa._id));
+                } catch (error) {
+                    usuario.empresa = null
+                }
+            })
             res.json({ lista, total })
         } catch (error) {
             errorHandler(error, res);
@@ -239,21 +252,31 @@ export default {
                 throw UNAUTH_SCOPE
             }
 
+            if (req.body.perfil) {
+                let __perfil = await PerfisModel.findOne(
+                    {
+                        _id: req.body.perfil,
+                        'empresa._id': req.empresa._id
+                    }
+                );
+                if (__perfil?.nome?.toUpperCase().includes("ADM")) {
+                    if (!req.body?.ativo) {
+                        throw new Error("Não é permitido desativar um usuário com perfil de administrador.");
+                    }
+                }
+            }
+
             let payload: any = {
-                niveis: [],
+                niveis: [USUARIO_NIVEL.ADMIN],
                 nome: req.body.nome,
                 username: req.body.username,
                 documento: req.body.documento,
                 email: req.body?.email || null,
                 data_nascimento: null,
-                status: req.body.status,
+                status: USUARIO_MODEL_STATUS.ATIVO,
                 telefones: [],
                 telefone_principal: null,
             }
-            if (req.body?.nivel_cliente) payload.niveis.push(USUARIO_NIVEL.CLIENTE);
-            if (req.body?.nivel_admin) payload.niveis.push(USUARIO_NIVEL.ADMIN);
-            if (req.body?.nivel_vendedor) payload.niveis.push(USUARIO_NIVEL.VENDEDOR);
-            if (req.body?.nivel_supervisor) payload.niveis.push(USUARIO_NIVEL.SUPERVISOR_VENDAS);
             if (!!req.body?.sexo) payload.sexo = req.body.sexo;
             if (req.body?.data_nascimento?.length == '10') payload.data_nascimento = dayjs(req.body.data_nascimento).toDate();
             if (!req.body?._id) payload.senha = bcrypt.hashSync(req.body.senha, 10);
@@ -290,6 +313,10 @@ export default {
                 payload.scopes = []
             }
 
+
+
+
+
             if (!!req.body?._id) {
                 payload.atualizado_por = {
                     data_hora: now,
@@ -297,18 +324,67 @@ export default {
                     usuario: req.usuario
                 }
                 if (!!req.body?.senha) payload.senha = bcrypt.hashSync(req.body.senha, 10);
-                await UsuariosModel.updateOne({ _id: req.body._id }, {
-                    $set: { ...payload }
-                })
+                let __usuario = await UsuariosModel.findOneAndUpdate(
+                    {
+                        _id: req.body._id,
+                        'empresas._id': String(req.empresa._id)
+                    }
+                );
+                if (!__usuario) throw new Error("Usuário não encontrado para atualização.");
+                let has_user_doc = await UsuariosModel.findOne({ documento: req.body.documento, _id: { $ne: req.body._id }, 'empresas._id': String(req.empresa._id) }).lean();
+                if (has_user_doc) throw new Error("Documento já cadastrado!");
+                let has_username = await UsuariosModel.findOne({ username: req.body.username, _id: { $ne: req.body._id }, 'empresas._id': String(req.empresa._id) }).lean();
+                if (has_username) throw new Error("Nome de usuário já cadastrado!");
+
+                let empresas = __usuario.empresas;
+                for (let empresa of empresas) {
+                    if (empresa._id == String(req.empresa._id)) {
+                        if (req.body.perfil) {
+                            empresa.perfil = await PerfisModel.findOne(
+                                {
+                                    _id: req.body.perfil,
+                                    'empresa._id': req.empresa._id
+                                }
+                            )
+                            empresa.ativo = req.body.ativo || false;
+                        } else {
+                            empresa.perfil = null;
+                            empresa.ativo = false;
+                        }
+                    }
+                }
+                payload.empresas = empresas;
+                doc = await UsuariosModel.findOneAndUpdate(
+                    { _id: req.body._id },
+                    { $set: { ...payload } },
+                    { new: true }
+                ).lean();
             } else {
                 payload.criado_por = {
                     data_hora: now,
                     // @ts-ignore
                     usuario: req.usuario
                 }
-                let has_user_doc = await UsuariosModel.findOne({ documento: req.body.documento }).lean();
+                payload.empresas = [
+                    {
+                        _id: req.empresa._id,
+                        nome: req.empresa.nome,
+                        perfil: null,
+                        ativo: false
+                    }
+                ]
+                if (req.body.perfil) {
+                    payload.empresas[0].perfil = await PerfisModel.findOne(
+                        {
+                            _id: req.body.perfil,
+                            'empresa._id': req.empresa._id
+                        }
+                    )
+                    payload.empresas[0].ativo = req.body.ativo || false;
+                }
+                let has_user_doc = await UsuariosModel.findOne({ documento: req.body.documento, 'empresas._id': String(req.empresa._id) }).lean();
                 if (has_user_doc) throw new Error("Documento já cadastrado!");
-                let has_username = await UsuariosModel.findOne({ username: req.body.username }).lean();
+                let has_username = await UsuariosModel.findOne({ username: req.body.username, 'empresas._id': String(req.empresa._id) }).lean();
                 if (has_username) throw new Error("Nome de usuário já cadastrado!");
 
                 payload.origem_cadastro = 'ADM';

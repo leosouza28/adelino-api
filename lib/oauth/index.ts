@@ -5,6 +5,8 @@ import { NextFunction, Request, Response } from 'express';
 import { USUARIO_MODEL_STATUS, UsuariosModel } from '../models/usuarios.model';
 import { IncomingHttpHeaders } from 'http';
 import { getAllAvailableScopes } from './permissions';
+import { PerfisModel } from '../models/perfis.model';
+import { EmpresasModel } from '../models/empresas.model';
 
 
 const NAO_AUTORIZADO = new Error("Não autorizado");
@@ -12,13 +14,14 @@ const UNAUTH_SCOPE = new Error("Escopo não autorizado");
 
 async function gerarSessao(id_usuario: any) {
     try {
-        let usuario = await UsuariosModel.findOne({ _id: id_usuario }, { nome: 1, documento: 1, niveis: 1, scopes: 1 }).lean();
+        let usuario = await UsuariosModel.findOne({ _id: id_usuario }, { nome: 1, documento: 1, niveis: 1, scopes: 1, empresas: 1 }).lean();
         if (!usuario) throw new Error("Usuário não encontrado");
         let payload: any = {
             _id: String(usuario._id),
             nome: usuario.nome,
             documento: usuario.documento,
             niveis: usuario.niveis,
+            empresas: usuario.empresas,
             iat: dayjs().unix(),
             exp: dayjs().add(50, 'year').unix()
         }
@@ -26,10 +29,24 @@ async function gerarSessao(id_usuario: any) {
         payload.access_token = `Bearer ${token}`;
         // @ts-ignore
         payload._id = String(payload._id);
-        payload.scopes = usuario.scopes;
-        if (usuario?.scopes.includes('*')) {
-            let allScopes = getAllAvailableScopes();
-            payload.scopes = allScopes.map((scope) => scope.key);
+        // @ts-ignore
+
+        let ids_perfis = usuario.empresas.map((e: any) => e.perfil._id);
+        let perfis = await PerfisModel.find({ _id: { $in: ids_perfis } }).lean();
+        for (let empresa of usuario.empresas || []) {
+            // @ts-ignore
+            let perfil = perfis.find(p => String(p._id) == String(empresa.perfil._id));
+            if (perfil) {
+                // @ts-ignore
+                empresa.perfil = perfil;
+                if (perfil?.scopes.includes('*')) {
+                    // @ts-ignore
+                    empresa.perfil.scopes = getAllAvailableScopes().map(s => s.key);
+                } else {
+                    // @ts-ignore
+                    empresa.perfil.scopes = perfil?.scopes || [];
+                }
+            }
         }
         return payload;
     } catch (error) {
@@ -43,6 +60,7 @@ async function autenticar(req: any, res: Response, next: NextFunction) {
         req.location_time = undefined;
         req.logado = undefined;
         req.usuario = undefined;
+        req.empresa = undefined;
 
         if (req.headers?.['location']) {
             let [latitude, longitude] = req.headers?.['location']?.split(",");
@@ -65,7 +83,6 @@ async function autenticar(req: any, res: Response, next: NextFunction) {
             req.usuario = await UsuariosModel.findOne({ _id: decoded._id }, { senha: 0, createdAt: 0, updatedAt: 0 }).lean();
             if (req.usuario?.status == USUARIO_MODEL_STATUS.BLOQUEADO) throw NAO_AUTORIZADO;
             req.logado = true;
-
             try {
                 await UsuariosModel.updateOne({ _id: req.usuario._id }, {
                     $set: {
@@ -75,6 +92,23 @@ async function autenticar(req: any, res: Response, next: NextFunction) {
                     }
                 });
             } catch (error) { }
+        }
+        if (req.headers['empresa'] && req.usuario) {
+            let empresa = await EmpresasModel.findOne({ _id: req.headers['empresa'] }).lean();
+            if (empresa) {
+                // Verificar se o usuário tem acesso a essa empresa
+                let possuiAcesso = false;
+                for (let emp of req.usuario.empresas || []) {
+                    if (String(emp._id) == String(empresa._id)) {
+                        possuiAcesso = true;
+                        break;
+                    }
+                }
+                if (!possuiAcesso) throw NAO_AUTORIZADO;
+                req.empresa = req.usuario.empresas.find((e: any) => String(e._id) == String(empresa._id));
+                let { scopes } = await PerfisModel.findOne({ _id: req.empresa.perfil._id }, { scopes: 1 }).lean() || { scopes: [] };
+                req.usuario.scopes = scopes;
+            }
         }
         next()
     } catch (error) {

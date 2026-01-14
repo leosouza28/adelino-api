@@ -9,6 +9,11 @@ import { storage } from "../integrations/firebase";
 import { USUARIO_NIVEL, UsuariosModel } from "../models/usuarios.model";
 import { isScopeAuthorized } from "../oauth/permissions";
 import { RecebimentosPixModel } from "../models/recebimentos-pix.model";
+import { EmpresasModel } from "../models/empresas.model";
+import { PerfisModel } from "../models/perfis.model";
+import { LojasModel } from "../models/lojas.model";
+import { AcessosModel } from "../models/acesso.model";
+import { InteresseModel } from "../models/interesse.model";
 
 export default {
     admin: {
@@ -88,6 +93,55 @@ export default {
             res.json(response);
         } catch (error) {
             errorHandler(error, res)
+        }
+    },
+    submitInteresse: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (req.body.cnpj === '30727693000180') {
+                throw new Error("Porque o meu mesmo? Que isso... Encontrou o easter egg heim :)");
+            }
+            // Verifica se teve algum interesse para o cnpj informado
+            let interesse = await InteresseModel.findOne({ cnpj: req.body.cnpj });
+            if (interesse) {
+                res.json({ message: 'Já estamos com seu formulário, em breve nosso time comercial entrará em contato com você.' });
+            } else {
+                let novoInteresse = new InteresseModel({
+                    nome_empresa: req.body.nome_empresa,
+                    cnpj: req.body.cnpj,
+                    nome_proprietario: req.body.nome_proprietario,
+                    telefone: req.body.telefone,
+                    cidade: req.body.cidade,
+                    cupom_indicacao: req.body.cupom_indicacao,
+                    connection_data: req.connection_data
+                });
+                await novoInteresse.save();
+                res.json({ message: 'Seu interesse foi registrado com sucesso! Em breve nosso time comercial entrará em contato com você.' });
+            }
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    computaAcesso: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            logDev(req.query, req.connection_data);
+            if (req.connection_data?.origin?.includes('localhost')) {
+                logDev("Acesso de desenvolvimento não computado");
+                return res.json({ message: 'Acesso de desenvolvimento não computado' });
+            }
+            let ip = req?.connection_data?.ip || '';
+            if (!ip) {
+                logDev("IP não identificado, acesso não computado");
+                return res.json({ message: 'IP não identificado, acesso não computado' });
+            }
+            let doc = new AcessosModel({
+                body_params: req.body,
+                query_params: req.query, 
+                connection_data: req.connection_data
+            });
+            await doc.save();
+            res.json({ message: 'OK' });
+        } catch (error) {
+            errorHandler(error, res);
         }
     },
     getDefaultValues: async (req: Request, res: Response, next: NextFunction) => {
@@ -204,9 +258,155 @@ export default {
             errorHandler(error, res)
         }
     },
+    verificarCodigoAtivacao: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { codigo_ativacao } = req.body;
+            let empresa = await EmpresasModel.findOne({ codigo_ativacao: codigo_ativacao });
+            if (!empresa) throw new Error('Código de ativação inválido');
+            res.json(empresa);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getLojas: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let lista = [], total = 0;
+            let perpage = Number(req.query.perpage) || 10;
+            let page = Number(req.query.page) || 1;
+            let skip = (perpage * page) - perpage;
+            let filtros: any = {
+                'empresa._id': String(req.empresa._id)
+            };
+            total = await LojasModel.countDocuments(filtros);
+            lista = await LojasModel.find(filtros).sort({ nome: 1 }).skip(skip).limit(perpage);
+            res.json({ lista, total });
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getLojaById: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { id } = req.params;
+            console.log(req.empresa._id, id);
+            let loja = await LojasModel.findOne({ _id: id, 'empresa._id': String(req.empresa._id) });
+            if (!loja) throw new Error('Loja não encontrada');
+            res.json(loja);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    setLoja: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { _id, nome } = req.body;
+            if (nome.trim().length == 0) throw new Error('O nome da loja é obrigatório');
+            if (!!_id) {
+                let loja = await LojasModel.findOneAndUpdate(
+                    { _id: _id, 'empresa._id': String(req.empresa._id) },
+                    {
+                        $set: {
+                            nome,
+                            atualizado_por: {
+                                data_hora: dayjs().toDate(),
+                                usuario: req.usuario
+                            }
+                        }
+                    },
+                    { new: true }
+                );
+                if (!loja) throw new Error('Loja não encontrada');
+                res.json(loja);
+            } else {
+                let novaLoja = new LojasModel({
+                    nome,
+                    empresa: {
+                        _id: String(req.empresa._id),
+                        nome: req.empresa.nome
+                    },
+                    criado_por: {
+                        data_hora: dayjs().toDate(),
+                        usuario: req.usuario
+                    }
+                });
+                await novaLoja.save();
+                res.json(novaLoja);
+            }
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    setPerfil: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { _id, nome, scopes } = req.body;
+            if (scopes.length == 0) throw new Error('O perfil deve possuir ao menos uma permissão');
+            if (nome.trim().length == 0) throw new Error('O nome do perfil é obrigatório');
+            if (nome.trim().includes('ADM')) throw new Error('Nome do Perfil inválido');
+            if (!!_id) {
+                let perfil = await PerfisModel.findOneAndUpdate(
+                    { _id: _id, 'empresa._id': String(req.empresa._id) },
+                    {
+                        $set: {
+                            nome,
+                            scopes,
+                            atualizado_por: {
+                                data_hora: dayjs().toDate(),
+                                usuario: req.usuario
+                            }
+                        }
+                    },
+                    { new: true }
+                );
+                if (!perfil) throw new Error('Perfil não encontrado');
+                res.json(perfil);
+            } else {
+                let novoPerfil = new PerfisModel({
+                    nome,
+                    scopes,
+                    empresa: {
+                        _id: String(req.empresa._id),
+                        nome: req.empresa.nome
+                    },
+                    criado_por: {
+                        data_hora: dayjs().toDate(),
+                        usuario: req.usuario
+                    }
+                });
+                await novoPerfil.save();
+                res.json(novoPerfil);
+            }
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getPerfilById: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { id } = req.params;
+            let perfil = await PerfisModel.findOne({ _id: id, 'empresa._id': String(req.empresa._id) });
+            if (!perfil) throw new Error('Perfil não encontrado');
+            res.json(perfil);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getPerfis: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let lista = [], total = 0;
+            let perpage = Number(req.query.perpage) || 10;
+            let page = Number(req.query.page) || 1;
+            let skip = (perpage * page) - perpage;
+            let filtros: any = {
+                'empresa._id': String(req.empresa._id)
+            };
+            total = await PerfisModel.countDocuments(filtros);
+            lista = await PerfisModel.find(filtros).sort({ nome: 1 }).skip(skip).limit(perpage);
+            res.json({ lista, total });
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
     getDashboardAdmin: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let response: any = {};
+
             if (isScopeAuthorized('pagina_inicial.dashboard_admin_geral', req.usuario?.scopes || [])) {
                 // Montar dados do dashboard geral do admin
 
@@ -227,7 +427,8 @@ export default {
                             horario: {
                                 $gte: di,
                                 $lte: df
-                            }
+                            },
+                            'empresa._id': String(req.empresa._id)
                         }
                     },
                     {
@@ -257,7 +458,8 @@ export default {
                             horario: {
                                 $gte: di,
                                 $lte: df
-                            }
+                            },
+                            'empresa._id': String(req.empresa._id)
                         }
                     },
                     {
@@ -280,8 +482,8 @@ export default {
                 ]);
 
                 ranking_pagadores = ranking.map(r => ({
-                    nomePagador: r.nomePagador,
-                    documento: r._id,
+                    nomePagador: r?.nomePagador || "Nome não capturado",
+                    documento: r?._id || "Documento não capturado",
                     total_valor: r.total_valor,
                     total_pixs: r.total_pixs
                 }));
@@ -293,7 +495,8 @@ export default {
                             horario: {
                                 $gte: di,
                                 $lte: df
-                            }
+                            },
+                            'empresa._id': String(req.empresa._id)
                         }
                     },
                     {

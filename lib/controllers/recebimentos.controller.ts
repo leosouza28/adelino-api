@@ -4,11 +4,11 @@ import { errorHandler } from "../util";
 import dayjs from "dayjs";
 import { PixModel } from "../models/pix.model";
 import { SicoobIntegration } from "../integrations/sicoob";
+import { LojasModel } from "../models/lojas.model";
 
 export default {
     atualizarRecebimento: async (req: Request, res: Response, next: NextFunction) => {
         try {
-
             let $unset: any = {};
             let $set: any = {};
             if (!!req.body?.data_caixa) {
@@ -66,9 +66,17 @@ export default {
                     data_hora: dayjs().toDate()
                 }
             }
+            if (req.body.loja) {
+                let loja = await LojasModel.findOne({ _id: req.body.loja });
+                if (!loja) throw new Error("Loja não encontrada");
+                $set['loja'] = loja;
+            } else {
+                $unset['loja'] = "";
+            }
             await RecebimentosPixModel.updateOne(
                 {
-                    _id: req.body._id
+                    _id: req.body._id,
+                    'empresa._id': String(req.empresa._id)
                 },
                 {
                     $set,
@@ -90,9 +98,8 @@ export default {
             let data = req.query.data ? String(req.query.data) : null;
             let busca = req.query.busca ? String(req.query.busca).toLowerCase() : null;
 
-
             let filter: any = {
-
+                'empresa._id': String(req.empresa._id)
             }
             if (req.query.tipo_data === 'caixa') {
                 filter.data_caixa = {
@@ -160,6 +167,11 @@ export default {
                         done: true
                     });
                 }
+                let is_loja_informada = item?.loja?._id;
+                steps.push({
+                    label: "Loja",
+                    done: is_loja_informada ? true : false
+                });
                 item.steps = steps;
                 return item;
             })
@@ -167,7 +179,8 @@ export default {
                 {
                     $match: {
                         data_caixa: dayjs(data).toDate(),
-                        classificacao: RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO
+                        classificacao: RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO,
+                        'empresa._id': String(req.empresa._id)
                     }
                 },
                 {
@@ -178,12 +191,42 @@ export default {
                 }
             ]);
 
+            let lojas = await LojasModel.find({ 'empresa._id': String(req.empresa._id) }).sort({ nome: 1 }).lean();
 
+            let _caixas_lojas = await RecebimentosPixModel.aggregate([
+                {
+                    $match: {
+                        'data_caixa': dayjs(data).toDate(),
+                        'classificacao': RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO,
+                        'loja._id': { $exists: true },
+                        'empresa._id': String(req.empresa._id)
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$loja._id",
+                        loja_nome: { $first: "$loja.nome" },
+                        total: { $sum: "$valor" }
+                    }
+                }
+            ]);
+
+            let total_caixa_por_loja: any[] = [];
+            for (let loja of lojas) {
+                let caixa_loja = _caixas_lojas.find(c => String(c._id) === String(loja._id));
+                total_caixa_por_loja.push({
+                    loja_id: loja._id,
+                    loja_nome: loja.nome,
+                    total: caixa_loja ? caixa_loja.total : 0
+                });
+            }
+            
             res.json({
                 lista,
                 total,
                 total_caixa_data: total_caixa_data[0]?.total || 0,
-                total_pendentes_processamento_data: await getRecebimentosPendentesStepsByDate(data!)
+                total_caixa_por_loja: total_caixa_por_loja,
+                total_pendentes_processamento_data: await getRecebimentosPendentesStepsByDate(data!, String(req.empresa._id))
             });
         } catch (error) {
             errorHandler(error, res);
@@ -197,7 +240,7 @@ export default {
             let skip = (perpage * page) - perpage;
 
             let filter: any = {
-
+                'empresa._id': String(req.empresa._id)
             }
 
             total = await PixModel.countDocuments(filter);
@@ -245,23 +288,22 @@ export default {
             if (!!req.body?.descricao) {
                 payload_pix.solicitacaoPagador = req.body.descricao;
             }
-
-
-            let sicoob = new SicoobIntegration();
-            await sicoob.authorize();
-            let data = await sicoob.gerarPix(payload_pix);
-            let novoPix = new PixModel({
-                ...data,
-                expira_em: dayjs().add(payload_pix.calendario.expiracao, 'second').toDate(),
-                gateway: GATEWAYS_PIX.SICOOB
-            });
-            await novoPix.save();
-            console.log(
-                JSON.stringify({
-                    ...novoPix.toObject()
-                }, null, 2)
-            );
-            res.json(novoPix);
+            // let sicoob = new SicoobIntegration();
+            // await sicoob.init();
+            // let data = await sicoob.gerarPix(payload_pix);
+            // let novoPix = new PixModel({
+            //     ...data,
+            //     expira_em: dayjs().add(payload_pix.calendario.expiracao, 'second').toDate(),
+            //     gateway: GATEWAYS_PIX.SICOOB
+            // });
+            // await novoPix.save();
+            // console.log(
+            //     JSON.stringify({
+            //         ...novoPix.toObject()
+            //     }, null, 2)
+            // );
+            // res.json(novoPix);
+            res.json({});
         } catch (error) {
             errorHandler(error, res);
         }
@@ -270,12 +312,13 @@ export default {
 
 
 
-async function getRecebimentosPendentesStepsByDate(data: string) {
+async function getRecebimentosPendentesStepsByDate(data: string, empresa_id?: string) {
     let total = 0;
 
     let response = await RecebimentosPixModel.aggregate([
         {
             $match: {
+                'empresa._id': empresa_id ? empresa_id : { $exists: true },
                 horario: {
                     $gte: dayjs(data).startOf('day').add(3, 'h').toDate(),
                     $lte: dayjs(data).endOf('day').add(3, 'h').toDate()
@@ -289,7 +332,8 @@ async function getRecebimentosPendentesStepsByDate(data: string) {
                             { nota_fiscal_emitida: { $exists: false } }
                         ]
                     },
-                    { nota_baixada_sistema: { $exists: false } }
+                    { nota_baixada_sistema: { $exists: false } },
+                    { loja: { $exists: false } }
                 ]
             }
         },

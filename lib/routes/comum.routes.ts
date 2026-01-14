@@ -11,8 +11,19 @@ router.get('/public/estados', comumController.getEstados);
 router.get('/public/cidades', comumController.getCidades);
 router.get('/public/cep', comumController.getConsultaCEP);
 router.get('/public/default-values', comumController.getDefaultValues);
+router.post('/public/computa-acesso', comumController.computaAcesso);
+router.post('/public/interesse', comumController.submitInteresse);
 
+router.post('/v1/admin/empresas/ativacao', autenticar, comumController.verificarCodigoAtivacao);
 router.get('/v1/admin/dashboard/admin', autenticar, comumController.getDashboardAdmin);
+// Perfis
+router.get('/v1/admin/perfis', autenticar, comumController.getPerfis);
+router.get('/v1/admin/perfis/:id', autenticar, comumController.getPerfilById);
+router.post('/v1/admin/perfis', autenticar, comumController.setPerfil);
+router.get('/v1/admin/lojas', autenticar, comumController.getLojas);
+router.get('/v1/admin/lojas/:id', autenticar, comumController.getLojaById);
+router.post('/v1/admin/lojas', autenticar, comumController.setLoja);
+
 
 
 export default router;

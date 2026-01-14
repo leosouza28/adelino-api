@@ -10,9 +10,18 @@ import path from 'path';
 import routes from './routes';
 import { logDev } from './util';
 import { SicoobIntegration } from './integrations/sicoob';
-import cronjobsController from './controllers/cronjobs.controller';
+import cronjobsController, { ajustaEmpresaPedro } from './controllers/cronjobs.controller';
 import { messaging } from './integrations/firebase';
-import { UsuariosModel } from './models/usuarios.model';
+import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from './models/usuarios.model';
+import { startDB } from './populations';
+import { EmpresasModel } from './models/empresas.model';
+import { LojasModel } from './models/lojas.model';
+import usuariosController from './controllers/usuarios.controller';
+import { PerfisModel } from './models/perfis.model';
+import { INTEGRACOES_BANCOS, IntegracoesModel } from './models/integracoes.model';
+import { BradescoIntegration } from './integrations/bradesco';
+import { ItauIntegration } from './integrations/itau';
+import bcrypt from 'bcrypt';
 
 dayjs.locale('pt-br');
 
@@ -35,17 +44,133 @@ server.use(detectFetchAndBody);
 server.use(resolveHeaders);
 server.use(routes);
 
+async function criarEmpresaNova(
+    nome: string, cnpj: string,
+    codigo_ativacao: string,
+    nome_proprietario: string,
+    cpf_proprietario: string,
+    username_proprietario: string,
+    telefone_proprietario: string,
+    senha_proprietario: string = 'xpto1234'
+) {
+    try {
+        let empresa = await EmpresasModel.findOne({ documento: cnpj });
+        if (empresa) throw new Error("Empresa já existe");
+        let codigo_existe = await EmpresasModel.findOne({ codigo_ativacao: codigo_ativacao });
+        if (codigo_existe) throw new Error("Código de ativação já está em uso");
+        let _empresa = new EmpresasModel({
+            nome: nome,
+            nome_fantasia: nome,
+            razao_social: nome,
+            documento: cnpj,
+            codigo_ativacao: codigo_ativacao,
+        });
+        await _empresa.save();
+        let perfil_admin = new PerfisModel({
+            empresa: _empresa,
+            nome: "Administrador",
+            scopes: ['*'],
+        });
+        await perfil_admin.save();
+        let usuario_admin = new UsuariosModel({
+            empresas: [
+                {
+                    ..._empresa.toJSON(),
+                    perfil: perfil_admin,
+                    ativo: true
+                }
+            ],
+            documento: cpf_proprietario,
+            username: username_proprietario,
+            nome: nome_proprietario,
+            doc_type: 'cpf',
+            senha: bcrypt.hashSync(senha_proprietario, 10),
+            status: USUARIO_MODEL_STATUS.ATIVO,
+            niveis: [USUARIO_NIVEL.ADMIN],
+            origem_cadastro: "SISTEMA",
+            telefone_principal: {
+                tipo: USUARIO_MODEL_TIPO_TELEFONE.CEL_WHATSAPP,
+                valor: telefone_proprietario,
+            },
+            telefones: [
+                {
+                    tipo: USUARIO_MODEL_TIPO_TELEFONE.CEL_WHATSAPP,
+                    valor: telefone_proprietario,
+                    principal: true
+                }
+            ],
+            criado_por: {
+                data_hora: dayjs().toDate(),
+                usuario: {
+                    _id: "SISTEMA",
+                    nome: "SISTEMA",
+                    username: "SISTEMA"
+                }
+            }
+        });
+        await usuario_admin.save();
+        logDev("Empresa criada com sucesso:", _empresa.nome);
+    } catch (error) {
+        console.log("Falha ao criar a empresa", error)
+    }
+}
+
 
 async function start() {
     try {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
-
+            
+            
+            // await criarEmpresaNova(
+            //     'CENTER NORTH',
+            //     '83654848000161',
+            //     '001002',
+            //     'Matheus Costa',
+            //     '02581748206',
+            //     'matheus',
+            //     '03623671240',
+            //     '1234'
+            // )
+            
             // startDB();
             // await cronjobsController.syncSicoobPixRecebidos('2025-12-10');
-            
-            
+            // await ajustaEmpresaPedro();
+            // await IntegracoesModel.findOneAndUpdate(
+            //     {
+            //         nome: 'Itaú - Empresa Teste',
+            //         banco: INTEGRACOES_BANCOS.ITAU,
+            //     },
+            //     {
+            //         $set: {
+            //             client_id: '988b3b25-c30b-4ccb-83b9-afb00eb7a5cd',
+            //             client_secret: '8edf638b-923c-4d9a-92d7-530e0e512d15',
+            //             path_certificado: 'magolocacoes',
+            //              chave_pix: '5298ebe9-c633-4fcf-8ead-f0fee7d65af2'
+            //         }
+            //     },
+            //     { new: true, upsert: true }
+            // )
+            // console.log("Inicializadoo")
+
+            // try {
+            //     let bradescoIntegracao = new BradescoIntegration();
+            //     await bradescoIntegracao.init('6965597e35c325bb9cf34594');
+            //     let response = await bradescoIntegracao.getRecebimentos('2026-01-01', '2026-01-10');
+            //     console.log(response);
+            // } catch (error) {
+            //     console.log('@@@', error);
+            // }
+
+            // try {
+            //     let itauIntegracao = new ItauIntegration();
+            //     let resp = await itauIntegracao.init('69664acd35c325bb9cf34610');
+            //     let response = await itauIntegracao.getRecebimentos('2026-01-01', '2026-01-10');
+            // } catch (error) {
+            //     console.log('@@@', error);
+            // }
+
             // console.log(`  > Sucesso! Total de ${resultado.total} registros sincronizados.`);
             // let dias_pra_tras = 36;
             // let data_limite = "2025-12-06"
@@ -123,6 +248,7 @@ function resolveHeaders(req: express.Request, res: express.Response, next: expre
     if (process.env.DEV === "1") {
         console.log('Connection Data:', connection_data);
     }
+
     req.connection_data = connection_data;
     next();
 }

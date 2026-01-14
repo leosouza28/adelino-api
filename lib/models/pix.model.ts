@@ -46,6 +46,10 @@ const ModelSchema = new mongoose.Schema({
     brcode: String,
     gateway: String,
     expira_em: Date,
+    empresa: {
+        _id: String,
+        nome: String
+    }
 }, {
     timestamps: {
         createdAt: 'createdAt',
@@ -54,6 +58,16 @@ const ModelSchema = new mongoose.Schema({
 });
 
 export const PixModel = mongoose.model("pixes", ModelSchema);
+
+export const PIX_GATEWAYS = {
+    SICOOB: 'SICOOB',
+    // BANCO_DO_BRASIL: 'BB',
+    // ITAU: 'ITAU',
+    // INTER: 'INTER',
+    // BRADESCO: 'BRADESCO',
+    // SANTANDER: 'SANTANDER',
+    // PICPAY: 'PICPAY'
+}
 
 export const PIX_STATUS = {
     ATIVO: 'ATIVO',

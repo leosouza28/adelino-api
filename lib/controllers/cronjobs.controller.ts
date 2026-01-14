@@ -1,101 +1,98 @@
 import { Request, Response } from "express";
-import { errorHandler } from "../util"
+import { errorHandler, logDev } from "../util"
 import { SicoobIntegration } from "../integrations/sicoob";
 import dayjs from "dayjs";
 import { GATEWAYS_PIX, RecebimentosPixModel } from "../models/recebimentos-pix.model";
 import { PIX_STATUS, PixModel } from "../models/pix.model";
 import { messaging } from "../integrations/firebase";
 import { UsuariosModel } from "../models/usuarios.model";
+import { EmpresasModel } from "../models/empresas.model";
+import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
+import { ItauIntegration } from "../integrations/itau";
+import { BradescoIntegration } from "../integrations/bradesco";
 
-export default {
-    syncSicoobPixRecebidos: async (data = "") => {
-        try {
-            let hoje = dayjs().add(-3, 'h').format("YYYY-MM-DD");
-            if (data) hoje = dayjs(data as string).format("YYYY-MM-DD");
-            let sicoob = new SicoobIntegration();
-            await sicoob.authorize();
-            let lista: any[] = await sicoob.consultaPixRecebidos(hoje, hoje) || [];
-
-            console.log(lista.length, "PIXs recebidos do Sicoob para o dia", hoje);
-
-            let updates: any[] = [];
-            let baixas_pixs: any = [];
-            try {
-                lista.forEach(element => {
-                    // Verifica o valor da devolucao, se for igual ao valor do pix, remover do sistema
-                    let valor_pix = Number(element.valor);
-                    let valor_devolucao = 0;
-                    if (element.devolucoes && element.devolucoes.length > 0) {
-                        valor_devolucao = element.devolucoes.reduce((acc: number, curr: any) => acc + Number(curr.valor), 0);
-                    }
-                    if (element?.txid?.length == 32) {
-                        baixas_pixs.push(element.txid);
-                    }
-                    if (valor_pix === valor_devolucao) {
-                        console.log(`Pix ${element.endToEndId} totalmente devolvido. Removendo do sistema.`);
-                        updates.push({
-                            deleteOne: {
-                                filter: {
-                                    endToEndId: element.endToEndId
-                                }
-                            }
-                        });
-                        return; // Pula para o próximo elemento
-                    }
-                    element.horario = dayjs(element.horario).toDate();
-                    updates.push({
-                        updateOne: {
-                            filter: {
-                                endToEndId: element.endToEndId
-                            },
-                            update: {
-                                $set: {
-                                    ...element,
-                                    gateway: GATEWAYS_PIX.SICOOB,
-                                    last_sync: dayjs().toDate()
-                                }
-                            },
-                            upsert: true
-                        }
-                    })
-                });
-            } catch (error) {
-                console.log(error);
-            }
-            await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
-            await Promise.all(
-                baixas_pixs.map(async (txid: string) => {
-                    await baixaPixSicoob(txid, sicoob);
-                })
-            );
-            await notificarPixRecebidos();
-
-            return {
-                success: true,
-                data: lista,
-                total: lista.length
-            }
-        } catch (error) {
-            throw error;
-        }
+export async function ajustaEmpresaPedro() {
+    let empresa_pedro = await EmpresasModel.findOne({ _id: "6963abe535c325bb9cf34355" }).lean();
+    if (!empresa_pedro) {
+        return;
     }
+    console.log("Iniciando ajuste para a empresa Pedro...");
+    await RecebimentosPixModel.updateMany(
+        {
+            'empresa._id': { $exists: false },
+        },
+        {
+            $set: {
+                empresa: empresa_pedro
+            }
+        }
+    )
+    await PixModel.updateMany(
+        {
+            'empresa._id': { $exists: false },
+        },
+        {
+            $set: {
+                empresa: empresa_pedro
+            }
+        }
+    )
+    console.log("Ajuste concluído para a empresa Pedro.");
 }
 
-export async function notificarPixRecebidos() {
+
+export default {
+    syncIntegracao: async (req: Request, res: Response) => {
+        try {
+            let { sku, data } = req.params;
+            let dataParam = data || dayjs().add(-3, 'h').format("YYYY-MM-DD");
+            let hoje = dayjs(dataParam as string).format("YYYY-MM-DD");
+            let integracao = await IntegracoesModel.findOne({ sku }).lean();
+            if (!integracao) {
+                throw new Error("Integração não encontrada para o SKU informado.");
+            }
+            if (integracao.banco == INTEGRACOES_BANCOS.ITAU) {
+                let itau = new ItauIntegration();
+                await itau.init(integracao._id.toString());
+                let lista: any[] = await itau.getRecebimentos(hoje, hoje) || [];
+                await processarListaPixs(lista, integracao);
+            }
+            if (integracao.banco == INTEGRACOES_BANCOS.SICOOB) {
+                let sicoob = new SicoobIntegration();
+                await sicoob.init(integracao._id.toString());
+                let lista: any[] = await sicoob.getRecebimentos(hoje, hoje) || [];
+                await processarListaPixs(lista, integracao);
+            }
+            if (integracao.banco == INTEGRACOES_BANCOS.BRADESCO) {
+                let bradesco = new BradescoIntegration();
+                await bradesco.init(integracao._id.toString());
+                let lista: any[] = await bradesco.getRecebimentos(hoje, hoje) || [];
+                await processarListaPixs(lista, integracao);
+            }
+            res.json(true);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+}
+
+export async function notificarPixRecebidos(empresa_id: string) {
     try {
         let _pixes_hoje_nao_notificados = await RecebimentosPixModel.find({
-            createdAt: {
+            'createdAt': {
                 $gte: dayjs().startOf('day').toDate(),
             },
-            notificado: {
+            'notificado': {
                 $exists: false
-            }
+            },
+            'empresa._id': empresa_id
         });
         if (_pixes_hoje_nao_notificados.length == 0) return;
 
-        let users = await UsuariosModel.find({}).lean();
+        let users = await UsuariosModel.find({ 'empresas._id': empresa_id }).lean();
         let messages: any[] = [];
         for (let user of users) {
+            // @ts-ignore
             if (user?.scopes?.includes('notificacao.pix_recebido') || user?.scopes?.includes('*')) {
                 let payload = {
                     notification: {
@@ -126,7 +123,8 @@ export async function notificarPixRecebidos() {
                     },
                     notificado: {
                         $exists: false
-                    }
+                    },
+                    'empresa._id': empresa_id
                 },
                 {
                     $set: {
@@ -137,13 +135,85 @@ export async function notificarPixRecebidos() {
             console.log("Notificações enviadas com sucesso!");
         }
 
-
-
-
     } catch (error) {
         console.log(error);
     }
 }
+async function processarListaPixs(lista: any[], integracao: any) {
+    let updates: any[] = [];
+    let baixas_pixs: any[] = [];
+    try {
+        lista.forEach(element => {
+            // Verifica o valor da devolucao, se for igual ao valor do pix, remover do sistema
+            let valor_pix = Number(element.valor);
+            let valor_devolucao = 0;
+            if (element.devolucoes && element.devolucoes.length > 0) {
+                valor_devolucao = element.devolucoes.reduce((acc: number, curr: any) => acc + Number(curr.valor), 0);
+            }
+            if (element?.txid?.length == 32) {
+                baixas_pixs.push(element.txid);
+            }
+            if (valor_pix === valor_devolucao) {
+                console.log(`Pix ${element.endToEndId} totalmente devolvido. Removendo do sistema.`);
+                updates.push({
+                    deleteOne: {
+                        filter: {
+                            endToEndId: element.endToEndId
+                        }
+                    }
+                });
+                return; // Pula para o próximo elemento
+            }
+            if (integracao?.banco === INTEGRACOES_BANCOS.ITAU) {
+                element.horario = dayjs(element.horario).add(3, 'h').toDate();
+            } else {
+                element.horario = dayjs(element.horario).toDate();
+            }
+            logDev(element);
+            updates.push({
+                updateOne: {
+                    filter: {
+                        endToEndId: element.endToEndId
+                    },
+                    update: {
+                        $set: {
+                            ...element,
+                            chave_pix_utilizada: integracao.chave_pix,
+                            empresa: integracao.empresa,
+                            gateway: integracao.banco,
+                            last_sync: dayjs().toDate()
+                        }
+                    },
+                    upsert: true
+                }
+            })
+        });
+        logDev("Processando", updates.length, "registros de PIX recebidos...");
+        await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
+        logDev("Registros processados com sucesso.");
+        try {
+            if (baixas_pixs.length > 0 && integracao.banco === INTEGRACOES_BANCOS.SICOOB) {
+                let sicoob = new SicoobIntegration();
+                await sicoob.init(integracao._id.toString());
+                await Promise.all(
+                    baixas_pixs.map(async (txid: string) => {
+                        await baixaPixSicoob(txid, sicoob);
+                    })
+                );
+            }
+        } catch (error) {
+            console.error(`Error at Baixa PIXs: ${error}`);
+        }
+        try {
+            await notificarPixRecebidos(integracao.empresa._id);
+        } catch (error) {
+            console.error(`Error at Notificar PIXs: ${error}`);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 export async function baixaPixSicoob(txid: string, sicoob: SicoobIntegration) {
     try {

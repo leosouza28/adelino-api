@@ -13,8 +13,21 @@ const ModelSchema = new mongoose.Schema({
     devolucoes: [],
     gateway: String,
     last_sync: Date,
-    
+    chave_pix_utilizada: String,
+
+    empresa: {
+        _id: String,
+        nome: String
+    },
     // Informações manipuláveis
+    loja: {
+        _id: String,
+        nome: String,
+        empresa: {
+            _id: String,
+            nome: String
+        }
+    },
     data_caixa: Date,
     classificacao: String,
     cupom_fiscal_emitido: Boolean,
@@ -62,6 +75,10 @@ export const RecebimentosPixModel = mongoose.model("recebimentos-pixes", ModelSc
 
 export const GATEWAYS_PIX = {
     SICOOB: 'SICOOB',
+    ITAU: 'ITAU',
+    BRADESCO: 'BRADESCO',
+    BB: 'BANCO DO BRASIL',
+    SANTANDER: 'SANTANDER',
 }
 
 export const RECEBIMENTO_CLASSIFICACAO = {

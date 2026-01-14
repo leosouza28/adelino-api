@@ -5,32 +5,77 @@ import dayjs from 'dayjs';
 import { response } from 'express';
 import { logDev } from '../../util';
 import { v4 } from 'uuid';
+import { IntegracoesModel } from '../../models/integracoes.model';
+import path from 'path';
+
 export class SicoobIntegration {
 
-    client_id: string;
-    server_url: string = "https://api.sicoob.com.br";
-    auth_url: string = "https://auth.sicoob.com.br/auth/realms/cooperado/protocol/openid-connect/token";
+    development: boolean = false;
+    client_id: string = "";
+    auth_url: string = "";
+    url: string = "";
     httpsAgent: any;
     bearer_token: string = "";
     authorized: boolean = false;
-    scopes = "pix.write payloadlocation.write pix.read webhook.write cob.write lotecobv.write cob.read webhook.read cobv.read cobv.write lotecobv.read payloadlocation.read";
+    scopes: string = "";
     chave_pix = '42156259000176';
 
     constructor() {
-        const pathCerts = __dirname + '/cert-adelino';
-        this.client_id = "bfb2bb61-ab1c-42ed-ae16-140d079810f9";
-        this.httpsAgent = new https.Agent({
-            rejectUnauthorized: false,
-            cert: fs.readFileSync(pathCerts + '/client.crt'),
-            key: fs.readFileSync(pathCerts + '/client.key'),
-            ca: fs.readFileSync(pathCerts + '/chain-client.crt')
-        })
+        this.development = false;
+        // this.httpsAgent = new https.Agent({
+        //     rejectUnauthorized: false,
+        //     cert: fs.readFileSync(pathCerts + '/client.crt'),
+        //     key: fs.readFileSync(pathCerts + '/client.key'),
+        //     ca: fs.readFileSync(pathCerts + '/chain-client.crt')
+        // })
 
     }
 
-    async authorize() {
-        try {
 
+    async init(integracao_id: string) {
+        try {
+            let integracao = await IntegracoesModel.findById(integracao_id);
+            if (!integracao) throw new Error('Integração não encontrada');
+            this.chave_pix = integracao.chave_pix || '';
+            this.client_id = integracao.client_id!;
+            this.auth_url = 'https://auth.sicoob.com.br/auth/realms/cooperado/protocol/openid-connect/token';
+            this.url = 'https://api.sicoob.com.br';
+            this.scopes = integracao.scopes!;
+            let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.crt');
+            let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.key');
+            this.httpsAgent = new https.Agent({
+                cert: fs.readFileSync(certPath),
+                key: fs.readFileSync(keyPath),
+                rejectUnauthorized: false
+            })
+            let need_auth = true;
+            if (integracao?.bearer_token && integracao?.last_bearer_token_update) {
+                // Dura apenas 5 minutos
+                let tokenAge = (Date.now() - integracao.last_bearer_token_update.getTime()) / 1000;
+                if (tokenAge < 300) {
+                    this.bearer_token = integracao.bearer_token;
+                    this.authorized = true;
+                } else {
+                    need_auth = true;
+                }
+            }
+            if (need_auth) {
+                let bearer_token = await this.authenticate();
+                this.bearer_token = bearer_token;
+                this.authorized = true;
+                await IntegracoesModel.findByIdAndUpdate(integracao_id, {
+                    bearer_token: bearer_token,
+                    last_bearer_token_update: dayjs().toDate()
+                });
+            }
+            return { success: 1, initializated: true }
+        } catch (error: any) {
+            return { success: 0, error: error?.message || "Erro desconhecido" }
+        }
+    }
+
+    async authenticate() {
+        try {
             let form = new URLSearchParams();
             form.append('grant_type', 'client_credentials');
             form.append('client_id', this.client_id);
@@ -52,7 +97,7 @@ export class SicoobIntegration {
         }
     }
 
-    async consultaPixRecebidos(dataInicial: string, dataFinal: string) {
+    async getRecebimentos(dataInicial: string, dataFinal: string) {
         try {
             let query = new URLSearchParams({
                 inicio: dayjs(dataInicial).startOf('day').add(3, 'h').toISOString(),
@@ -70,7 +115,7 @@ export class SicoobIntegration {
                 }).toString();
                 let response = await axios({
                     method: "GET",
-                    url: `${this.server_url}/pix/api/v2/pix?${query}`,
+                    url: `${this.url}/pix/api/v2/pix?${query}`,
                     httpsAgent: this.httpsAgent,
                     headers: {
                         'client_id': this.client_id,
@@ -96,7 +141,7 @@ export class SicoobIntegration {
             let txid = v4().split('-').join('');
             let response = await axios({
                 method: "PUT",
-                url: `${this.server_url}/pix/api/v2/cob/${txid}`,
+                url: `${this.url}/pix/api/v2/cob/${txid}`,
                 httpsAgent: this.httpsAgent,
                 headers: {
                     'client_id': this.client_id,
@@ -115,7 +160,7 @@ export class SicoobIntegration {
         try {
             let response = await axios({
                 method: "GET",
-                url: `${this.server_url}/pix/api/v2/cob/${txid}`,
+                url: `${this.url}/pix/api/v2/cob/${txid}`,
                 httpsAgent: this.httpsAgent,
                 headers: {
                     'client_id': this.client_id,
@@ -132,7 +177,7 @@ export class SicoobIntegration {
             let txid = v4().split('-').join('');
             let response = await axios({
                 method: "PUT",
-                url: `${this.server_url}/pix/api/v2/pix/${e2eid}/devolucao/${txid}`,
+                url: `${this.url}/pix/api/v2/pix/${e2eid}/devolucao/${txid}`,
                 httpsAgent: this.httpsAgent,
                 headers: {
                     'client_id': this.client_id,
@@ -153,7 +198,7 @@ export class SicoobIntegration {
         try {
             let response = await axios({
                 method: "PUT",
-                url: `${this.server_url}/pix/api/v2/webhook/${this.chave_pix}`,
+                url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,
                 httpsAgent: this.httpsAgent,
                 headers: {
                     'client_id': this.client_id,

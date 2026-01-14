@@ -21,6 +21,7 @@ declare global {
             };
             logado?: boolean;
             usuario?: IUsuario;
+            empresa?: any;
         }
     }
 

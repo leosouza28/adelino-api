@@ -33,14 +33,14 @@ export interface IUsuario {
     telefones?: IUsuarioTelefone[];
     endereco?: IUsuarioEndereco;
     scopes?: string[];
-    admin?: {
-        status: string;
+    empresas?: {
+        _id: string;
+        nome: string;
         perfil: {
             _id: string;
-            nome: string;
+            scopes: string[];
         };
-        add_permissoes: number[];
-    };
+    }[];
     criado_por?: {
         data_hora: Date;
         usuario: IUsuario;
@@ -76,7 +76,7 @@ const ModelSchema = new mongoose.Schema({
     sexo: String,
     status: String,
     niveis: [String],
-    scopes: [String],
+    // scopes: [String],
     origem_cadastro: String,
     usuario_ultima_troca_senha: Date,
     telefone_principal: {
@@ -102,9 +102,22 @@ const ModelSchema = new mongoose.Schema({
 
     tokens: [String],
 
-    ultimo_acesso: String,
+    ultimo_acesso: Date,
     ultimo_ip: String,
     ultimo_user_agent: String,
+
+    empresas: [
+        {
+            _id: String,
+            nome: String,
+            perfil: {
+                _id: String,
+                nome: String,
+                scopes: [String]
+            },
+            ativo: Boolean
+        }
+    ],
 
     criado_por: {
         data_hora: Date,
