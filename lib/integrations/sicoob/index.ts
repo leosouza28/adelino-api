@@ -22,13 +22,6 @@ export class SicoobIntegration {
 
     constructor() {
         this.development = false;
-        // this.httpsAgent = new https.Agent({
-        //     rejectUnauthorized: false,
-        //     cert: fs.readFileSync(pathCerts + '/client.crt'),
-        //     key: fs.readFileSync(pathCerts + '/client.key'),
-        //     ca: fs.readFileSync(pathCerts + '/chain-client.crt')
-        // })
-
     }
 
 
@@ -194,7 +187,7 @@ export class SicoobIntegration {
         }
     }
 
-    async setWebhook(url: string = 'https://adelino-api.lsdevelopers.dev/webhook/sicoob/pix') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix') {
         try {
             let response = await axios({
                 method: "PUT",
@@ -209,7 +202,8 @@ export class SicoobIntegration {
                     webhookUrl: url
                 })
             })
-            console.log(response.status, response.data);
+            logDev("Webhook configurado:", response.data);
+            logDev("Webhook configurado para:", url);
         } catch (error) {
             throw error;
         }

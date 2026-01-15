@@ -1,26 +1,65 @@
+
+import fs from "fs";
 import express from "express";
-import http from "http";
+import https from "https";
+import { TLSSocket } from "tls";
 
 const app = express();
-const PORT = Number(process.env.PORT || 3010);
+
+const pem_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/fullchain.pem";
+const key_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/privkey.pem";
+const path_to_prod_cert = __dirname + "/certificates/efi/cert.crt"
+
+const httpsOptions: any = {
+    cert: fs.readFileSync(pem_cert), // Certificado fullchain do dominio
+    key: fs.readFileSync(key_cert), // Chave privada do domínio
+    minVersion: "TLSv1.2",
+    requestCert: true,
+    rejectUnauthorized: false, //Mantenha como false para que os demais endpoints da API não rejeitem requisições sem MTLS
+};
+if (process.env.CERT_CA) httpsOptions.ca = fs.readFileSync(__dirname + process.env.CERT_CA);
+
+const httpsServer = https.createServer(httpsOptions, app);
+const PORT = 443;
 const LOG_LEVEL = process.env.LOG_LEVEL || "DEFAULT";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-    console.log("Received request", req.method, req.originalUrl);
-    next();
+app.get("/", (req, res, next) => {
+    res.json("Online!");
+})
+
+// Endpoint para recepção do webhook com tratamento de autorização mútua
+app.post("/pix/webhook", (request, response) => {
+    let tslSocket = request.socket as TLSSocket;
+    if (tslSocket?.authorized) {
+        let { body } = request;
+        if (body && body.pix) {
+            for (let item of body.pix) {
+                console.log(LOG_LEVEL, "Received a body authorized", JSON.stringify(item, null, 2))
+            }
+        }
+        response.status(200).end();
+    } else {
+        response.status(401).end();
+    }
 });
 
-app.post("/pix", async (req, res) => {
-    console.log(LOG_LEVEL, "POSTTED AT /pix");
-    console.log(LOG_LEVEL, JSON.stringify(req.body, null, 2));
-    res.status(200).end();
-});
+// Endpoint para recepção do webhook sem tratar a autorização
+app.post("/pix/webhook-2", (request, response) => {
+    let { body } = request;
+    if (body && body.pix) {
+        for (let item of body.pix) {
+            console.log(LOG_LEVEL, "Received a body not authorized", JSON.stringify(item, null, 2))
+        }
+    }
+    response.status(200).end();
+})
 
-app.get("/", (req, res) => res.json("Online!"));
+httpsServer.listen(PORT, () => {
+    console.log("App online at:", PORT)
+})
 
-http.createServer(app).listen(PORT, "127.0.0.1", () => {
-    console.log("App online (HTTP) at:", PORT);
-});
+// Login Machine
+// gcloud compute ssh --zone "us-central1-f" "webhook-getnet" --project "kingingressosv3"

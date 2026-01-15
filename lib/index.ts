@@ -123,8 +123,17 @@ async function start() {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
-
             try {
+                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
+                // let sicoob = new SicoobIntegration();
+                // let response = await sicoob.init(integracao!._id.toString());
+                // await sicoob.setWebhook();
+
+                // let integracao = await IntegracoesModel.findOne({sku: "itauteste1"});
+                // let itau = new ItauIntegration();
+                // let response = await itau.init(integracao!._id.toString());
+                // await itau.getRecebimentos('2026-01-14', '2026-01-14');
+
                 // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
                 // let efi = new EfiIntegration();
                 // let response = await efi.init(integracao!._id.toString());

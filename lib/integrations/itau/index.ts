@@ -43,7 +43,7 @@ export class ItauIntegration {
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
             this.auth_url = 'https://sts.itau.com.br/api';
-            this.url = 'https://secure.api.itau/pix_recebimentos/v2';
+            this.url = 'https://secure.api.itau';
             let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.crt');
             let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.key');
             this.httpsAgent = new https.Agent({
@@ -115,7 +115,7 @@ export class ItauIntegration {
                 }).toString();
                 let response = await axios({
                     method: "GET",
-                    url: `${this.url}/pix?${query}`,
+                    url: `${this.url}/pix_recebimentos/v2/cob?${query}`,
                     headers: {
                         'Authorization': this.bearer_token,
                         'Content-Type': 'application/json',
@@ -123,6 +123,7 @@ export class ItauIntegration {
                     httpsAgent: this.httpsAgent
                 })
                 let dados = response.data;
+                console.log(JSON.stringify(dados, null, 2));
                 todosResultados = todosResultados.concat(dados.pix);
                 totalPaginas = dados.parametros.paginacao.quantidadeDePaginas;
                 paginaAtual += 1;
