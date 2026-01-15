@@ -8,7 +8,6 @@ const app = express();
 
 const pem_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/fullchain.pem";
 const key_cert = "/etc/letsencrypt/live/webhook.trackpix.com.br/privkey.pem";
-const path_to_prod_cert = __dirname + "/certificates/efi/cert.crt"
 
 const httpsOptions: any = {
     cert: fs.readFileSync(pem_cert), // Certificado fullchain do dominio
