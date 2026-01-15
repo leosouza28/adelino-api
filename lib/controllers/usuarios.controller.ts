@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import dayjs from "dayjs";
 import { NextFunction, Request, Response } from "express";
 import { v4 } from 'uuid';
-import { sendEmailConfirmacaoConta, sendEmailRecuperacaoAcesso } from '../integrations/email';
 import compiler from '../integrations/handlebars/compiler';
 import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from "../models/usuarios.model";
 import { gerarSessao, NAO_AUTORIZADO, UNAUTH_SCOPE } from "../oauth";
@@ -23,7 +22,6 @@ export default {
     registerFcmToken: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let { token } = req.body;
-            console.log(req.usuario, token);
             if (!token) throw new Error("Token FCM é obrigatório.");
             if (req.usuario && !req.usuario._id) throw NAO_AUTORIZADO;
             let _usuario = await UsuariosModel.findOneAndUpdate(

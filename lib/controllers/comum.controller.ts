@@ -472,7 +472,7 @@ export default {
                                     "$pagador.cnpj"
                                 ]
                             },
-                            nomePagador: { $first: "$nomePagador" },
+                            nomePagador: { $first: "$pagador.nome" },
                             total_valor: { $sum: "$valor" },
                             total_pixs: { $sum: 1 }
                         }

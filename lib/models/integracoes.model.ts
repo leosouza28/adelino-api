@@ -19,6 +19,9 @@ const ModelSchema = new mongoose.Schema({
     last_bearer_token_update_dev: Date,
 
     chave_pix: String,
+
+    webhook_configurado: Boolean,
+    webhook_url: String,
     
     empresa: {
         _id: String,

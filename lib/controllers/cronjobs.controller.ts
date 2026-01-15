@@ -10,6 +10,7 @@ import { EmpresasModel } from "../models/empresas.model";
 import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
 import { ItauIntegration } from "../integrations/itau";
 import { BradescoIntegration } from "../integrations/bradesco";
+import { SantanderIntegration } from "../integrations/santander";
 
 export async function ajustaEmpresaPedro() {
     let empresa_pedro = await EmpresasModel.findOne({ _id: "6963abe535c325bb9cf34355" }).lean();
@@ -68,6 +69,16 @@ export default {
                 await bradesco.init(integracao._id.toString());
                 let lista: any[] = await bradesco.getRecebimentos(hoje, hoje) || [];
                 await processarListaPixs(lista, integracao);
+            }
+            if (integracao.banco == INTEGRACOES_BANCOS.SANTANDER) {
+                try {
+                    let santander = new SantanderIntegration();
+                    await santander.init(integracao._id.toString());
+                    let lista: any[] = await santander.getRecebimentos(hoje, hoje) || [];
+                    await processarListaPixs(lista, integracao);
+                } catch (error) {
+                    logDev("Erro ao sincronizar Santander:", error);                    
+                }
             }
             res.json(true);
         } catch (error) {
@@ -139,7 +150,7 @@ export async function notificarPixRecebidos(empresa_id: string) {
         console.log(error);
     }
 }
-async function processarListaPixs(lista: any[], integracao: any) {
+export async function processarListaPixs(lista: any[], integracao: any) {
     let updates: any[] = [];
     let baixas_pixs: any[] = [];
     try {

@@ -10,7 +10,7 @@ import path from 'path';
 import routes from './routes';
 import { logDev } from './util';
 import { SicoobIntegration } from './integrations/sicoob';
-import cronjobsController, { ajustaEmpresaPedro } from './controllers/cronjobs.controller';
+import cronjobsController, { ajustaEmpresaPedro, processarListaPixs } from './controllers/cronjobs.controller';
 import { messaging } from './integrations/firebase';
 import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from './models/usuarios.model';
 import { startDB } from './populations';
@@ -23,6 +23,7 @@ import { BradescoIntegration } from './integrations/bradesco';
 import { ItauIntegration } from './integrations/itau';
 import bcrypt from 'bcrypt';
 import { EfiIntegration } from './integrations/efi';
+import { SantanderIntegration } from './integrations/santander';
 
 dayjs.locale('pt-br');
 
@@ -122,28 +123,49 @@ async function start() {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
-            
+
             try {
-                let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
-                let efi = new EfiIntegration();
-                let response = await efi.init(integracao!._id.toString());
-                await efi.setWebhook();
+                // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
+                // let efi = new EfiIntegration();
+                // let response = await efi.init(integracao!._id.toString());
+                // await efi.setWebhook();
+                // await efi.checkWebhook();
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
+                // let santander = new SantanderIntegration();
+                // let response = await santander.init(integracao!._id.toString());
+                // let dias_pra_tras = 90;
+                // for (let i = 0; i <= dias_pra_tras; i++) {
+                //     try {
+                //         let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //         let data_recebidos = await santander.getRecebimentos(data, data);
+                //         processarListaPixs(data_recebidos, integracao!)
+                //             .then((res) => {
+                //                 console.log(`Data: ${data} - Total de recebidos processados: ${data_recebidos.length}`);
+                //             })
+                //             .catch((err) => {
+                //                 console.log(`Data: ${data} - Erro ao processar os recebidos:`, err);
+                //             });
+                //     } catch (error) {
+
+                //     }
+                // }
             } catch (error) {
                 console.log('@@@', error);
             }
 
-            
+
             // await criarEmpresaNova(
-            //     'CENTER NORTH',
-            //     '83654848000161',
-            //     '001002',
-            //     'Matheus Costa',
-            //     '02581748206',
-            //     'matheus',
-            //     '03623671240',
+            //     'COMERCIAL PREDILETO',
+            //     '04162554000146',
+            //     '000001',
+            //     'Etson Souza',
+            //     '28824725287',
+            //     'etson',
+            //     '91992737088',
             //     '1234'
             // )
-            
+
             // startDB();
             // await cronjobsController.syncSicoobPixRecebidos('2025-12-10');
             // await ajustaEmpresaPedro();
@@ -289,3 +311,9 @@ function detectFetchAndBody(req: express.Request, res: express.Response, next: e
     }
     next();
 }
+
+
+// ClientID:
+// hOqTuUjZJzLZiHGOTxUPqYVo9cIKuAGf
+// ClientSecret:
+// QwYJhHAgbXhjFfPB

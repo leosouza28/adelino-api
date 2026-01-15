@@ -5,8 +5,10 @@ import path from 'path';
 import fs from 'fs'
 import dayjs from "dayjs";
 import { logDev } from "../../util";
+import { ObjectId } from "mongoose";
 
 interface IIntegracao {
+    _id?: ObjectId;
     client_id?: string;
     client_secret?: string;
     path_certificado?: string;
@@ -35,8 +37,9 @@ export class EfiIntegration {
 
     async init(integracao_id: string) {
         try {
-            let integracao = await IntegracoesModel.findById(integracao_id);
+            let integracao: any = await IntegracoesModel.findById(integracao_id);
             if (!integracao) throw new Error('Integração não encontrada');
+            this.integracao = integracao;
             this.chave_pix = integracao.chave_pix || '';
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
@@ -127,6 +130,24 @@ export class EfiIntegration {
         }
     }
 
+    async checkWebhook() {
+        try {
+            let response = await axios({
+                method: "GET",
+                url: `${this.url}/v2/webhook/${this.chave_pix}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                }
+            })
+            logDev(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+
+    }
     async setWebhook(url: string = 'https://efi.webhook.trackpix.com.br/pix') {
         try {
             let response = await axios({
@@ -141,7 +162,17 @@ export class EfiIntegration {
                     webhookUrl: url
                 })
             })
-            console.log(response.status, response.data);
+            await IntegracoesModel.updateOne(
+                {
+                    _id: this.integracao._id,
+                },
+                {
+                    $set: {
+                        webhook_configurado: true,
+                        webhook_url: url
+                    }
+                }
+            )
         } catch (error) {
             throw error;
         }
