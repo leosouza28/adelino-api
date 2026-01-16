@@ -29,8 +29,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
-    logDev("Received request:", req.method, req.url, req.body);
-    return next()
+    console.log("Received request:", req.method, req.url, req.body);
+    next()
 })
 
 app.get("/", (req, res, next) => {
