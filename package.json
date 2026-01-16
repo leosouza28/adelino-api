@@ -7,7 +7,7 @@
     "build": "babel lib --extensions \".ts,.tsx\" --out-dir dist ; node copy-files.js",
     "dev": "cross-env DEV=1 TZ=utc ts-node-dev --respawn --files lib/index.ts",
     "commit": "git add . ; git commit -m leo ; git pull origin main --rebase ; git push origin main",
-    "update": "git reset --hard && git pull && sudo npm i && sudo npm run build &&  sudo pm2 stop ecosystem.config.js && sudo pm2 delete ecosystem.config.js && sudo pm2 start ecosystem.config.js",
+    "update": "git reset --hard && git pull && sudo npm i && npm run build && pm2 stop ecosystem.config.js && pm2 delete ecosystem.config.js && pm2 start ecosystem.config.js",
     "dev:webhook": "cross-env DEV=1 TZ=utc ts-node-dev --respawn --files lib/webhook-server/webhook-server.ts",
     "type-check": "tsc --noEmit",
     "start": "node dist/index.js"
