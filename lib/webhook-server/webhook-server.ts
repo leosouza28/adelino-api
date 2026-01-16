@@ -16,7 +16,9 @@ const httpsOptions: any = {
     requestCert: true,
     rejectUnauthorized: false, //Mantenha como false para que os demais endpoints da API não rejeitem requisições sem MTLS
 };
-if (process.env.CERT_CA) httpsOptions.ca = fs.readFileSync(__dirname + process.env.CERT_CA);
+let cert_efi = fs.readFileSync(__dirname + '/cert-efi.crt');
+let cert_itau = fs.readFileSync(__dirname + '/cert-itau.crt');
+httpsOptions.ca = [cert_efi, cert_itau]; // Adicione os certificados das instituições financeiras aqui
 
 const httpsServer = https.createServer(httpsOptions, app);
 const PORT = 443;

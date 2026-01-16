@@ -41,67 +41,33 @@ export class BradescoIntegration {
             this.chave_pix = integracao.chave_pix || '';
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
-            if (this.development) {
-                this.auth_url = 'https://openapisandbox.prebanco.com.br/auth/server/oauth/token';
-                this.url = 'https://openapisandbox.prebanco.com.br:443/v2/pix';
-                let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.pem');
-                let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.pem');
-                this.httpsAgent = new https.Agent({
-                    cert: fs.readFileSync(certPath),
-                    key: fs.readFileSync(keyPath),
-                    rejectUnauthorized: false
-                })
-            } else {
-                this.auth_url = 'https://qrpix.bradesco.com.br/auth/server/oauth/token'
-                this.url = 'https://qrpix.bradesco.com.br/v2/pix';
-                let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.pem');
-                let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.pem');
-                this.httpsAgent = new https.Agent({
-                    cert: fs.readFileSync(certPath),
-                    key: fs.readFileSync(keyPath),
-                    rejectUnauthorized: false
-                })
+            this.auth_url = 'https://qrpix.bradesco.com.br/auth/server/oauth/token'
+            this.url = 'https://qrpix.bradesco.com.br';
+            let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.pem');
+            let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.pem');
+            this.httpsAgent = new https.Agent({
+                cert: fs.readFileSync(certPath),
+                key: fs.readFileSync(keyPath),
+                rejectUnauthorized: false
+            })
+            let need_auth = true
+            if (integracao?.bearer_token && integracao?.last_bearer_token_update) {
+                // Dura apenas 1 hora
+                let tokenAge = (Date.now() - integracao.last_bearer_token_update.getTime()) / 1000;
+                if (tokenAge < 3600) {
+                    this.bearer_token = integracao.bearer_token;
+                    this.authorized = true;
+                    need_auth = false;
+                } else {
+                    need_auth = true;
+                }
             }
-            if (this.development) {
-                let need_auth = true
-                if (integracao?.bearer_token_dev && integracao?.last_bearer_token_update_dev) {
-                    // Dura apenas 1 hora
-                    let tokenAge = (Date.now() - integracao.last_bearer_token_update_dev.getTime()) / 1000;
-                    if (tokenAge < 3600) {
-                        this.bearer_token = integracao.bearer_token_dev;
-                        this.authorized = true;
-                        need_auth = false;
-                    } else {
-                        need_auth = true;
-                    }
-                }
-                if (need_auth) {
-                    this.bearer_token = await this.authenticate();
-                    integracao.bearer_token_dev = this.bearer_token;
-                    integracao.last_bearer_token_update_dev = new Date();
-                    await integracao.save();
-                    this.authorized = true;
-                }
-            } else {
-                let need_auth = true
-                if (integracao?.bearer_token && integracao?.last_bearer_token_update) {
-                    // Dura apenas 1 hora
-                    let tokenAge = (Date.now() - integracao.last_bearer_token_update.getTime()) / 1000;
-                    if (tokenAge < 3600) {
-                        this.bearer_token = integracao.bearer_token;
-                        this.authorized = true;
-                        need_auth = false;
-                    } else {
-                        need_auth = true;
-                    }
-                }
-                if (need_auth) {
-                    this.bearer_token = await this.authenticate();
-                    integracao.bearer_token = this.bearer_token;
-                    integracao.last_bearer_token_update = new Date();
-                    await integracao.save();
-                    this.authorized = true;
-                }
+            if (need_auth) {
+                this.bearer_token = await this.authenticate();
+                integracao.bearer_token = this.bearer_token;
+                integracao.last_bearer_token_update = new Date();
+                await integracao.save();
+                this.authorized = true;
             }
             return { success: 1, initializated: true }
         } catch (error: any) {
@@ -134,17 +100,26 @@ export class BradescoIntegration {
             let paginaAtual = 0;
             let totalPaginas = 1;
             let todosResultados: any[] = [];
+            let agora = dayjs().format('YYYY-MM-DD');
+            let _dataFinal = '';
+            if (agora === dayjs(dataFinal).format('YYYY-MM-DD')) {
+                _dataFinal = dayjs().toISOString();
+            }else{
+                _dataFinal = dayjs(dataFinal).endOf('day').toISOString();
+            }
+            let _dataInicial = dayjs(dataInicial).toISOString()
             while (paginaAtual < totalPaginas) {
                 let query = new URLSearchParams({
-                    inicio: dayjs(dataInicial).startOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm:ss"),
-                    fim: dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm:ss"),
-                    // 'paginacao.paginaAtual': paginaAtual.toString(),
+                    inicio: _dataInicial,
+                    fim: _dataFinal,
+                    'paginacao.paginaAtual': paginaAtual.toString(),
                 }).toString();
                 let response = await axios({
                     method: "GET",
-                    url: `${this.url}?${query}`,
+                    url: `${this.url}/v2/pix?${query}`,
                     httpsAgent: this.httpsAgent,
                     headers: {
+                        'Accept': 'application/json',
                         'authorization': this.bearer_token
                     }
                 })

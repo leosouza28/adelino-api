@@ -193,6 +193,8 @@ export default {
 
             let lojas = await LojasModel.find({ 'empresa._id': String(req.empresa._id) }).sort({ nome: 1 }).lean();
 
+            console.log(req.empresa);
+            
             let _caixas_lojas = await RecebimentosPixModel.aggregate([
                 {
                     $match: {

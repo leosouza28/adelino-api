@@ -55,8 +55,8 @@ export default {
             if (integracao.banco == INTEGRACOES_BANCOS.ITAU) {
                 let itau = new ItauIntegration();
                 await itau.init(integracao._id.toString());
-                let lista: any[] = await itau.getRecebimentos(hoje, hoje) || [];
-                await processarListaPixs(lista, integracao);
+                await itau.getRecebimentos(hoje, hoje, processarListaPixs) || [];
+                // Itaú é Diferente para poder Conciliar
             }
             if (integracao.banco == INTEGRACOES_BANCOS.SICOOB) {
                 let sicoob = new SicoobIntegration();
@@ -77,7 +77,7 @@ export default {
                     let lista: any[] = await santander.getRecebimentos(hoje, hoje) || [];
                     await processarListaPixs(lista, integracao);
                 } catch (error) {
-                    logDev("Erro ao sincronizar Santander:", error);                    
+                    logDev("Erro ao sincronizar Santander:", error);
                 }
             }
             res.json(true);
@@ -175,12 +175,11 @@ export async function processarListaPixs(lista: any[], integracao: any) {
                 });
                 return; // Pula para o próximo elemento
             }
-            if (integracao?.banco === INTEGRACOES_BANCOS.ITAU) {
+            if (integracao?.banco === INTEGRACOES_BANCOS.ITAU || integracao?.banco === INTEGRACOES_BANCOS.SANTANDER) {
                 element.horario = dayjs(element.horario).add(3, 'h').toDate();
             } else {
                 element.horario = dayjs(element.horario).toDate();
             }
-            logDev(element);
             updates.push({
                 updateOne: {
                     filter: {

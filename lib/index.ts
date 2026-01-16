@@ -117,22 +117,63 @@ async function criarEmpresaNova(
     }
 }
 
+async function addEmpresasToAdmin() {
+    try {
+        let admin = await UsuariosModel.findOne({ username: 'admin' });
+        let empresas = await EmpresasModel.find();
+        let __empresas = [];
+        for (let empresa of empresas) {
+            let perfil_admin = await PerfisModel.findOne({ 'empresa._id': empresa._id.toString(), nome: "Administrador" });
+            __empresas.push({
+                ...empresa.toJSON(),
+                perfil: perfil_admin,
+                ativo: true
+            });
+        }
+        await UsuariosModel.updateOne(
+            {
+                _id: admin!._id
+            },
+            {
+                $set: {
+                    empresas: __empresas
+                }
+            }
+        )
+        logDev("Added empresas to admin user");
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 async function start() {
     try {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
+
+
             try {
+                // await addEmpresasToAdmin();
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
+                // let bradescoIntegracao = new BradescoIntegration();
+                // await bradescoIntegracao.init(integracao?._id.toString() || '');
+                // let dias_pra_tras = 90;
+                // for (let i = 0; i <= dias_pra_tras; i++) {
+                //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //     let response = await bradescoIntegracao.getRecebimentos(data, data);
+                //     await processarListaPixs(response, integracao!)
+                // }
+
                 // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
                 // let sicoob = new SicoobIntegration();
                 // let response = await sicoob.init(integracao!._id.toString());
                 // await sicoob.setWebhook();
 
-                // let integracao = await IntegracoesModel.findOne({sku: "itauteste1"});
+                // let integracao = await IntegracoesModel.findOne({ sku: "itauteste1" });
                 // let itau = new ItauIntegration();
                 // let response = await itau.init(integracao!._id.toString());
-                // await itau.getRecebimentos('2026-01-14', '2026-01-14');
 
                 // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
                 // let efi = new EfiIntegration();
@@ -143,10 +184,15 @@ async function start() {
                 // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
                 // let santander = new SantanderIntegration();
                 // let response = await santander.init(integracao!._id.toString());
+                // while (true) {
+                //     console.log("GET");
+                //     let recebimentos = await santander.getRecebimentos('2026-01-16', '2026-01-16');
+                //     await processarListaPixs(recebimentos, integracao!);
+                // }
+                
                 // let dias_pra_tras = 90;
                 // for (let i = 0; i <= dias_pra_tras; i++) {
                 //     try {
-                //         let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
                 //         let data_recebidos = await santander.getRecebimentos(data, data);
                 //         processarListaPixs(data_recebidos, integracao!)
                 //             .then((res) => {
@@ -195,14 +241,7 @@ async function start() {
             // )
             // console.log("Inicializadoo")
 
-            // try {
-            //     let bradescoIntegracao = new BradescoIntegration();
-            //     await bradescoIntegracao.init('6965597e35c325bb9cf34594');
-            //     let response = await bradescoIntegracao.getRecebimentos('2026-01-01', '2026-01-10');
-            //     console.log(response);
-            // } catch (error) {
-            //     console.log('@@@', error);
-            // }
+
 
             // try {
             //     let itauIntegracao = new ItauIntegration();
