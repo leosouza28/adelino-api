@@ -55,7 +55,7 @@ app.post("/pix/webhook", (request, response) => {
             response.status(401).end();
         }
     } catch (error) {
-        errorHandler(error, res);
+        errorHandler(error, response);
     }
 });
 
