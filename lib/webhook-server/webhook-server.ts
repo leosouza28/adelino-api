@@ -3,6 +3,7 @@ import fs from "fs";
 import express from "express";
 import https from "https";
 import { TLSSocket } from "tls";
+import { logDev } from "../util";
 
 const app = express();
 
@@ -26,6 +27,11 @@ const LOG_LEVEL = process.env.LOG_LEVEL || "DEFAULT";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+    logDev("Received request:", req.method, req.url, req.body);
+    return next()
+})
 
 app.get("/", (req, res, next) => {
     res.json("Online!");
