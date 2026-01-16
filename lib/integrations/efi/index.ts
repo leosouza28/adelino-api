@@ -148,7 +148,7 @@ export class EfiIntegration {
         }
 
     }
-    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix/webhook') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook') {
         try {
             let response = await axios({
                 method: "PUT",

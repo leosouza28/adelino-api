@@ -187,7 +187,7 @@ export class SicoobIntegration {
         }
     }
 
-    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix/webhook') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook') {
         try {
             logDev({ chave_pix: this.chave_pix })
             let response = await axios({
