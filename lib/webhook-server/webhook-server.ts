@@ -1,6 +1,6 @@
 
 import fs from "fs";
-import express from "express";
+import express, { response } from "express";
 import https from "https";
 import { TLSSocket } from "tls";
 import { errorHandler, logDev } from "../util";
@@ -70,6 +70,24 @@ app.post("/webhook/pix", (request, response) => {
         } else {
             response.status(401).end();
         }
+    } catch (error) {
+        errorHandler(error, response);
+    }
+});
+app.post("/webhook/sicoob", (request, response) => {
+    try {
+        console.log(LOG_LEVEL, "PIX Sicoob Webhook Config Received", request.body)
+        response.status(200).end();
+    } catch (error) {
+        errorHandler(error, response);
+    }
+});
+app.post("/webhook/sicoob/pix", (request, response) => {
+    try {
+        console.log(LOG_LEVEL, "PIX Sicoob Webhook Received", request.body)
+        let { body } = request;
+        console.log(LOG_LEVEL, JSON.stringify(body, null, 2));
+        response.status(200).end();
     } catch (error) {
         errorHandler(error, response);
     }

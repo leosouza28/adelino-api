@@ -187,9 +187,24 @@ export class SicoobIntegration {
         }
     }
 
-    async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook/sicoob') {
         try {
             logDev({ chave_pix: this.chave_pix })
+            try {
+                let response = await axios({
+                    method: "DELETE",
+                    url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,
+                    httpsAgent: this.httpsAgent,
+                    headers: {
+                        'client_id': this.client_id,
+                        'authorization': this.bearer_token,
+                        'Content-Type': 'application/json'
+                    },
+                })
+                logDev("Webhook deletado", response.status);
+            } catch (error) {
+                logDev("Nenhum webhook para deletar");
+            }
             let response = await axios({
                 method: "PUT",
                 url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,

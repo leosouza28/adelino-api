@@ -166,20 +166,20 @@ async function start() {
                 //     await processarListaPixs(response, integracao!)
                 // }
 
-                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
-                // let sicoob = new SicoobIntegration();
-                // let response = await sicoob.init(integracao!._id.toString());
-                // await sicoob.setWebhook();
+                let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
+                let sicoob = new SicoobIntegration();
+                let response = await sicoob.init(integracao!._id.toString());
+                await sicoob.setWebhook();
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "itauteste1" });
                 // let itau = new ItauIntegration();
                 // let response = await itau.init(integracao!._id.toString());
 
-                let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
-                let efi = new EfiIntegration();
-                let response = await efi.init(integracao!._id.toString());
-                await efi.setWebhook();
-                await efi.checkWebhook();
+                // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
+                // let efi = new EfiIntegration();
+                // let response = await efi.init(integracao!._id.toString());
+                // await efi.setWebhook();
+                // await efi.checkWebhook();
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
                 // let santander = new SantanderIntegration();
