@@ -35,6 +35,7 @@ app.get("/", (req, res, next) => {
 app.post("/pix/webhook", (request, response) => {
     let tslSocket = request.socket as TLSSocket;
     if (tslSocket?.authorized) {
+        console.log(LOG_LEVEL, "Client Certificate Authorized!");
         let { body } = request;
         if (body && body.pix) {
             for (let item of body.pix) {

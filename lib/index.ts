@@ -189,7 +189,7 @@ async function start() {
                 //     let recebimentos = await santander.getRecebimentos('2026-01-16', '2026-01-16');
                 //     await processarListaPixs(recebimentos, integracao!);
                 // }
-                
+
                 // let dias_pra_tras = 90;
                 // for (let i = 0; i <= dias_pra_tras; i++) {
                 //     try {

@@ -148,7 +148,7 @@ export class EfiIntegration {
         }
 
     }
-    async setWebhook(url: string = 'https://efi.webhook.trackpix.com.br/pix') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix/webhook1') {
         try {
             let response = await axios({
                 method: "PUT",
@@ -162,6 +162,7 @@ export class EfiIntegration {
                     webhookUrl: url
                 })
             })
+            logDev(`webhook setado: ${response.status}`);
             await IntegracoesModel.updateOne(
                 {
                     _id: this.integracao._id,
