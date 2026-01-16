@@ -38,13 +38,29 @@ app.get("/", (req, res, next) => {
 })
 
 // Endpoint para recepção do webhook com tratamento de autorização mútua
-app.post("/pix/webhook", (request, response) => {
+app.post("/webhook", (request, response) => {
+    try {
+        console.log(LOG_LEVEL, "PIX Webhook Configured", request.body)
+        let tslSocket = request.socket as TLSSocket;
+        if (tslSocket?.authorized) {
+            console.log(LOG_LEVEL, "Client Certificate Configured and Authorized!");
+            response.status(200).end();
+        } else {
+            response.status(401).end();
+        }
+    } catch (error) {
+        errorHandler(error, response);
+    }
+});
+
+app.post("/webhook/pix", (request, response) => {
     try {
         console.log(LOG_LEVEL, "PIX Webhook Received", request.body)
         let tslSocket = request.socket as TLSSocket;
         if (tslSocket?.authorized) {
-            console.log(LOG_LEVEL, "Client Certificate Authorized!");
+            console.log(LOG_LEVEL, "HandShake Done!");
             let { body } = request;
+            console.log(LOG_LEVEL, JSON.stringify(body, null, 2));
             if (body && body.pix) {
                 for (let item of body.pix) {
                     console.log(LOG_LEVEL, "Received a body authorized", JSON.stringify(item, null, 2))
@@ -58,22 +74,6 @@ app.post("/pix/webhook", (request, response) => {
         errorHandler(error, response);
     }
 });
-
-// Endpoint para recepção do webhook sem tratar a autorização
-app.post("/pix/webhook-2", (request, response) => {
-    try {
-        console.log(LOG_LEVEL, "PIX Webhook Received", request.body)
-        let { body } = request;
-        if (body && body.pix) {
-            for (let item of body.pix) {
-                console.log(LOG_LEVEL, "Received a body not authorized", JSON.stringify(item, null, 2))
-            }
-        }
-        response.status(200).end();
-    } catch (error) {
-        errorHandler(error, response);
-    }
-})
 
 httpsServer.listen(PORT, () => {
     console.log("App online at:", PORT)
