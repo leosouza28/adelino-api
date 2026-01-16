@@ -3,7 +3,7 @@ import fs from "fs";
 import express from "express";
 import https from "https";
 import { TLSSocket } from "tls";
-import { logDev } from "../util";
+import { errorHandler, logDev } from "../util";
 
 const app = express();
 
@@ -39,30 +39,40 @@ app.get("/", (req, res, next) => {
 
 // Endpoint para recepção do webhook com tratamento de autorização mútua
 app.post("/pix/webhook", (request, response) => {
-    let tslSocket = request.socket as TLSSocket;
-    if (tslSocket?.authorized) {
-        console.log(LOG_LEVEL, "Client Certificate Authorized!");
-        let { body } = request;
-        if (body && body.pix) {
-            for (let item of body.pix) {
-                console.log(LOG_LEVEL, "Received a body authorized", JSON.stringify(item, null, 2))
+    try {
+        console.log(LOG_LEVEL, "PIX Webhook Received", request.body)
+        let tslSocket = request.socket as TLSSocket;
+        if (tslSocket?.authorized) {
+            console.log(LOG_LEVEL, "Client Certificate Authorized!");
+            let { body } = request;
+            if (body && body.pix) {
+                for (let item of body.pix) {
+                    console.log(LOG_LEVEL, "Received a body authorized", JSON.stringify(item, null, 2))
+                }
             }
+            response.status(200).end();
+        } else {
+            response.status(401).end();
         }
-        response.status(200).end();
-    } else {
-        response.status(401).end();
+    } catch (error) {
+        errorHandler(error, res);
     }
 });
 
 // Endpoint para recepção do webhook sem tratar a autorização
 app.post("/pix/webhook-2", (request, response) => {
-    let { body } = request;
-    if (body && body.pix) {
-        for (let item of body.pix) {
-            console.log(LOG_LEVEL, "Received a body not authorized", JSON.stringify(item, null, 2))
+    try {
+        console.log(LOG_LEVEL, "PIX Webhook Received", request.body)
+        let { body } = request;
+        if (body && body.pix) {
+            for (let item of body.pix) {
+                console.log(LOG_LEVEL, "Received a body not authorized", JSON.stringify(item, null, 2))
+            }
         }
+        response.status(200).end();
+    } catch (error) {
+        errorHandler(error, response);
     }
-    response.status(200).end();
 })
 
 httpsServer.listen(PORT, () => {

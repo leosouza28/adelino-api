@@ -175,11 +175,11 @@ async function start() {
                 // let itau = new ItauIntegration();
                 // let response = await itau.init(integracao!._id.toString());
 
-                let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
-                let efi = new EfiIntegration();
-                let response = await efi.init(integracao!._id.toString());
-                await efi.setWebhook();
-                await efi.checkWebhook();
+                // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
+                // let efi = new EfiIntegration();
+                // let response = await efi.init(integracao!._id.toString());
+                // await efi.setWebhook();
+                // await efi.checkWebhook();
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
                 // let santander = new SantanderIntegration();

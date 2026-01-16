@@ -187,8 +187,9 @@ export class SicoobIntegration {
         }
     }
 
-    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix') {
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/pix/webhook') {
         try {
+            logDev({ chave_pix: this.chave_pix })
             let response = await axios({
                 method: "PUT",
                 url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,
@@ -202,7 +203,7 @@ export class SicoobIntegration {
                     webhookUrl: url
                 })
             })
-            logDev("Webhook configurado:", response.data);
+            logDev("Webhook configurado", response.status);
             logDev("Webhook configurado para:", url);
         } catch (error) {
             throw error;
