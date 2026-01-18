@@ -44,7 +44,6 @@ export class EfiIntegration {
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
 
-            this.auth_url = ''
             this.url = 'https://pix.api.efipay.com.br';
             let pfxPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.p12');
             this.httpsAgent = new https.Agent({
@@ -104,13 +103,13 @@ export class EfiIntegration {
             let todosResultados: any[] = [];
             while (paginaAtual < totalPaginas) {
                 let query = new URLSearchParams({
-                    inicio: dayjs(dataInicial).startOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm:ss"),
-                    fim: dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm:ss"),
-                    // 'paginacao.paginaAtual': paginaAtual.toString(),
+                    inicio: dayjs(dataInicial).startOf('day').add(3, 'h').toISOString(),
+                    fim: dayjs(dataFinal).endOf('day').add(3, 'h').toISOString(),
+                    'paginacao.paginaAtual': paginaAtual.toString(),
                 }).toString();
                 let response = await axios({
                     method: "GET",
-                    url: `${this.url}?${query}`,
+                    url: `${this.url}/v2/pix?${query}`,
                     httpsAgent: this.httpsAgent,
                     headers: {
                         'authorization': this.bearer_token
@@ -130,6 +129,24 @@ export class EfiIntegration {
         }
     }
 
+    async getWebhooks() {
+        try {
+            let response = await axios({
+                method: "GET",
+                url: `${this.url}/v2/webhook?inicio=2020-10-22T16:01:35Z&fim=2026-01-16T21:01:35Z`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                }
+            })
+            logDev(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+
+    }
     async checkWebhook() {
         try {
             let response = await axios({
@@ -148,8 +165,72 @@ export class EfiIntegration {
         }
 
     }
+    async reenviarWebhook() {
+        try {
+            let response = await axios({
+                method: "POST",
+                url: `${this.url}/v2/gn/webhook/reenviar`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    "tipo": "PIX_RECEBIDO",
+                    "e2eids": [
+                        "E60746948202601161335A2144xqNmrE"
+                    ]
+                })
+            })
+            logDev("Reenviados", response.data);
+        } catch (error) {
+            throw error;
+        }
+    }
     async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook') {
         try {
+            // tentar difinir que vai receber o webhook de qualquer lugar
+            try {
+                let _url = `${this.url}/v2/gn/config`
+                let body = {
+                    "pix": {
+                        "receberSemChave": true,
+                        "chaves": {
+                            [this.chave_pix]: {
+                                "recebimento": {
+                                    "txidObrigatorio": false,
+                                    "qrCodeEstatico": {
+                                        "recusarTodos": false
+                                    },
+                                    "webhook": {
+                                        "notificacao": {
+                                            "tarifa": true,
+                                            "pagador": true
+                                        },
+                                        "notificar": {
+                                            "pixSemTxid": true
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+                let resp_config = await axios({
+                    method: "PUT",
+                    url: _url,
+                    httpsAgent: this.httpsAgent,
+                    headers: {
+                        'authorization': this.bearer_token,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(body)
+                })
+                console.log(`Configuração da Chave PIX OK`, resp_config.status);
+            } catch (error: any) {
+                console.log("Erro ao obter config", error.response.data);
+            }
+
             let response = await axios({
                 method: "PUT",
                 url: `${this.url}/v2/webhook/${this.chave_pix}`,
@@ -162,18 +243,35 @@ export class EfiIntegration {
                     webhookUrl: url
                 })
             })
-            logDev(`webhook setado: ${response.status}`);
-            await IntegracoesModel.updateOne(
-                {
-                    _id: this.integracao._id,
-                },
-                {
-                    $set: {
-                        webhook_configurado: true,
-                        webhook_url: url
-                    }
+            console.log("Webhook configurado:", response.status);
+            // await IntegracoesModel.updateOne(
+            //     {
+            //         _id: this.integracao._id,
+            //     },
+            //     {
+            //         $set: {
+            //             webhook_configurado: true,
+            //             webhook_url: url
+            //         }
+            //     }
+            // )
+        } catch (error) {
+            throw error;
+        }
+    }
+    async deleteWebhook(chave = '') {
+        try {
+            if (!chave) chave = this.chave_pix;
+            await axios({
+                method: "DELETE",
+                url: `${this.url}/v2/webhook/${chave}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
                 }
-            )
+            })
+            logDev("Excluida", chave)
         } catch (error) {
             throw error;
         }

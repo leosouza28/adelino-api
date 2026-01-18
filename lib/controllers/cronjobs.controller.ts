@@ -11,6 +11,7 @@ import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.mode
 import { ItauIntegration } from "../integrations/itau";
 import { BradescoIntegration } from "../integrations/bradesco";
 import { SantanderIntegration } from "../integrations/santander";
+import { EfiIntegration } from "../integrations/efi";
 
 export async function ajustaEmpresaPedro() {
     let empresa_pedro = await EmpresasModel.findOne({ _id: "6963abe535c325bb9cf34355" }).lean();
@@ -57,6 +58,12 @@ export default {
                 await itau.init(integracao._id.toString());
                 await itau.getRecebimentos(hoje, hoje, processarListaPixs) || [];
                 // Itaú é Diferente para poder Conciliar
+            }
+            if (integracao.banco == INTEGRACOES_BANCOS.EFI) {
+                let efi = new EfiIntegration();
+                await efi.init(integracao._id.toString());
+                let lista: any[] = await efi.getRecebimentos(hoje, hoje);
+                await processarListaPixs(lista, integracao);
             }
             if (integracao.banco == INTEGRACOES_BANCOS.SICOOB) {
                 let sicoob = new SicoobIntegration();

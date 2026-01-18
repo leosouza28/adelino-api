@@ -125,7 +125,7 @@ export class SicoobIntegration {
             if (error.response.data) {
                 console.log("Erro ao consultar Pix recebidos:", error.response.data);
             }
-            // console.error("Erro ao consultar Pix recebidos:", error);
+            throw error;
         }
     }
 
@@ -182,6 +182,24 @@ export class SicoobIntegration {
                 })
             })
             return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getWebhooks() {
+        try {
+            let response = await axios({
+                method: "GET",
+                url: `${this.url}/pix/api/v2/webhook`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'client_id': this.client_id,
+                    'authorization': this.bearer_token,
+                    'Content-Type': 'application/json'
+                },
+            })
+            logDev("Webhooks", response.data);
         } catch (error) {
             throw error;
         }

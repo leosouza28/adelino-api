@@ -3,12 +3,12 @@ import compiler from "../handlebars/compiler";
 import { MoneyBRL } from "../../util";
 
 // const transporter = nodemailer.createTransport({
-//     host: "smtp.mailersend.net",
+//     host: "",
 //     port: 587,
 //     secure: false, // true para 465, false para outras portas
 //     auth: {
-//         user: "MS_B0xo38@parqueestreladalva.com.br",
-//         pass: "mssp.7ehBTd6.vywj2lpykqml7oqz.oVLbRSB",
+//         user: ""
+//         pass: ""
 //     },
 // });
 

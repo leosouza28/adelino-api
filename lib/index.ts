@@ -151,11 +151,9 @@ async function start() {
         await mongoose.connect(DB_URL);
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
-
+            // await addEmpresasToAdmin();
 
             try {
-                // await addEmpresasToAdmin();
-
                 // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
                 // let bradescoIntegracao = new BradescoIntegration();
                 // await bradescoIntegracao.init(integracao?._id.toString() || '');
@@ -166,10 +164,11 @@ async function start() {
                 //     await processarListaPixs(response, integracao!)
                 // }
 
-                let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
-                let sicoob = new SicoobIntegration();
-                let response = await sicoob.init(integracao!._id.toString());
-                await sicoob.setWebhook();
+                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
+                // let sicoob = new SicoobIntegration();
+                // let response = await sicoob.init(integracao!._id.toString());
+                // await sicoob.setWebhook();
+                // await sicoob.getWebhooks();
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "itauteste1" });
                 // let itau = new ItauIntegration();
@@ -179,7 +178,9 @@ async function start() {
                 // let efi = new EfiIntegration();
                 // let response = await efi.init(integracao!._id.toString());
                 // await efi.setWebhook();
-                // await efi.checkWebhook();
+                // await efi.reenviarWebhook();
+                // await efi.deleteWebhook('30727693000180');
+                // await efi.getWebhooks();
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
                 // let santander = new SantanderIntegration();
@@ -211,13 +212,13 @@ async function start() {
 
 
             // await criarEmpresaNova(
-            //     'COMERCIAL PREDILETO',
-            //     '04162554000146',
-            //     '000001',
-            //     'Etson Souza',
-            //     '28824725287',
-            //     'etson',
-            //     '91992737088',
+            //     'LS DEVELOPERS',
+            //     '30727693000180',
+            //     '999999',
+            //     'Leonardo Souza',
+            //     '02581748206',
+            //     'leosouza',
+            //     '91983045923',
             //     '1234'
             // )
 
