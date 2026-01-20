@@ -1,4 +1,4 @@
-
+import 'dotenv/config';
 import dayjs from "dayjs";
 import express from "express";
 import fs from "fs";
