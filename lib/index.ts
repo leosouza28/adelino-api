@@ -165,12 +165,22 @@ async function start() {
         server.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
             // await addEmpresasToAdmin();
-
+            // await criarEmpresaNova(
+            //     'CENTER MIX',
+            //     '',
+            //     '0001003',
+            //     'Leonardo Souza',
+            //     '02581748206',
+            //     'leosouza',
+            //     '91983045923',
+            //     '1234'
+            // )
+            // startDB();
             try {
-
                 // let integracao = await IntegracoesModel.findOne({ sku: "centermix" });
                 // let itau = new ItauIntegration();
                 // let response = await itau.init(integracao!._id.toString());
+                // await itau.getWebhooks();
                 // await itau.setWebhook();
                 // let data = "2026-01-20";
                 // await itau.getRecebimentos(data, data, processarListaPixs);
@@ -185,6 +195,9 @@ async function start() {
                 // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
                 // let bradescoIntegracao = new BradescoIntegration();
                 // await bradescoIntegracao.init(integracao?._id.toString() || '');
+                // await bradescoIntegracao.setWebhook();
+                // await bradescoIntegracao.getWebhooks();
+                
                 // let dias_pra_tras = 90;
                 // for (let i = 0; i <= dias_pra_tras; i++) {
                 //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
@@ -198,103 +211,10 @@ async function start() {
                 // await sicoob.setWebhook();
                 // await sicoob.getWebhooks();
 
-                // let integracao = await IntegracoesModel.findOne({ sku: "itauteste1" });
-                // let itau = new ItauIntegration();
-                // let response = await itau.init(integracao!._id.toString());
 
-                // let integracao = await IntegracoesModel.findOne({sku: "lsdevelopers"});
-                // let efi = new EfiIntegration();
-                // let response = await efi.init(integracao!._id.toString());
-                // await efi.setWebhook();
-                // await efi.reenviarWebhook();
-                // await efi.deleteWebhook('30727693000180');
-                // await efi.getWebhooks();
-
-                // let integracao = await IntegracoesModel.findOne({ sku: "comercialpredileto" });
-                // let santander = new SantanderIntegration();
-                // let response = await santander.init(integracao!._id.toString());
-                // while (true) {
-                //     console.log("GET");
-                //     let recebimentos = await santander.getRecebimentos('2026-01-16', '2026-01-16');
-                //     await processarListaPixs(recebimentos, integracao!);
-                // }
-
-                // let dias_pra_tras = 90;
-                // for (let i = 0; i <= dias_pra_tras; i++) {
-                //     try {
-                //         let data_recebidos = await santander.getRecebimentos(data, data);
-                //         processarListaPixs(data_recebidos, integracao!)
-                //             .then((res) => {
-                //                 console.log(`Data: ${data} - Total de recebidos processados: ${data_recebidos.length}`);
-                //             })
-                //             .catch((err) => {
-                //                 console.log(`Data: ${data} - Erro ao processar os recebidos:`, err);
-                //             });
-                //     } catch (error) {
-
-                //     }
-                // }
             } catch (error) {
                 console.log('@@@', error);
             }
-
-            // await criarEmpresaNova(
-            //     'CENTER MIX',
-            //     '',
-            //     '0001003',
-            //     'Leonardo Souza',
-            //     '02581748206',
-            //     'leosouza',
-            //     '91983045923',
-            //     '1234'
-            // )
-
-            // startDB();
-            // await cronjobsController.syncSicoobPixRecebidos('2025-12-10');
-            // await ajustaEmpresaPedro();
-            // await IntegracoesModel.findOneAndUpdate(
-            //     {
-            //         nome: 'Itaú - Empresa Teste',
-            //         banco: INTEGRACOES_BANCOS.ITAU,
-            //     },
-            //     {
-            //         $set: {
-            //             client_id: '988b3b25-c30b-4ccb-83b9-afb00eb7a5cd',
-            //             client_secret: '8edf638b-923c-4d9a-92d7-530e0e512d15',
-            //             path_certificado: 'magolocacoes',
-            //              chave_pix: '5298ebe9-c633-4fcf-8ead-f0fee7d65af2'
-            //         }
-            //     },
-            //     { new: true, upsert: true }
-            // )
-            // console.log("Inicializadoo")
-
-
-
-            // try {
-            //     let itauIntegracao = new ItauIntegration();
-            //     let resp = await itauIntegracao.init('69664acd35c325bb9cf34610');
-            //     let response = await itauIntegracao.getRecebimentos('2026-01-01', '2026-01-10');
-            // } catch (error) {
-            //     console.log('@@@', error);
-            // }
-
-            // console.log(`  > Sucesso! Total de ${resultado.total} registros sincronizados.`);
-            // let dias_pra_tras = 36;
-            // let data_limite = "2025-12-06"
-            // for (let i = dias_pra_tras; i >= 0; i--) {
-            //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
-            //     if (data > data_limite) {
-            //         continue;
-            //     }
-            //     console.log(`Sincronizando PIXs recebidos do Sicoob para o dia ${data}...`);
-            //     try {
-            //         let resultado = await cronjobsController.syncSicoobPixRecebidos(data);
-            //         console.log(`  > Sucesso! Total de ${resultado.total} registros sincronizados.`);
-            //     } catch (error) {
-            //         console.log(`  > Erro ao sincronizar os registros:`, error);
-            //     }
-            // }
 
 
         });

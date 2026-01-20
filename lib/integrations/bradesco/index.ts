@@ -8,6 +8,7 @@ import { logDev } from "../../util";
 
 
 interface IIntegracao {
+    _id?: string;
     client_id?: string;
     client_secret?: string;
     path_certificado?: string;
@@ -36,9 +37,10 @@ export class BradescoIntegration {
 
     async init(integracao_id: string) {
         try {
-            let integracao = await IntegracoesModel.findById(integracao_id);
+            let integracao: any = await IntegracoesModel.findById(integracao_id);
             if (!integracao) throw new Error('Integração não encontrada');
             this.chave_pix = integracao.chave_pix || '';
+            this.integracao = integracao;
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
             this.auth_url = 'https://qrpix.bradesco.com.br/auth/server/oauth/token'
@@ -104,7 +106,7 @@ export class BradescoIntegration {
             let _dataFinal = '';
             if (agora === dayjs(dataFinal).format('YYYY-MM-DD')) {
                 _dataFinal = dayjs().toISOString();
-            }else{
+            } else {
                 _dataFinal = dayjs(dataFinal).endOf('day').toISOString();
             }
             let _dataInicial = dayjs(dataInicial).toISOString()
@@ -134,6 +136,60 @@ export class BradescoIntegration {
                 console.log("Erro ao consultar Pix recebidos:", JSON.stringify(error.response.data, null, 2));
             }
             throw error;
+        }
+    }
+
+    async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook') {
+        try {
+            let response = await axios({
+                method: "PUT",
+                url: `${this.url}/v2/webhook/${this.chave_pix}`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': this.bearer_token
+                },
+                data: JSON.stringify({
+                    webhookUrl: url
+                })
+            })
+            await IntegracoesModel.updateOne(
+                {
+                    _id: this.integracao._id
+                },
+                {
+                    $set: {
+                        webhook_configurado: true,
+                        webhook_url: url
+                    }
+                }
+            )
+            console.log(`Webhook definido com sucesso: ${response.status}`);
+        } catch (error: any) {
+            if (error.response.data) {
+                console.log("Erro ao consultar Pix recebidos:", JSON.stringify(error.response.data, null, 2));
+            }
+            throw error
+        }
+    }
+    async getWebhooks() {
+        try {
+            let response = await axios({
+                method: "GET",
+                url: `${this.url}/v2/webhook`,
+                httpsAgent: this.httpsAgent,
+                headers: {
+                    'Accept': 'application/json',
+                    'authorization': this.bearer_token
+                }
+            })
+            console.log(JSON.stringify(response.data, null, 2));
+        } catch (error: any) {
+            if (error.response.data) {
+                console.log("Erro ao consultar Pix recebidos:", JSON.stringify(error.response.data, null, 2));
+            }
+            throw error
         }
     }
 }

@@ -296,7 +296,28 @@ export class ItauIntegration {
                 })
                 console.log(_data.data, _data.status);
             }
-        } catch (error:any) {
+        } catch (error: any) {
+            if (error?.response?.data) {
+                console.log(JSON.stringify(error.response.data, null, 2));
+            }
+            throw error;
+        }
+    }
+    async getWebhooks() {
+        try {
+            let urlParams = new URLSearchParams();
+            urlParams.append('inicio', '2024-01-01T00:00:00Z');
+            urlParams.append('fim', dayjs().endOf('day').toISOString());
+            let _data = await axios({
+                method: "GET",
+                url: `${this.url}/pix_recebimentos/v2/webhook?${urlParams.toString()}`,
+                headers: {
+                    'Authorization': this.bearer_token,
+                },
+                httpsAgent: this.httpsAgent,
+            })
+            console.log(_data.data);
+        } catch (error: any) {
             if (error?.response?.data) {
                 console.log(JSON.stringify(error.response.data, null, 2));
             }

@@ -41,26 +41,6 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get("/", (req, res, next) => {
-    res.json("Online!");
-})
-
-// Endpoint para recepção do webhook com tratamento de autorização mútua
-app.post("/webhook", (request, response) => {
-    try {
-        console.log(LOG_LEVEL, "PIX Webhook Configured", request.body)
-        let tslSocket = request.socket as TLSSocket;
-        if (tslSocket?.authorized) {
-            console.log(LOG_LEVEL, "Client Certificate Configured and Authorized!");
-            response.status(200).end();
-        } else {
-            response.status(401).end();
-        }
-    } catch (error) {
-        errorHandler(error, response);
-    }
-});
-
 interface IPixWebhook {
     endToEndId: string;
     valor?: number;
@@ -121,9 +101,22 @@ async function initiateWebhookProcessing(pix: IPixWebhook) {
     }
 }
 
+app.get("/", (req, res, next) => {
+    res.json("Online!");
+})
+
+app.post("/webhook", async (request, response) => {
+    try {
+        console.log(LOG_LEVEL, "PIX Webhook Config Received", request.body);
+        response.status(200).end();
+    } catch (error) {
+        errorHandler(error, response);
+    }
+});
+
 app.post("/webhook/pix", async (request, response) => {
     try {
-        console.log(LOG_LEVEL, "PIX RECEIVED!");
+        console.log(LOG_LEVEL, "Webhook Received Successfully", request.body);
         let tslSocket = request.socket as TLSSocket;
         if (tslSocket?.authorized) {
             let { body } = request;
