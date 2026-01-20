@@ -1,17 +1,17 @@
 
+import dayjs from "dayjs";
 import express from "express";
 import fs from "fs";
 import https from "https";
 import { TLSSocket } from "tls";
-import { errorHandler } from "../util";
-import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
-import { EfiIntegration } from "../integrations/efi";
-import dayjs from "dayjs";
 import { processarListaPixs } from "../controllers/cronjobs.controller";
 import { BradescoIntegration } from "../integrations/bradesco";
+import { EfiIntegration } from "../integrations/efi";
 import { ItauIntegration } from "../integrations/itau";
 import { SantanderIntegration } from "../integrations/santander";
 import { SicoobIntegration } from "../integrations/sicoob";
+import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
+import { errorHandler } from "../util";
 
 const app = express();
 
