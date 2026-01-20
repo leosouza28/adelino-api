@@ -106,7 +106,6 @@ export class ItauIntegration {
             let totalPaginas = 1;
             let todosResultados: any[] = [];
             while (paginaAtual < totalPaginas) {
-                logDev("Buscando página", paginaAtual);
                 let query = new URLSearchParams({
                     inicio: dayjs(dataInicial).startOf('day').add(3, 'h').toISOString(),
                     fim: dayjs(dataFinal).endOf('day').add(3, 'h').toISOString(),
@@ -127,7 +126,6 @@ export class ItauIntegration {
                 paginaAtual += 1;
             }
             try {
-                console.log(todosResultados);
                 if (processarPixesFunction) await processarPixesFunction(todosResultados, this.integracao);
             } catch (error) { }
             this.getRecebimentosConciliado(dataInicial);
@@ -142,32 +140,37 @@ export class ItauIntegration {
 
     async getRecebimentosConciliado(data: string = '') {
         try {
-            let paginaAtual = 1;
-            let totalPaginas = 1;
+            let chaves: any = [];
+            if (this.chave_pix) chaves.push(this.chave_pix);
+            if (this.chave_pix2) chaves.push(this.chave_pix2);
             let todosResultados: any[] = [];
-            while (paginaAtual <= totalPaginas) {
-                let query = new URLSearchParams({
-                    data_lancamento: `${dayjs(data).format("YYYY-MM-DDTHH:mm")},${dayjs(data).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
-                    chaves: this.chave_pix,
-                    view: 'basico',
-                    page: paginaAtual.toString(),
-                    page_size: '100',
-                }).toString();
-                let response = await axios({
-                    method: "GET",
-                    url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
-                    headers: {
-                        'Authorization': this.bearer_token,
-                        'Content-Type': 'application/json',
-                    },
-                    httpsAgent: this.httpsAgent
-                })
-                let dados = response.data;
-                todosResultados = todosResultados.concat(dados.data);
-                totalPaginas = dados.pagination.totalPages;
-                paginaAtual += 1;
+            for (let chave of chaves) {
+                logDev(`Conciliando recebimentos para a chave ${chave} na data ${data}`);
+                let paginaAtual = 1;
+                let totalPaginas = 1;
+                while (paginaAtual <= totalPaginas) {
+                    let query = new URLSearchParams({
+                        data_lancamento: `${dayjs(data).format("YYYY-MM-DDTHH:mm")},${dayjs(data).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
+                        chaves: chave,
+                        view: 'basico',
+                        page: paginaAtual.toString(),
+                        page_size: '100',
+                    }).toString();
+                    let response = await axios({
+                        method: "GET",
+                        url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
+                        headers: {
+                            'Authorization': this.bearer_token,
+                            'Content-Type': 'application/json',
+                        },
+                        httpsAgent: this.httpsAgent
+                    })
+                    let dados = response.data;
+                    todosResultados = todosResultados.concat(dados.data);
+                    totalPaginas = dados.pagination.totalPages;
+                    paginaAtual += 1;
+                }
             }
-            console.log(todosResultados);
             let updates = [];
             for (let lancamento of todosResultados) {
                 if (
@@ -204,77 +207,75 @@ export class ItauIntegration {
             throw error;
         }
     }
+    // async conciliarPeriodo(dataInicial: string, dataFinal: string) {
+    //     try {
+    //         let paginaAtual = 1;
+    //         let totalPaginas = 1;
+    //         let todosResultados: any[] = [];
+    //         while (paginaAtual <= totalPaginas) {
 
-    async conciliarPeriodo(dataInicial: string, dataFinal: string) {
-        try {
-            let paginaAtual = 1;
-            let totalPaginas = 1;
-            let todosResultados: any[] = [];
-            while (paginaAtual <= totalPaginas) {
-
-                logDev("Buscando página", paginaAtual);
-                let chaves = [];
-                if (this.chave_pix) {
-                    chaves.push(this.chave_pix);
-                }
-                if (this.chave_pix2) {
-                    chaves.push(this.chave_pix2);
-                }
-                let query = new URLSearchParams({
-                    data_lancamento: `${dayjs(dataInicial).add(3, 'h').format("YYYY-MM-DDTHH:mm")},${dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
-                    chaves: chaves.join(','),
-                    view: 'basico',
-                    page: paginaAtual.toString(),
-                    page_size: '100',
-                }).toString();
-                let response = await axios({
-                    method: "GET",
-                    url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
-                    headers: {
-                        'Authorization': this.bearer_token,
-                        'Content-Type': 'application/json',
-                    },
-                    httpsAgent: this.httpsAgent
-                })
-                let dados = response.data;
-                if (paginaAtual == 1) logDev(`Total de Páginas a processar: ${dados.pagination.totalPages}`);
-                todosResultados = todosResultados.concat(dados.data);
-                totalPaginas = dados.pagination.totalPages;
-                paginaAtual += 1;
-            }
-            let updates = [];
-            for (let lancamento of todosResultados) {
-                if (
-                    lancamento?.detalhe_pagamento?.id_pagamento &&
-                    lancamento?.detalhe_pagamento?.debitado?.nome &&
-                    lancamento?.detalhe_pagamento?.debitado?.numero_documento
-                ) {
-                    let payload_pagador: any = { nome: lancamento.detalhe_pagamento.debitado.nome };
-                    if (lancamento?.detalhe_pagamento?.debitado?.numero_documento?.length == 11) {
-                        payload_pagador['cpf'] = lancamento.detalhe_pagamento.debitado.numero_documento;
-                    } else {
-                        payload_pagador['cnpj'] = lancamento.detalhe_pagamento.debitado.numero_documento;
-                    }
-                    updates.push({
-                        updateOne: {
-                            filter: {
-                                'endToEndId': lancamento.detalhe_pagamento.id_pagamento,
-                                'empresa._id': this.integracao.empresa._id,
-                            },
-                            update: {
-                                'nomePagador': lancamento.detalhe_pagamento.debitado.nome,
-                                'pagador': payload_pagador
-                            }
-                        }
-                    })
-                }
-            }
-            await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
-            logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
-        } catch (error) {
-            throw error;
-        }
-    }
+    //             let chaves = [];
+    //             if (this.chave_pix) {
+    //                 chaves.push(this.chave_pix);
+    //             }
+    //             if (this.chave_pix2) {
+    //                 chaves.push(this.chave_pix2);
+    //             }
+    //             let query = new URLSearchParams({
+    //                 data_lancamento: `${dayjs(dataInicial).add(3, 'h').format("YYYY-MM-DDTHH:mm")},${dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
+    //                 chaves: chaves.join(','),
+    //                 view: 'basico',
+    //                 page: paginaAtual.toString(),
+    //                 page_size: '100',
+    //             }).toString();
+    //             let response = await axios({
+    //                 method: "GET",
+    //                 url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
+    //                 headers: {
+    //                     'Authorization': this.bearer_token,
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 httpsAgent: this.httpsAgent
+    //             })
+    //             let dados = response.data;
+    //             if (paginaAtual == 1) logDev(`Total de Páginas a processar: ${dados.pagination.totalPages}`);
+    //             todosResultados = todosResultados.concat(dados.data);
+    //             totalPaginas = dados.pagination.totalPages;
+    //             paginaAtual += 1;
+    //         }
+    //         let updates = [];
+    //         for (let lancamento of todosResultados) {
+    //             if (
+    //                 lancamento?.detalhe_pagamento?.id_pagamento &&
+    //                 lancamento?.detalhe_pagamento?.debitado?.nome &&
+    //                 lancamento?.detalhe_pagamento?.debitado?.numero_documento
+    //             ) {
+    //                 let payload_pagador: any = { nome: lancamento.detalhe_pagamento.debitado.nome };
+    //                 if (lancamento?.detalhe_pagamento?.debitado?.numero_documento?.length == 11) {
+    //                     payload_pagador['cpf'] = lancamento.detalhe_pagamento.debitado.numero_documento;
+    //                 } else {
+    //                     payload_pagador['cnpj'] = lancamento.detalhe_pagamento.debitado.numero_documento;
+    //                 }
+    //                 updates.push({
+    //                     updateOne: {
+    //                         filter: {
+    //                             'endToEndId': lancamento.detalhe_pagamento.id_pagamento,
+    //                             'empresa._id': this.integracao.empresa._id,
+    //                         },
+    //                         update: {
+    //                             'nomePagador': lancamento.detalhe_pagamento.debitado.nome,
+    //                             'pagador': payload_pagador
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //         await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
+    //         logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
     async setWebhook(url_webhook: string = 'https://webhook.trackpix.com.br/webhook') {
         try {
             let chaves = [];

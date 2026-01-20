@@ -19,6 +19,7 @@ export class SicoobIntegration {
     authorized: boolean = false;
     scopes: string = "";
     chave_pix = '42156259000176';
+    integracao: any = null;
 
     constructor() {
         this.development = false;
@@ -27,8 +28,9 @@ export class SicoobIntegration {
 
     async init(integracao_id: string) {
         try {
-            let integracao = await IntegracoesModel.findById(integracao_id);
+            let integracao: any = await IntegracoesModel.findById(integracao_id);
             if (!integracao) throw new Error('Integração não encontrada');
+            this.integracao = integracao
             this.chave_pix = integracao.chave_pix || '';
             this.client_id = integracao.client_id!;
             this.auth_url = 'https://auth.sicoob.com.br/auth/realms/cooperado/protocol/openid-connect/token';
@@ -36,6 +38,7 @@ export class SicoobIntegration {
             this.scopes = integracao.scopes!;
             let certPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'cert.crt');
             let keyPath = path.join(__dirname, 'certificates', integracao.path_certificado!, 'key.key');
+
             this.httpsAgent = new https.Agent({
                 cert: fs.readFileSync(certPath),
                 key: fs.readFileSync(keyPath),
@@ -100,7 +103,6 @@ export class SicoobIntegration {
             let totalPaginas = 1;
             let todosResultados: any[] = [];
             while (paginaAtual < totalPaginas) {
-                logDev("Buscando página", paginaAtual);
                 query = new URLSearchParams({
                     inicio: dayjs(dataInicial).startOf('day').add(3, 'h').toISOString(),
                     fim: dayjs(dataFinal).endOf('day').add(3, 'h').toISOString(),
@@ -207,22 +209,21 @@ export class SicoobIntegration {
 
     async setWebhook(url: string = 'https://webhook.trackpix.com.br/webhook/sicoob') {
         try {
-            logDev({ chave_pix: this.chave_pix })
-            try {
-                let response = await axios({
-                    method: "DELETE",
-                    url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,
-                    httpsAgent: this.httpsAgent,
-                    headers: {
-                        'client_id': this.client_id,
-                        'authorization': this.bearer_token,
-                        'Content-Type': 'application/json'
-                    },
-                })
-                logDev("Webhook deletado", response.status);
-            } catch (error) {
-                logDev("Nenhum webhook para deletar");
-            }
+            // try {
+            //     let response = await axios({
+            //         method: "PATCH",
+            //         url: `${this.url}/api/v2/webhook/${this.chave_pix}`,
+            //         httpsAgent: this.httpsAgent,
+            //         headers: {
+            //             'client_id': this.client_id,
+            //             'authorization': this.bearer_token,
+            //         },
+            //     })
+            //     logDev("Webhook deletado", response.status);
+            // } catch (error) {
+            //     console.log(error);
+            //     logDev("Nenhum webhook para deletar");
+            // }
             let response = await axios({
                 method: "PUT",
                 url: `${this.url}/pix/api/v2/webhook/${this.chave_pix}`,
@@ -236,6 +237,10 @@ export class SicoobIntegration {
                     webhookUrl: url
                 })
             })
+            await IntegracoesModel.findByIdAndUpdate(this.integracao._id, {
+                webhook_configurado: true,
+                webhook_url: url
+            });
             logDev("Webhook configurado", response.status);
             logDev("Webhook configurado para:", url);
         } catch (error) {

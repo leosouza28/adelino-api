@@ -179,25 +179,16 @@ async function start() {
             try {
                 // let integracao = await IntegracoesModel.findOne({ sku: "centermix" });
                 // let itau = new ItauIntegration();
-                // let response = await itau.init(integracao!._id.toString());
-                // await itau.getWebhooks();
-                // await itau.setWebhook();
+                // await itau.init(integracao!._id.toString());
                 // let data = "2026-01-20";
                 // await itau.getRecebimentos(data, data, processarListaPixs);
-
-                // let dias_pra_tras = 90;
-                // for (let i = 0; i <= dias_pra_tras; i++) {
-                //     logDev(`Buscando recebidos do Itau para o dia ${dayjs().add(-i, 'day').format("YYYY-MM-DD")}...`);
-                //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
-                //     await itau.getRecebimentos(data, data, processarListaPixs);
-                // }
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
                 // let bradescoIntegracao = new BradescoIntegration();
                 // await bradescoIntegracao.init(integracao?._id.toString() || '');
                 // await bradescoIntegracao.setWebhook();
                 // await bradescoIntegracao.getWebhooks();
-                
+
                 // let dias_pra_tras = 90;
                 // for (let i = 0; i <= dias_pra_tras; i++) {
                 //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
@@ -205,11 +196,11 @@ async function start() {
                 //     await processarListaPixs(response, integracao!)
                 // }
 
-                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino1"});
-                // let sicoob = new SicoobIntegration();
-                // let response = await sicoob.init(integracao!._id.toString());
+                let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino"});
+                let sicoob = new SicoobIntegration();
+                let response = await sicoob.init(integracao!._id.toString());
                 // await sicoob.setWebhook();
-                // await sicoob.getWebhooks();
+                await sicoob.getWebhooks();
 
 
             } catch (error) {

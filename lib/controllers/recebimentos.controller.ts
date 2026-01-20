@@ -90,6 +90,7 @@ export default {
     },
     getRecebimentos: async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log(req.query);
             let lista = [], total = 0;
             let perpage = Number(req.query.perpage) || 10;
             let page = Number(req.query.page) || 1;

@@ -1,5 +1,17 @@
 cron:
-  # - description: "Atualizar PIX"
-  #   url: "/cron/sync-sicoob"
-  #   schedule: every 1 mins
-  #   target: "adelino-api"
+  - description: "ADELINO MATERIAL DE CONSTRUÇÃO"
+    url: "/cron/sync-integracoes/sicoobadelino"
+    schedule: every 1 mins
+    target: "adelino-api"
+  - description: "PIT STOP DO PADEIRO"
+    url: "/cron/sync-integracoes/pitstopdopadeiro"
+    schedule: every 1 mins
+    target: "adelino-api"
+  - description: "CENTER NORTH"
+    url: "/cron/sync-integracoes/centernorth"
+    schedule: every 1 mins
+    target: "adelino-api"
+  - description: "CENTER MIX"
+    url: "/cron/sync-integracoes/centermix"
+    schedule: every 1 mins
+    target: "adelino-api"

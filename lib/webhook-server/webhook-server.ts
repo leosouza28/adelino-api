@@ -12,6 +12,7 @@ import { SantanderIntegration } from "../integrations/santander";
 import { SicoobIntegration } from "../integrations/sicoob";
 import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
 import { errorHandler } from "../util";
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -153,8 +154,16 @@ app.post("/webhook/sicoob/pix", (request, response) => {
     }
 });
 
+const DB_URL = process.env.DB_URL!;
 httpsServer.listen(PORT, () => {
     console.log("App online at:", PORT)
+    mongoose.connect(DB_URL)
+        .then(() => {
+            console.log("Connected to database");
+        })
+        .catch((error) => {
+            console.log("Database connection error:", error);
+        });
 })
 
 // gcloud compute ssh --zone "us-central1-f" "webhook-getnet" --project "kingingressosv3"

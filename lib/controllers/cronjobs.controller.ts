@@ -195,7 +195,7 @@ export async function processarListaPixs(lista: any[], integracao: any) {
                     update: {
                         $set: {
                             ...element,
-                            chave_pix_utilizada: integracao.chave_pix,
+                            chave_pix_utilizada: element?.chave || '',
                             empresa: integracao.empresa,
                             gateway: integracao.banco,
                             last_sync: dayjs().toDate()
