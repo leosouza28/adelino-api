@@ -53,7 +53,8 @@ async function criarEmpresaNova(
     cpf_proprietario: string,
     username_proprietario: string,
     telefone_proprietario: string,
-    senha_proprietario: string = 'xpto1234'
+    senha_proprietario: string = 'xpto1234',
+    generate_proprietario: boolean = true
 ) {
     try {
         let empresa = await EmpresasModel.findOne({ documento: cnpj });
@@ -74,43 +75,55 @@ async function criarEmpresaNova(
             scopes: ['*'],
         });
         await perfil_admin.save();
-        let usuario_admin = new UsuariosModel({
-            empresas: [
-                {
-                    ..._empresa.toJSON(),
-                    perfil: perfil_admin,
-                    ativo: true
-                }
-            ],
-            documento: cpf_proprietario,
-            username: username_proprietario,
-            nome: nome_proprietario,
-            doc_type: 'cpf',
-            senha: bcrypt.hashSync(senha_proprietario, 10),
-            status: USUARIO_MODEL_STATUS.ATIVO,
-            niveis: [USUARIO_NIVEL.ADMIN],
-            origem_cadastro: "SISTEMA",
-            telefone_principal: {
-                tipo: USUARIO_MODEL_TIPO_TELEFONE.CEL_WHATSAPP,
-                valor: telefone_proprietario,
+        console.log(JSON.stringify({
+            _id: _empresa._id.toString(),
+            nome: _empresa.nome,
+            perfil: {
+                _id: perfil_admin._id.toString(),
+                nome: perfil_admin.nome,
+                scopes: perfil_admin.scopes
             },
-            telefones: [
-                {
+            ativo: true
+        }, null, 2))
+        if (generate_proprietario) {
+            let usuario_admin = new UsuariosModel({
+                empresas: [
+                    {
+                        ..._empresa.toJSON(),
+                        perfil: perfil_admin,
+                        ativo: true
+                    }
+                ],
+                documento: cpf_proprietario,
+                username: username_proprietario,
+                nome: nome_proprietario,
+                doc_type: 'cpf',
+                senha: bcrypt.hashSync(senha_proprietario, 10),
+                status: USUARIO_MODEL_STATUS.ATIVO,
+                niveis: [USUARIO_NIVEL.ADMIN],
+                origem_cadastro: "SISTEMA",
+                telefone_principal: {
                     tipo: USUARIO_MODEL_TIPO_TELEFONE.CEL_WHATSAPP,
                     valor: telefone_proprietario,
-                    principal: true
+                },
+                telefones: [
+                    {
+                        tipo: USUARIO_MODEL_TIPO_TELEFONE.CEL_WHATSAPP,
+                        valor: telefone_proprietario,
+                        principal: true
+                    }
+                ],
+                criado_por: {
+                    data_hora: dayjs().toDate(),
+                    usuario: {
+                        _id: "SISTEMA",
+                        nome: "SISTEMA",
+                        username: "SISTEMA"
+                    }
                 }
-            ],
-            criado_por: {
-                data_hora: dayjs().toDate(),
-                usuario: {
-                    _id: "SISTEMA",
-                    nome: "SISTEMA",
-                    username: "SISTEMA"
-                }
-            }
-        });
-        await usuario_admin.save();
+            });
+            await usuario_admin.save();
+        }
         logDev("Empresa criada com sucesso:", _empresa.nome);
     } catch (error) {
         console.log("Falha ao criar a empresa", error)
@@ -154,6 +167,21 @@ async function start() {
             // await addEmpresasToAdmin();
 
             try {
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "centermix" });
+                // let itau = new ItauIntegration();
+                // let response = await itau.init(integracao!._id.toString());
+                // await itau.setWebhook();
+                // let data = "2026-01-20";
+                // await itau.getRecebimentos(data, data, processarListaPixs);
+
+                // let dias_pra_tras = 90;
+                // for (let i = 0; i <= dias_pra_tras; i++) {
+                //     logDev(`Buscando recebidos do Itau para o dia ${dayjs().add(-i, 'day').format("YYYY-MM-DD")}...`);
+                //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //     await itau.getRecebimentos(data, data, processarListaPixs);
+                // }
+
                 // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
                 // let bradescoIntegracao = new BradescoIntegration();
                 // await bradescoIntegracao.init(integracao?._id.toString() || '');
@@ -210,11 +238,10 @@ async function start() {
                 console.log('@@@', error);
             }
 
-
             // await criarEmpresaNova(
-            //     'LS DEVELOPERS',
-            //     '30727693000180',
-            //     '999999',
+            //     'CENTER MIX',
+            //     '',
+            //     '0001003',
             //     'Leonardo Souza',
             //     '02581748206',
             //     'leosouza',

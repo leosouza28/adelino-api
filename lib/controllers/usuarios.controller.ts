@@ -97,6 +97,15 @@ export default {
             errorHandler(error, res);
         }
     },
+    relogin: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // @ts-ignore
+            let sessao = await gerarSessao(req.usuario._id)
+            res.json(sessao);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
     getUsuario: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let { id, busca_por, tipo_documento, documento } = req.query;

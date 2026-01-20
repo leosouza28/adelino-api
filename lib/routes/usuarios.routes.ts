@@ -12,6 +12,7 @@ router.get("/v1/me", autenticar, usuariosController.me)
 // Usuários
 router.get('/v1/admin/usuarios', autenticar, usuariosController.getUsuarios);
 router.get('/v1/admin/usuario', autenticar, usuariosController.getUsuario);
+router.post('/v1/relogin', autenticar, usuariosController.relogin);
 // Vendedores
 router.get('/v1/admin/usuarios/vendedores', autenticar, usuariosController.getVendedores);
 

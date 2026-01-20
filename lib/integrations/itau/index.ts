@@ -31,6 +31,7 @@ export class ItauIntegration {
     authorized: boolean = false;
     integracao: any = {};
     chave_pix: string = '';
+    chave_pix2: string = '';
 
     constructor() {
         this.development = false;
@@ -42,6 +43,7 @@ export class ItauIntegration {
             if (!integracao) throw new Error('Integração não encontrada');
             this.integracao = integracao;
             this.chave_pix = integracao.chave_pix || '';
+            this.chave_pix2 = integracao.chave_pix2 || '';
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
             this.auth_url = 'https://sts.itau.com.br/api';
@@ -125,6 +127,7 @@ export class ItauIntegration {
                 paginaAtual += 1;
             }
             try {
+                console.log(todosResultados);
                 if (processarPixesFunction) await processarPixesFunction(todosResultados, this.integracao);
             } catch (error) { }
             this.getRecebimentosConciliado(dataInicial);
@@ -143,7 +146,6 @@ export class ItauIntegration {
             let totalPaginas = 1;
             let todosResultados: any[] = [];
             while (paginaAtual <= totalPaginas) {
-                logDev("Buscando página", paginaAtual);
                 let query = new URLSearchParams({
                     data_lancamento: `${dayjs(data).format("YYYY-MM-DDTHH:mm")},${dayjs(data).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
                     chaves: this.chave_pix,
@@ -165,6 +167,7 @@ export class ItauIntegration {
                 totalPaginas = dados.pagination.totalPages;
                 paginaAtual += 1;
             }
+            console.log(todosResultados);
             let updates = [];
             for (let lancamento of todosResultados) {
                 if (
@@ -196,6 +199,8 @@ export class ItauIntegration {
             logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
             return todosResultados;
         } catch (error) {
+            // @ts-ignore
+            console.log(JSON.stringify(error?.response?.data, null, 2));
             throw error;
         }
     }
@@ -208,9 +213,16 @@ export class ItauIntegration {
             while (paginaAtual <= totalPaginas) {
 
                 logDev("Buscando página", paginaAtual);
+                let chaves = [];
+                if (this.chave_pix) {
+                    chaves.push(this.chave_pix);
+                }
+                if (this.chave_pix2) {
+                    chaves.push(this.chave_pix2);
+                }
                 let query = new URLSearchParams({
                     data_lancamento: `${dayjs(dataInicial).add(3, 'h').format("YYYY-MM-DDTHH:mm")},${dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
-                    chaves: this.chave_pix,
+                    chaves: chaves.join(','),
                     view: 'basico',
                     page: paginaAtual.toString(),
                     page_size: '100',
@@ -260,6 +272,34 @@ export class ItauIntegration {
             await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
             logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
         } catch (error) {
+            throw error;
+        }
+    }
+    async setWebhook(url_webhook: string = 'https://webhook.trackpix.com.br/webhook') {
+        try {
+            let chaves = [];
+            if (this.chave_pix) chaves.push(this.chave_pix);
+            if (this.chave_pix2) chaves.push(this.chave_pix2);
+            for (let chave of chaves) {
+                console.log("Setting", chave)
+                let _data = await axios({
+                    method: "PUT",
+                    url: `${this.url}/pix_recebimentos/v2/webhook/${chave}`,
+                    headers: {
+                        'Authorization': this.bearer_token,
+                        'Content-Type': 'application/json',
+                    },
+                    httpsAgent: this.httpsAgent,
+                    data: JSON.stringify({
+                        webhookUrl: url_webhook,
+                    })
+                })
+                console.log(_data.data, _data.status);
+            }
+        } catch (error:any) {
+            if (error?.response?.data) {
+                console.log(JSON.stringify(error.response.data, null, 2));
+            }
             throw error;
         }
     }

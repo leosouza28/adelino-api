@@ -1,0 +1,1 @@
+openssl req -new -subj "/CN=1a372d01-407d-4644-99e1-b8d484928fa0/OU=P S DA COSTA DISTRIBUIDORA/L=CASTANHAL/ST=PA/C=BR" -out certificado.csr -nodes -sha512 -newkey rsa:2048 -keyout key.key
