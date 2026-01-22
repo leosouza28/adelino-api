@@ -20,9 +20,12 @@ const ModelSchema = new mongoose.Schema({
 
     chave_pix: String,
     chave_pix2: String,
+    chaves_itau: [String],
 
     webhook_configurado: Boolean,
     webhook_url: String,
+    
+    last_sync: Date,
     
     empresa: {
         _id: String,

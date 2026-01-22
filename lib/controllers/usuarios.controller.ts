@@ -283,7 +283,10 @@ export default {
                 status: USUARIO_MODEL_STATUS.ATIVO,
                 telefones: [],
                 telefone_principal: null,
+                controle_acesso: req.body.controle_acesso || { ativado: false, horarios: [] },
             }
+            console.log(JSON.stringify(payload, null, 2));
+
             if (!!req.body?.sexo) payload.sexo = req.body.sexo;
             if (req.body?.data_nascimento?.length == '10') payload.data_nascimento = dayjs(req.body.data_nascimento).toDate();
             if (!req.body?._id) payload.senha = bcrypt.hashSync(req.body.senha, 10);
@@ -321,7 +324,7 @@ export default {
             }
 
 
-
+            // logDev(JSON.stringify(req.body, null, 2));
 
 
             if (!!req.body?._id) {
@@ -353,9 +356,16 @@ export default {
                                     'empresa._id': req.empresa._id
                                 }
                             )
+                            empresa.controle_acesso = payload.controle_acesso;
+                            empresa.limitar_dias_consulta = req.body.limitar_dias_consulta || false;
+                            empresa.max_dias_passados = req.body.max_dias_passados || 0;
                             empresa.ativo = req.body.ativo || false;
                         } else {
                             empresa.perfil = null;
+                            // @ts-ignore
+                            empresa.controle_acesso = { ativado: false, horarios: [] };
+                            empresa.limitar_dias_consulta = false;
+                            empresa.max_dias_passados = 0;
                             empresa.ativo = false;
                         }
                     }
@@ -384,9 +394,12 @@ export default {
                     payload.empresas[0].perfil = await PerfisModel.findOne(
                         {
                             _id: req.body.perfil,
-                            'empresa._id': req.empresa._id
+                            'empresa._id': req.empresa._id,
                         }
                     )
+                    payload.empresas[0].controle_acesso = payload.controle_acesso;
+                    payload.empresas[0].limitar_dias_consulta = req.body.limitar_dias_consulta || false;
+                    payload.empresas[0].max_dias_passados = req.body.max_dias_passados || 0;
                     payload.empresas[0].ativo = req.body.ativo || false;
                 }
                 let has_user_doc = await UsuariosModel.findOne({ documento: req.body.documento, 'empresas._id': String(req.empresa._id) }).lean();

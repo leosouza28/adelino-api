@@ -44,6 +44,7 @@ export async function ajustaEmpresaPedro() {
 
 
 export default {
+
     syncIntegracao: async (req: Request, res: Response) => {
         try {
             let { sku, data } = req.params;
@@ -90,6 +91,57 @@ export default {
             res.json(true);
         } catch (error) {
             errorHandler(error, res);
+        }
+    },
+    syncEmpresaIntegracoes: async (req: Request, res: Response) => {
+        try {
+            let integracoes = await IntegracoesModel.find({ 'empresa._id': String(req.empresa._id) });
+            if (!integracoes.length) return;
+            let agora = dayjs().add(-3, 'h').format('YYYY-MM-DD');
+            let lista_pix: any[] = [];
+            await Promise.all(
+                integracoes.map(async (integracao) => {
+                    // logDev(`Iniciando sincronização da integração: ${integracao.nome} - Banco: ${integracao.banco}`);
+                    if (integracao?.banco === INTEGRACOES_BANCOS.EFI) {
+                        // Process EFI specific logic
+                        let efi = new EfiIntegration();
+                        await efi.init(integracao._id.toString());
+                        lista_pix = await efi.getRecebimentos(agora, agora)
+                        await processarListaPixs(lista_pix, integracao);
+                    }
+                    if (integracao?.banco == INTEGRACOES_BANCOS.BRADESCO) {
+                        // Process Bradesco specific logic
+                        let bradesco = new BradescoIntegration();
+                        await bradesco.init(integracao._id.toString());
+                        lista_pix = await bradesco.getRecebimentos(agora, agora)
+                        await processarListaPixs(lista_pix, integracao);
+                    }
+                    if (integracao?.banco == INTEGRACOES_BANCOS.ITAU) {
+                        // Process Itau specific logic
+                        let itau = new ItauIntegration();
+                        await itau.init(integracao._id.toString());
+                        lista_pix = await itau.getRecebimentos(agora, agora, processarListaPixs)
+                    }
+                    if (integracao?.banco == INTEGRACOES_BANCOS.SANTANDER) {
+                        // Process Santander specific logic
+                        let santander = new SantanderIntegration();
+                        await santander.init(integracao._id.toString());
+                        lista_pix = await santander.getRecebimentos(agora, agora)
+                        await processarListaPixs(lista_pix, integracao);
+                    }
+                    if (integracao?.banco == INTEGRACOES_BANCOS.SICOOB) {
+                        // Process Sicoob specific logic
+                        let sicoob = new SicoobIntegration();
+                        await sicoob.init(integracao._id.toString());
+                        lista_pix = await sicoob.getRecebimentos(agora, agora)
+                        await processarListaPixs(lista_pix, integracao);
+                    }
+                })
+            )
+            logDev("Sincronização de integrações finalizada.");
+            res.json(true);
+        } catch (error) {
+            console.error("Erro ao sincronizar integrações:", error);
         }
     },
 }
@@ -172,7 +224,7 @@ export async function processarListaPixs(lista: any[], integracao: any) {
                 baixas_pixs.push(element.txid);
             }
             if (valor_pix === valor_devolucao) {
-                console.log(`Pix ${element.endToEndId} totalmente devolvido. Removendo do sistema.`);
+                // console.log(`Pix ${element.endToEndId} totalmente devolvido. Removendo do sistema.`);
                 updates.push({
                     deleteOne: {
                         filter: {
@@ -205,9 +257,9 @@ export async function processarListaPixs(lista: any[], integracao: any) {
                 }
             })
         });
-        logDev("Processando", updates.length, "registros de PIX recebidos...");
+        // logDev("Processando", updates.length, "registros de PIX recebidos...");
         await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
-        logDev("Registros processados com sucesso.");
+        // logDev("Registros processados com sucesso.");
         try {
             if (baixas_pixs.length > 0 && integracao.banco === INTEGRACOES_BANCOS.SICOOB) {
                 let sicoob = new SicoobIntegration();
@@ -225,6 +277,20 @@ export async function processarListaPixs(lista: any[], integracao: any) {
             await notificarPixRecebidos(integracao.empresa._id);
         } catch (error) {
             console.error(`Error at Notificar PIXs: ${error}`);
+        }
+        try {
+            await IntegracoesModel.updateOne(
+                {
+                    _id: integracao._id
+                },
+                {
+                    $set: {
+                        last_sync: dayjs().toDate()
+                    }
+                }
+            )
+        } catch (error) {
+            console.log("Erro ao atualizar last_sync da integração:", error);
         }
     } catch (error) {
         console.log(error);

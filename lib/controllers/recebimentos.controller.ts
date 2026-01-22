@@ -1,10 +1,16 @@
 import { NextFunction, Request, Response } from "express"
 import { GATEWAYS_PIX, RECEBIMENTO_CLASSIFICACAO, RecebimentosPixModel } from "../models/recebimentos-pix.model"
-import { errorHandler } from "../util";
+import { errorHandler, logDev } from "../util";
 import dayjs from "dayjs";
 import { PixModel } from "../models/pix.model";
 import { SicoobIntegration } from "../integrations/sicoob";
-import { LojasModel } from "../models/lojas.model";
+import { LOJAS_TIPO_COMERCIO, LojasModel } from "../models/lojas.model";
+import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
+import { EfiIntegration } from "../integrations/efi";
+import { processarListaPixs } from "./cronjobs.controller";
+import { BradescoIntegration } from "../integrations/bradesco";
+import { ItauIntegration } from "../integrations/itau";
+import { SantanderIntegration } from "../integrations/santander";
 
 export default {
     atualizarRecebimento: async (req: Request, res: Response, next: NextFunction) => {
@@ -16,11 +22,11 @@ export default {
             } else {
                 $unset['data_caixa'] = "";
             }
-            if (!!req.body?.classificacao) {
-                $set['classificacao'] = req.body.classificacao;
-            } else {
-                $unset['classificacao'] = "";
-            }
+            // if (!!req.body?.classificacao) {
+            //     $set['classificacao'] = req.body.classificacao;
+            // } else {
+            //     $unset['classificacao'] = "";
+            // }
             if (req.body.cupom_fiscal_emitido) {
                 $set['cupom_fiscal_emitido'] = req.body.cupom_fiscal_emitido;
                 $set['cupom_fiscal_alteracao'] = {
@@ -70,8 +76,15 @@ export default {
                 let loja = await LojasModel.findOne({ _id: req.body.loja });
                 if (!loja) throw new Error("Loja não encontrada");
                 $set['loja'] = loja;
+                if (loja?.tipo_comercio == LOJAS_TIPO_COMERCIO.ATACADO) {
+                    $set['classificacao'] = RECEBIMENTO_CLASSIFICACAO.VENDA_ATACADO;
+                }
+                if (loja?.tipo_comercio == LOJAS_TIPO_COMERCIO.VAREJO || loja?.tipo_comercio == LOJAS_TIPO_COMERCIO.VAREJO_ATACADO) {
+                    $set['classificacao'] = RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO;
+                }
             } else {
                 $unset['loja'] = "";
+                $unset['classificacao'] = "";
             }
             await RecebimentosPixModel.updateOne(
                 {
@@ -90,7 +103,37 @@ export default {
     },
     getRecebimentos: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log(req.query);
+            if (req?.empresa?.controle_acesso?.ativado) {
+                let dia_semana = dayjs().add(-3, 'h').day();
+                let hora_atual = dayjs().add(-3, 'h').format('HH:mm');
+                let acesso_permitido = false;
+                let controle_acesso = req.empresa.controle_acesso;
+                // a estrutura de 'controle_acesso' é uma array de horarios que contem dia_semana, hora_inicio e hora_fim
+                for (let horario of controle_acesso.horarios) {
+                    if (horario.dia === dia_semana && horario.ativado) {
+                        // verificar se a hora atual está entre o hora_inicio e hora_fim
+                        if (hora_atual >= horario.hora_inicio && hora_atual <= horario.hora_fim) {
+                            logDev('Acesso permitido pelo controle de acesso');
+                            acesso_permitido = true;
+                            break;
+                        }
+                    }
+                }
+                if (!acesso_permitido) {
+                    logDev("Fora do Horário de Acesso Permitido pelo Controle de Acesso da Empresa");
+                    return res.json({ lista: [], total: 0 })
+                }
+            }
+            if (req?.empresa?.limitar_dias_consulta) {
+                let hoje = dayjs().add(-3, 'h').startOf('day');
+                let data_consulta = req.query.data ? dayjs(String(req.query.data)).startOf('day') : hoje;
+                let dias_passados = hoje.diff(data_consulta, 'day');
+                if (dias_passados > req.empresa.max_dias_passados) {
+                    logDev("Limite de dias para consulta excedido pela empresa");
+                    return res.json({ lista: [], total: 0 })
+                }
+            }
+
             let lista = [], total = 0;
             let perpage = Number(req.query.perpage) || 10;
             let page = Number(req.query.page) || 1;
@@ -102,6 +145,7 @@ export default {
             let filter: any = {
                 'empresa._id': String(req.empresa._id)
             }
+
             if (req.query.tipo_data === 'caixa') {
                 filter.data_caixa = {
                     $gte: dayjs(data).toDate(),
@@ -194,13 +238,11 @@ export default {
 
             let lojas = await LojasModel.find({ 'empresa._id': String(req.empresa._id) }).sort({ nome: 1 }).lean();
 
-            console.log(req.empresa);
-            
             let _caixas_lojas = await RecebimentosPixModel.aggregate([
                 {
                     $match: {
                         'data_caixa': dayjs(data).toDate(),
-                        'classificacao': RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO,
+                        'classificacao': { $in: [RECEBIMENTO_CLASSIFICACAO.VENDA_VAREJO, RECEBIMENTO_CLASSIFICACAO.VENDA_ATACADO] },
                         'loja._id': { $exists: true },
                         'empresa._id': String(req.empresa._id)
                     }
@@ -223,7 +265,7 @@ export default {
                     total: caixa_loja ? caixa_loja.total : 0
                 });
             }
-            
+
             res.json({
                 lista,
                 total,

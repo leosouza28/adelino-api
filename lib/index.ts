@@ -75,16 +75,6 @@ async function criarEmpresaNova(
             scopes: ['*'],
         });
         await perfil_admin.save();
-        console.log(JSON.stringify({
-            _id: _empresa._id.toString(),
-            nome: _empresa.nome,
-            perfil: {
-                _id: perfil_admin._id.toString(),
-                nome: perfil_admin.nome,
-                scopes: perfil_admin.scopes
-            },
-            ativo: true
-        }, null, 2))
         if (generate_proprietario) {
             let usuario_admin = new UsuariosModel({
                 empresas: [
@@ -196,11 +186,12 @@ async function start() {
                 //     await processarListaPixs(response, integracao!)
                 // }
 
-                let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino"});
-                let sicoob = new SicoobIntegration();
-                let response = await sicoob.init(integracao!._id.toString());
+                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino"});
+                // let sicoob = new SicoobIntegration();
+                // let response = await sicoob.init(integracao!._id.toString());
+                // await sicoob.getWebhooks();
                 // await sicoob.setWebhook();
-                await sicoob.getWebhooks();
+                // await sicoob.getWebhooks();
 
 
             } catch (error) {

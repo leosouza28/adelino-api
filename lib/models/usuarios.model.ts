@@ -115,6 +115,20 @@ const ModelSchema = new mongoose.Schema({
                 nome: String,
                 scopes: [String]
             },
+            controle_acesso: {
+                ativado: Boolean,
+                horarios: [
+                    {
+                        dia: Number,
+                        label: String,
+                        ativado: Boolean,
+                        hora_inicio: String,
+                        hora_fim: String
+                    }
+                ]
+            },
+            limitar_dias_consulta: Boolean,
+            max_dias_passados: Number,
             ativo: Boolean
         }
     ],

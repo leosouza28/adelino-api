@@ -106,6 +106,8 @@ async function autenticar(req: any, res: Response, next: NextFunction) {
                 }
                 if (!possuiAcesso) throw NAO_AUTORIZADO;
                 req.empresa = req.usuario.empresas.find((e: any) => String(e._id) == String(empresa._id));
+                // Testar se o está ativo o usuário
+                if (!req.empresa?.ativo) throw NAO_AUTORIZADO;
                 let { scopes } = await PerfisModel.findOne({ _id: req.empresa.perfil._id }, { scopes: 1 }).lean() || { scopes: [] };
                 req.usuario.scopes = scopes;
             }

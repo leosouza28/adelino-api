@@ -287,7 +287,6 @@ export default {
     getLojaById: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let { id } = req.params;
-            console.log(req.empresa._id, id);
             let loja = await LojasModel.findOne({ _id: id, 'empresa._id': String(req.empresa._id) });
             if (!loja) throw new Error('Loja não encontrada');
             res.json(loja);
@@ -305,6 +304,7 @@ export default {
                     {
                         $set: {
                             nome,
+                            tipo_comercio: req.body?.tipo_comercio || "",
                             atualizado_por: {
                                 data_hora: dayjs().toDate(),
                                 usuario: req.usuario
@@ -318,6 +318,7 @@ export default {
             } else {
                 let novaLoja = new LojasModel({
                     nome,
+                    tipo_comercio: req.body?.tipo_comercio || "",
                     empresa: {
                         _id: String(req.empresa._id),
                         nome: req.empresa.nome

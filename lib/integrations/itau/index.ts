@@ -32,6 +32,7 @@ export class ItauIntegration {
     integracao: any = {};
     chave_pix: string = '';
     chave_pix2: string = '';
+    chaves_itau: string[] = [];
 
     constructor() {
         this.development = false;
@@ -44,6 +45,9 @@ export class ItauIntegration {
             this.integracao = integracao;
             this.chave_pix = integracao.chave_pix || '';
             this.chave_pix2 = integracao.chave_pix2 || '';
+            this.chaves_itau = integracao.chaves_itau || [];
+            // remover repetido de chaves_itau
+            this.chaves_itau = Array.from(new Set(this.chaves_itau));
             this.client_id = integracao.client_id!;
             this.client_secret = integracao.client_secret!;
             this.auth_url = 'https://sts.itau.com.br/api';
@@ -140,14 +144,15 @@ export class ItauIntegration {
 
     async getRecebimentosConciliado(data: string = '') {
         try {
-            let chaves: any = [];
-            if (this.chave_pix) chaves.push(this.chave_pix);
-            if (this.chave_pix2) chaves.push(this.chave_pix2);
-            let todosResultados: any[] = [];
-            for (let chave of chaves) {
-                logDev(`Conciliando recebimentos para a chave ${chave} na data ${data}`);
+            let chaves: any = this.chaves_itau;
+            logDev("Iniciando conciliação de recebimentos para as chaves:", chaves);
+            // Criar promises para cada chave
+            const chavePromises = chaves.map(async (chave: string) => {
+                // logDev(`Conciliando recebimentos para a chave ${chave} na data ${data}`);
                 let paginaAtual = 1;
                 let totalPaginas = 1;
+                let resultadosChave: any[] = [];
+                
                 while (paginaAtual <= totalPaginas) {
                     let query = new URLSearchParams({
                         data_lancamento: `${dayjs(data).format("YYYY-MM-DDTHH:mm")},${dayjs(data).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
@@ -156,6 +161,7 @@ export class ItauIntegration {
                         page: paginaAtual.toString(),
                         page_size: '100',
                     }).toString();
+                    
                     let response = await axios({
                         method: "GET",
                         url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
@@ -164,13 +170,21 @@ export class ItauIntegration {
                             'Content-Type': 'application/json',
                         },
                         httpsAgent: this.httpsAgent
-                    })
+                    });
+                    
                     let dados = response.data;
-                    todosResultados = todosResultados.concat(dados.data);
+                    resultadosChave = resultadosChave.concat(dados.data);
                     totalPaginas = dados.pagination.totalPages;
                     paginaAtual += 1;
                 }
-            }
+                
+                return resultadosChave;
+            });
+            
+            // Executar todas as promises em paralelo
+            const resultadosPorChave = await Promise.all(chavePromises);
+            const todosResultados = resultadosPorChave.flat();
+            
             let updates = [];
             for (let lancamento of todosResultados) {
                 if (
@@ -198,8 +212,11 @@ export class ItauIntegration {
                     })
                 }
             }
-            await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
-            logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
+            
+            if (updates.length > 0) {
+                await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
+            }
+            // logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
             return todosResultados;
         } catch (error) {
             // @ts-ignore
@@ -207,75 +224,6 @@ export class ItauIntegration {
             throw error;
         }
     }
-    // async conciliarPeriodo(dataInicial: string, dataFinal: string) {
-    //     try {
-    //         let paginaAtual = 1;
-    //         let totalPaginas = 1;
-    //         let todosResultados: any[] = [];
-    //         while (paginaAtual <= totalPaginas) {
-
-    //             let chaves = [];
-    //             if (this.chave_pix) {
-    //                 chaves.push(this.chave_pix);
-    //             }
-    //             if (this.chave_pix2) {
-    //                 chaves.push(this.chave_pix2);
-    //             }
-    //             let query = new URLSearchParams({
-    //                 data_lancamento: `${dayjs(dataInicial).add(3, 'h').format("YYYY-MM-DDTHH:mm")},${dayjs(dataFinal).endOf('day').add(3, 'h').format("YYYY-MM-DDTHH:mm")}`,
-    //                 chaves: chaves.join(','),
-    //                 view: 'basico',
-    //                 page: paginaAtual.toString(),
-    //                 page_size: '100',
-    //             }).toString();
-    //             let response = await axios({
-    //                 method: "GET",
-    //                 url: `${this.url}/pix_recebimentos_conciliacoes/v2/lancamentos_pix?${query}`,
-    //                 headers: {
-    //                     'Authorization': this.bearer_token,
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 httpsAgent: this.httpsAgent
-    //             })
-    //             let dados = response.data;
-    //             if (paginaAtual == 1) logDev(`Total de Páginas a processar: ${dados.pagination.totalPages}`);
-    //             todosResultados = todosResultados.concat(dados.data);
-    //             totalPaginas = dados.pagination.totalPages;
-    //             paginaAtual += 1;
-    //         }
-    //         let updates = [];
-    //         for (let lancamento of todosResultados) {
-    //             if (
-    //                 lancamento?.detalhe_pagamento?.id_pagamento &&
-    //                 lancamento?.detalhe_pagamento?.debitado?.nome &&
-    //                 lancamento?.detalhe_pagamento?.debitado?.numero_documento
-    //             ) {
-    //                 let payload_pagador: any = { nome: lancamento.detalhe_pagamento.debitado.nome };
-    //                 if (lancamento?.detalhe_pagamento?.debitado?.numero_documento?.length == 11) {
-    //                     payload_pagador['cpf'] = lancamento.detalhe_pagamento.debitado.numero_documento;
-    //                 } else {
-    //                     payload_pagador['cnpj'] = lancamento.detalhe_pagamento.debitado.numero_documento;
-    //                 }
-    //                 updates.push({
-    //                     updateOne: {
-    //                         filter: {
-    //                             'endToEndId': lancamento.detalhe_pagamento.id_pagamento,
-    //                             'empresa._id': this.integracao.empresa._id,
-    //                         },
-    //                         update: {
-    //                             'nomePagador': lancamento.detalhe_pagamento.debitado.nome,
-    //                             'pagador': payload_pagador
-    //                         }
-    //                     }
-    //                 })
-    //             }
-    //         }
-    //         await RecebimentosPixModel.bulkWrite(updates, { ordered: false });
-    //         logDev("Atualizados dados de pagadores em recebimentos conciliados:", updates.length);
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
     async setWebhook(url_webhook: string = 'https://webhook.trackpix.com.br/webhook') {
         try {
             let chaves = [];
