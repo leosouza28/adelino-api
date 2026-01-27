@@ -15,6 +15,7 @@ import { PIX_STATUS, PixModel } from "../models/pix.model";
 
 export default async () => {
     try {
+        console.log("Starting integrations synchronization...");
         let integracoes = await IntegracoesModel.find({ active: true }).lean();
         let _data = dayjs().add(-3, 'h').format("YYYY-MM-DD");
         let promises = integracoes.map(async (integracao) => syncIntegracao(integracao!, _data));
@@ -23,7 +24,7 @@ export default async () => {
         } catch (error) {
             console.error(error);
         }
-        logDev("Sincronização de integrações concluída.");
+        console.log("Finished integrations synchronization.");
     } catch (error) {
         console.error('Error at sync', error);
     }
