@@ -1,29 +1,29 @@
 cron:
-  - description: "ADELINO MATERIAL DE CONSTRUÇÃO"
-    url: "/cron/sync-integracoes/sicoobadelino"
-    schedule: every 1 mins
-    target: "adelino-api"
-  - description: "PIT STOP DO PADEIRO"
-    url: "/cron/sync-integracoes/pitstopdopadeiro"
-    schedule: every 1 mins
-    target: "adelino-api"
-  - description: "CENTER NORTH"
-    url: "/cron/sync-integracoes/centernorth"
-    schedule: every 1 mins
-    target: "adelino-api"
-  - description: "CENTER MIX"
-    url: "/cron/sync-integracoes/centermix"
-    schedule: every 1 mins
-    target: "adelino-api"
-  - description: "MAGO LOCACOES"
-    url: "/cron/sync-integracoes/magolocacoes"
-    schedule: every 1 mins
-    target: "adelino-api"
-  - description: "ECLIPSE"
-    url: "/cron/sync-integracoes/magolocacoes_mp_payments"
-    schedule: every 10 mins
-    target: "adelino-api"
-  - description: "NEW MAGO"
-    url: "/cron/sync-integracoes/newmago_mp_payments"
-    schedule: every 10 mins
-    target: "adelino-api"
+  # - description: "ADELINO MATERIAL DE CONSTRUÇÃO"
+  #   url: "/cron/sync-integracoes/sicoobadelino"
+  #   schedule: every 1 mins
+  #   target: "adelino-api"
+  # - description: "PIT STOP DO PADEIRO"
+  #   url: "/cron/sync-integracoes/pitstopdopadeiro"
+  #   schedule: every 1 mins
+  #   target: "adelino-api"
+  # - description: "CENTER NORTH"
+  #   url: "/cron/sync-integracoes/centernorth"
+  #   schedule: every 1 mins
+  #   target: "adelino-api"
+  # - description: "CENTER MIX"
+  #   url: "/cron/sync-integracoes/centermix"
+  #   schedule: every 1 mins
+  #   target: "adelino-api"
+  # - description: "MAGO LOCACOES"
+  #   url: "/cron/sync-integracoes/magolocacoes"
+  #   schedule: every 1 mins
+  #   target: "adelino-api"
+  # - description: "ECLIPSE"
+  #   url: "/cron/sync-integracoes/magolocacoes_mp_payments"
+  #   schedule: every 10 mins
+  #   target: "adelino-api"
+  # - description: "NEW MAGO"
+  #   url: "/cron/sync-integracoes/newmago_mp_payments"
+  #   schedule: every 10 mins
+  #   target: "adelino-api"

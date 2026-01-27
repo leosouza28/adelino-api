@@ -8,7 +8,7 @@ module.exports = {
                 DEV: 0,
                 CRON_ON: 1
             },
-            log_date_format: "DD/MM HH:mm"
+            log_date_format: "DD/MM HH:mm:ss"
         }
         // {
         //     name: "webhook-trackpix",
