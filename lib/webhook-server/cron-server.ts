@@ -58,4 +58,4 @@ async function startTasks() {
 startTasks()
 
 
-// gcloud compute ssh --zone "us-central1-f" "nodeapps@webhook-getnet" --project "kingingressosv3"
+// gcloud compute ssh --zone "us-central1-a" "nodeapps@punk-node" --project "kingingressosv3"

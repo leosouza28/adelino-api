@@ -4,6 +4,7 @@ module.exports = {
             name: "cron-tp",
             script: "dist/webhook-server/cron-server.js",
             env: {
+                PORT: 8005,
                 DEV: 0,
                 CRON_ON: 1
             },
