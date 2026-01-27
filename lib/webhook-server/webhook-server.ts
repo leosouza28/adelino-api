@@ -166,4 +166,3 @@ httpsServer.listen(PORT, () => {
         });
 })
 
-// gcloud compute ssh --zone "us-central1-f" "webhook-getnet" --project "kingingressosv3"

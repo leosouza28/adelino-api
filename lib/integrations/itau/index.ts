@@ -230,7 +230,6 @@ export class ItauIntegration {
             if (this.chave_pix) chaves.push(this.chave_pix);
             if (this.chave_pix2) chaves.push(this.chave_pix2);
             for (let chave of chaves) {
-                console.log("Setting", chave)
                 let _data = await axios({
                     method: "PUT",
                     url: `${this.url}/pix_recebimentos/v2/webhook/${chave}`,
@@ -243,7 +242,6 @@ export class ItauIntegration {
                         webhookUrl: url_webhook,
                     })
                 })
-                console.log(_data.data, _data.status);
             }
         } catch (error: any) {
             if (error?.response?.data) {
@@ -265,7 +263,6 @@ export class ItauIntegration {
                 },
                 httpsAgent: this.httpsAgent,
             })
-            console.log(_data.data);
         } catch (error: any) {
             if (error?.response?.data) {
                 console.log(JSON.stringify(error.response.data, null, 2));

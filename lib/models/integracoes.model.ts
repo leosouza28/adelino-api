@@ -10,6 +10,10 @@ const ModelSchema = new mongoose.Schema({
     client_id: String,
     client_secret: String,
 
+    // MercadoPago
+    access_token: String,
+    public_key: String,
+
     path_certificado: String,
     bearer_token: String,
     last_bearer_token_update: Date,
@@ -26,6 +30,8 @@ const ModelSchema = new mongoose.Schema({
     webhook_url: String,
     
     last_sync: Date,
+
+    active: Boolean,
     
     empresa: {
         _id: String,
@@ -45,5 +51,6 @@ export const INTEGRACOES_BANCOS = {
     SICOOB: 'SICOOB',
     ITAU: 'ITAU',
     SANTANDER: 'SANTANDER',
-    EFI: 'EFI'
+    EFI: 'EFI',
+    MERCADO_PAGO_PAYMENTS_POS: 'MERCADO_PAGO_PAYMENTS_POS',
 }

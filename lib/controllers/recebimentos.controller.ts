@@ -11,6 +11,7 @@ import { processarListaPixs } from "./cronjobs.controller";
 import { BradescoIntegration } from "../integrations/bradesco";
 import { ItauIntegration } from "../integrations/itau";
 import { SantanderIntegration } from "../integrations/santander";
+import { RecebimentosPOSModel } from "../models/recebimentos-pos.model";
 
 export default {
     atualizarRecebimento: async (req: Request, res: Response, next: NextFunction) => {
@@ -97,6 +98,165 @@ export default {
                 }
             )
             res.json(true);
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getRecebimentosPOSSummary: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let filter: any = {
+                'empresa._id': String(req.empresa._id),
+            }
+            if (req.query?.data_inicial && req.query?.data_final) {
+                filter.data = {
+                    $gte: dayjs(String(req.query.data_inicial)).add(3, 'h').toDate(),
+                    $lte: dayjs(String(req.query.data_final)).add(3, 'h').toDate(),
+                }
+            }
+            if (!!req.query?.status) filter['status'] = String(req.query.status);
+
+            let total_valor_query = 0;
+            let total_vendas_query = 0;
+            let total_por_forma_pagamento: any[] = [];
+            let response = await RecebimentosPOSModel.aggregate([
+                {
+                    $match: filter
+                },
+                {
+                    $group: {
+                        _id: "$forma_pagamento",
+                        total_valor: { $sum: "$valor" },
+                        total_vendas: { $sum: 1 }
+                    }
+                },
+                {
+                    $sort: {
+                        _id: 1
+                    }
+                }
+            ])
+
+            if (response?.length) {
+                response.forEach((item: any) => {
+                    total_valor_query += item.total_valor;
+                    total_vendas_query += item.total_vendas;
+                    total_por_forma_pagamento.push({
+                        label: item?._id || "DESCONHECIDO",
+                        total_valor: item.total_valor,
+                        total_vendas: item.total_vendas
+                    });
+                });
+            }
+
+            let lista = await RecebimentosPOSModel.find(filter).sort({ data: 1 }).lean();
+
+            let recebimentos_por_data: any = {};
+            for (let l of lista) {
+                let data_key = dayjs(l.data).add(-3, 'h').format('YYYY-MM-DD');
+                if (!recebimentos_por_data[data_key]) {
+                    recebimentos_por_data[data_key] = {
+                        total_valor: 0,
+                        total_vendas: 0,
+                        formas_pagamento: {}
+                    }
+                }
+                // @ts-ignore
+                if (!recebimentos_por_data[data_key].formas_pagamento[l.forma_pagamento]) {
+                    // @ts-ignore
+                    recebimentos_por_data[data_key].formas_pagamento[l.forma_pagamento] = {
+                        total_valor: 0,
+                        total_vendas: 0
+                    }
+                }
+                // @ts-ignore
+                recebimentos_por_data[data_key].formas_pagamento[l.forma_pagamento].total_valor += l.valor;
+                // @ts-ignore
+                recebimentos_por_data[data_key].formas_pagamento[l.forma_pagamento].total_vendas += 1;
+                recebimentos_por_data[data_key].total_valor += l.valor;
+                recebimentos_por_data[data_key].total_vendas += 1;
+            }
+
+            res.json({
+                total_valor_query,
+                total_vendas_query,
+                total_por_forma_pagamento,
+                recebimentos_por_data,
+                lista
+            })
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    getRecebimentosPOS: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let lista = [], total = 0;
+            let perpage = Number(req.query.perpage) || 10;
+            let page = Number(req.query.page) || 1;
+            let skip = (perpage * page) - perpage;
+            let filter: any = {
+                'empresa._id': String(req.empresa._id),
+            }
+            if (req.query?.data_inicial && req.query?.data_final) {
+                filter.data = {
+                    $gte: dayjs(String(req.query.data_inicial)).add(3, 'h').toDate(),
+                    $lte: dayjs(String(req.query.data_final)).add(3, 'h').toDate(),
+                }
+            }
+            if (!!req.query?.status && req?.query?.status != 'TODOS') filter['status'] = String(req.query.status);
+            if (!!req.query?.busca) {
+                filter['$or'] = [
+                    { 'order_id': { $regex: String(req.query.busca), $options: 'i' } },
+                    { 'codigo_autorizacao': { $regex: String(req.query.busca), $options: 'i' } },
+                    { 'pos_identificacao': { $regex: String(req.query.busca), $options: 'i' } }
+                ]
+            }
+            if(!!req.query?.forma_pagamento && req?.query?.forma_pagamento != 'TODOS') filter['forma_pagamento'] = String(req.query.forma_pagamento);
+
+            logDev("Filtro Recebimentos POS: ", filter);
+
+            lista = await RecebimentosPOSModel.find(filter).sort({ data: -1 }).skip(skip).limit(perpage).lean();
+            total = await RecebimentosPOSModel.countDocuments(filter);
+
+            let total_valor_query = 0;
+            let total_vendas_query = 0;
+            let total_por_forma_pagamento: any[] = [];
+            let response = await RecebimentosPOSModel.aggregate([
+                {
+                    $match: filter
+                },
+                {
+                    $group: {
+                        _id: "$forma_pagamento",
+                        total_valor: { $sum: "$valor" },
+                        total_vendas: { $sum: 1 }
+                    }
+                },
+                {
+                    $sort: {
+                        _id: 1
+                    }
+                }
+            ])
+
+            if (response?.length) {
+                response.forEach((item: any) => {
+                    total_valor_query += item.total_valor;
+                    total_vendas_query += item.total_vendas;
+                    total_por_forma_pagamento.push({
+                        label: item?._id || "DESCONHECIDO",
+                        total_valor: item.total_valor,
+                        total_vendas: item.total_vendas
+                    });
+                });
+            }
+
+            res.json({
+                lista,
+                total,
+                total_valor_query,
+                total_vendas_query,
+                total_por_forma_pagamento
+            })
         } catch (error) {
             errorHandler(error, res);
         }

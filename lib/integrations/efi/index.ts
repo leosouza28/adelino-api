@@ -226,7 +226,6 @@ export class EfiIntegration {
                     },
                     data: JSON.stringify(body)
                 })
-                console.log(`Configuração da Chave PIX OK`, resp_config.status);
             } catch (error: any) {
                 console.log("Erro ao obter config", error.response.data);
             }
@@ -243,7 +242,6 @@ export class EfiIntegration {
                     webhookUrl: url
                 })
             })
-            console.log("Webhook configurado:", response.status);
             // await IntegracoesModel.updateOne(
             //     {
             //         _id: this.integracao._id,

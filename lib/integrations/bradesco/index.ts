@@ -165,7 +165,6 @@ export class BradescoIntegration {
                     }
                 }
             )
-            console.log(`Webhook definido com sucesso: ${response.status}`);
         } catch (error: any) {
             if (error.response.data) {
                 console.log("Erro ao consultar Pix recebidos:", JSON.stringify(error.response.data, null, 2));
@@ -184,7 +183,7 @@ export class BradescoIntegration {
                     'authorization': this.bearer_token
                 }
             })
-            console.log(JSON.stringify(response.data, null, 2));
+            // console.log(JSON.stringify(response.data, null, 2));
         } catch (error: any) {
             if (error.response.data) {
                 console.log("Erro ao consultar Pix recebidos:", JSON.stringify(error.response.data, null, 2));

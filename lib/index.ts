@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dayjs from 'dayjs';
@@ -7,23 +8,11 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import mongoose from 'mongoose';
 import path from 'path';
+import { EmpresasModel } from './models/empresas.model';
+import { PerfisModel } from './models/perfis.model';
+import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from './models/usuarios.model';
 import routes from './routes';
 import { logDev } from './util';
-import { SicoobIntegration } from './integrations/sicoob';
-import cronjobsController, { ajustaEmpresaPedro, processarListaPixs } from './controllers/cronjobs.controller';
-import { messaging } from './integrations/firebase';
-import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from './models/usuarios.model';
-import { startDB } from './populations';
-import { EmpresasModel } from './models/empresas.model';
-import { LojasModel } from './models/lojas.model';
-import usuariosController from './controllers/usuarios.controller';
-import { PerfisModel } from './models/perfis.model';
-import { INTEGRACOES_BANCOS, IntegracoesModel } from './models/integracoes.model';
-import { BradescoIntegration } from './integrations/bradesco';
-import { ItauIntegration } from './integrations/itau';
-import bcrypt from 'bcrypt';
-import { EfiIntegration } from './integrations/efi';
-import { SantanderIntegration } from './integrations/santander';
 
 dayjs.locale('pt-br');
 
@@ -156,22 +145,87 @@ async function start() {
             console.log(`Server is running on port ${PORT}`);
             // await addEmpresasToAdmin();
             // await criarEmpresaNova(
-            //     'CENTER MIX',
-            //     '',
-            //     '0001003',
-            //     'Leonardo Souza',
-            //     '02581748206',
-            //     'leosouza',
-            //     '91983045923',
-            //     '1234'
+            //     'NEW MAGO ENT LTDA',
+            //     '62975483000105',
+            //     '021002',
+            //     'SANDRO ROCHA',
+            //     '99999999999',
+            //     'sandro',
+            //     '21964352376',
+            //     '1234',
+            //     false
             // )
             // startDB();
+
+            // let empresa_mago = await EmpresasModel.findOne({ documento: '44179287000134' });
+            // await IntegracoesModel.updateOne(
+            //     {
+            //         sku: "magolocacoes_mp_payments",
+            //     },
+            //     {
+            //         $set: {
+            //             nome: "MercadoPago Payments POS - Mago Locacoes",
+            //             banco: INTEGRACOES_BANCOS.MERCADO_PAGO_PAYMENTS_POS,
+            //             client_id: '4642639874306409',
+            //             client_secret: 'HWRBVZynWQKBt7hXGVZ6TY2JIvFE75mR',
+            //             access_token: "APP_USR-4642639874306409-120608-92d86fecb2044613c5f5e64e833880db-2980173132",
+            //             public_key: "APP_USR-94cd39dc-f714-46db-b266-25050ae0ad5d",
+            //             bearer_token: `Bearer APP_USR-4642639874306409-120608-92d86fecb2044613c5f5e64e833880db-2980173132`,
+            //             empresa: {
+            //                 _id: empresa_mago!._id,
+            //                 nome: empresa_mago!.nome,
+            //             }
+            //         }
+            //     },
+            //     {
+            //         upsert: true
+            //     }
+            // )
+
+
             try {
-                // let integracao = await IntegracoesModel.findOne({ sku: "centermix" });
+                // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoes_mp_payments" });
+                // let mp = new MercadoPagoPayments();
+                // await mp.init(integracao!._id.toString());
+                // let times = 3;
+                // for (let i = 0; i < times; i++) {
+                //     logDev(`Iniciando passagem ${i + 1} de ${times} para recebimentos de POS...`);
+                //     let dias_para_tras = 7;
+                //     for (let i = 0; i <= dias_para_tras; i++) {
+                //         let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //         logDev(`Processando recebimentos do dia ${data}`);
+                //         let response = await mp.getRecebimentos(data, data);
+                //         await processarListaPOS(response, integracao!);
+                //     }
+                // }
+
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "newmago_mp_payments" });
+                // let mp = new MercadoPagoPayments();
+                // await mp.init(integracao!._id.toString());
+                // let times = 3;
+                // let dias_para_tras = 30;
+                // for (let i = 0; i <= dias_para_tras; i++) {
+                //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //     for (let j = 0; j < times; j++) {
+                //         logDev(`Processando recebimentos do dia ${data}`);
+                //         let response = await mp.getRecebimentos(data, data);
+                //         await processarListaPOS(response, integracao!);
+                //     }
+                // }
+
+
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoes" });
                 // let itau = new ItauIntegration();
                 // await itau.init(integracao!._id.toString());
-                // let data = "2026-01-20";
-                // await itau.getRecebimentos(data, data, processarListaPixs);
+
+                // let dias_passado = 90; 
+                // for (let i = 0; i <= dias_passado; i++) {
+                //     let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
+                //     let response = await itau.getRecebimentos(data, data);
+                //     await processarListaPixs(response, integracao!)
+                // }
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "centernorth" });
                 // let bradescoIntegracao = new BradescoIntegration();

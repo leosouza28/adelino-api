@@ -14,6 +14,7 @@ import { PerfisModel } from "../models/perfis.model";
 import { LojasModel } from "../models/lojas.model";
 import { AcessosModel } from "../models/acesso.model";
 import { InteresseModel } from "../models/interesse.model";
+import { POSModel } from "../models/pos.model";
 
 export default {
     admin: {
@@ -135,7 +136,7 @@ export default {
             }
             let doc = new AcessosModel({
                 body_params: req.body,
-                query_params: req.query, 
+                query_params: req.query,
                 connection_data: req.connection_data
             });
             await doc.save();
@@ -544,7 +545,24 @@ export default {
         } catch (error) {
             errorHandler(error, res);
         }
-    }
+    },
+    getListaPOS: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let { } = req.query;
+            let lista = await POSModel.find({ 'empresa._id': String(req.empresa._id) }).sort({ nome: 1 });
+            res.json({ lista, total: lista.length });
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
+    setPOS: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            console.log("OK");
+            throw new Error("Not implemented");
+        } catch (error) {
+            errorHandler(error, res);
+        }
+    },
 
 }
 

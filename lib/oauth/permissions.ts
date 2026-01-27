@@ -17,11 +17,14 @@ const scopes = {
 
     "pix.leitura": "Ler pix gerados pelo sistema",
     "pix.editar": "Gerar pix pelo sistema",
+    "pos.leitura": "Ler POS cadastrados no sistema",
+
 
     "lojas.leitura": "Permite acessar a lista de lojas",
     "lojas.editar": "Permite editar a lista de lojas",
 
     "monitoramento.pix_leitura": "Permite acessar o monitoramento de PIX",
+    "monitoramento.pos_leitura": "Permite acessar o monitoramento de POS",
 
     "relatorio.pix_recebidos": "Permite acessar o relatório de pix recebidos",
 

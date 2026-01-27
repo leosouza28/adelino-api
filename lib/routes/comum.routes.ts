@@ -31,4 +31,7 @@ router.post('/v1/admin/empresas/ativacao', autenticar, comumController.verificar
 router.get('/v1/admin/configuracoes', autenticar, empresaController.getConfiguracoesEmpresa);
 router.post('/v1/admin/configuracoes', autenticar, empresaController.postConfiguracoesEmpresa);
 
+router.get('/v1/admin/pos', autenticar, comumController.getListaPOS);
+router.post('/v1/admin/pos', autenticar, comumController.setPOS);
+
 export default router;
