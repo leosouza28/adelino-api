@@ -1,0 +1,3993 @@
+[
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "ip_address": "179.165.156.159",
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-30T13:49:38.412-04:00",
+        "execution_id": "01KG80CQ69865H7GTYNQE8NA94"
+      }
+    },
+    "collector": {
+      "email": null,
+      "first_name": null,
+      "id": 663391165,
+      "identification": {
+        "number": null,
+        "type": null
+      },
+      "last_name": null,
+      "operator_id": null,
+      "phone": null
+    },
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-30T13:49:39.000-04:00",
+    "date_created": "2026-01-30T13:49:38.000-04:00",
+    "date_last_updated": "2026-01-30T13:49:48.000-04:00",
+    "date_of_expiration": "2026-01-31T13:49:38.000-04:00",
+    "deduction_schema": null,
+    "description": null,
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [],
+    "financing_group": null,
+    "id": 143457703705,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {},
+    "money_release_date": "2026-01-30T13:49:39.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "money_transfer",
+    "order": {},
+    "payer_id": 2980173132,
+    "payment_method": {
+      "data": {
+        "trusted_contact": false
+      },
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": null,
+        "operating_system": null,
+        "version": null
+      },
+      "business_info": {
+        "branch": "Intra MP",
+        "sub_unit": "money_outflows",
+        "unit": "digital_accounts_cards"
+      },
+      "device": {
+        "initiation_mode": "fullData",
+        "manufacturer": null,
+        "model": null,
+        "serial_number": null
+      },
+      "sub_type": "INTRA_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": null,
+            "long_name": null,
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": null,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": null
+          }
+        },
+        "bank_transfer_id": null,
+        "e2e_id": "E105735212026013017496Kw4pdjdVwZ",
+        "financial_institution": null,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": null
+      },
+      "type": "PSP_TRANSFER"
+    },
+    "pos_id": null,
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": null,
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 30000,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": null,
+      "external_resource_url": null,
+      "financial_institution": null,
+      "installment_amount": 0,
+      "net_received_amount": 30000,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 30000,
+      "transaction_id": null
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.25,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-30T04:02:47.000-04:00",
+        "external_charge_id": "01KG6YT57G327PJZT80GM4QZ4C",
+        "id": "144071996800-001",
+        "last_updated": "2026-01-30T04:02:47.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-30T04:02:47.163-04:00",
+        "execution_id": "01KG6YT56T7WVGFZ4QFFA7PTXK"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-30T04:02:47.000-04:00",
+    "date_created": "2026-01-30T04:02:47.000-04:00",
+    "date_last_updated": "2026-01-30T04:02:50.000-04:00",
+    "date_of_expiration": "2026-01-31T04:02:47.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.25,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144071996800,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-30T04:02:47.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37733544446",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "BANCO BMG S.A."
+          }
+        },
+        "bank_transfer_id": 121736501906,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE61186680202601300802Ev1lVUxJo7r"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 50,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121736501906,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 49.75,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 50,
+      "transaction_id": "PIXE61186680202601300802Ev1lVUxJo7r"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.74,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-30T01:28:06.000-04:00",
+        "external_charge_id": "01KG6NYXP0G170F6XNQ0DY2C3W",
+        "id": "143386659643-001",
+        "last_updated": "2026-01-30T01:28:06.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-30T01:28:06.089-04:00",
+        "execution_id": "01KG6NYXN7XK1BZE06P6WM551N"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-30T01:28:06.000-04:00",
+    "date_created": "2026-01-30T01:28:06.000-04:00",
+    "date_last_updated": "2026-01-30T01:28:08.000-04:00",
+    "date_of_expiration": "2026-01-31T01:28:05.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.74,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143386659643,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-30T01:28:06.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37732963476",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121736069246,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300527s057bd7edaa"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 150,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121736069246,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 149.26,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 150,
+      "transaction_id": "PIXE18236120202601300527s057bd7edaa"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "ip_address": "189.40.66.137",
+      "items": [
+        {
+          "description": "Produto de ECLIPSE 2006",
+          "quantity": "1",
+          "title": "Produto de ECLIPSE 2006",
+          "unit_price": "300"
+        }
+      ],
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-30T00:31:15.621-04:00",
+        "execution_id": "01KG6JPV45QEVWB860AG419XVC"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-30T00:31:16.000-04:00",
+    "date_created": "2026-01-30T00:31:15.000-04:00",
+    "date_last_updated": "2026-01-30T00:31:23.000-04:00",
+    "date_of_expiration": null,
+    "deduction_schema": null,
+    "description": "Produto de ECLIPSE 2006",
+    "differential_pricing_id": null,
+    "external_reference": "INSTORE-45115086-031b-41fc-ab51-d1f57e0eca51",
+    "fee_details": [],
+    "financing_group": null,
+    "id": 143383802971,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "2007",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {},
+    "money_release_date": "2026-01-30T00:31:16.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37732558356",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "email": "soaresdaailvagomes@gmail.com",
+      "entity_type": null,
+      "first_name": null,
+      "id": "336469410",
+      "identification": {
+        "number": "12558833758",
+        "type": "CPF"
+      },
+      "last_name": null,
+      "operator_id": null,
+      "phone": {
+        "number": null,
+        "extension": null,
+        "area_code": null
+      },
+      "type": null
+    },
+    "payment_method": {
+      "id": "account_money",
+      "issuer_id": "2007",
+      "type": "account_money"
+    },
+    "payment_method_id": "account_money",
+    "payment_type_id": "account_money",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": null,
+        "operating_system": null,
+        "version": null
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": null,
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669914"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTRA_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": null,
+            "long_name": null,
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": null,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": null
+          }
+        },
+        "bank_transfer_id": null,
+        "e2e_id": null,
+        "financial_institution": null,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": null
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 300,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": null,
+      "external_resource_url": null,
+      "financial_institution": null,
+      "installment_amount": 0,
+      "net_received_amount": 300,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 300,
+      "transaction_id": null
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 3.92,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:57:24.000-04:00",
+        "external_charge_id": "01KG6GRVVTFC3GF8HMR7V0F604",
+        "id": "143381637821-001",
+        "last_updated": "2026-01-29T23:57:24.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:57:24.740-04:00",
+        "execution_id": "01KG6GRVV1RFKJKHKK6F7ZNVSY"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:57:24.000-04:00",
+    "date_created": "2026-01-29T23:57:24.000-04:00",
+    "date_last_updated": "2026-01-29T23:57:32.000-04:00",
+    "date_of_expiration": "2026-01-30T23:57:24.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 3.92,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143381637821,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:57:24.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37706128295",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "BANCO BRADESCO S.A."
+          }
+        },
+        "bank_transfer_id": 121735517024,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE60746948202601300357A14149l5t2k"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 800,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121735517024,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 796.08,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 800,
+      "transaction_id": "PIXE60746948202601300357A14149l5t2k"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.49,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:56:01.000-04:00",
+        "external_charge_id": "01KG6GPAERAYB6J7P9H4MY4GPD",
+        "id": "144059381684-001",
+        "last_updated": "2026-01-29T23:56:01.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:56:01.378-04:00",
+        "execution_id": "01KG6GPADT0HTYGEFEAVEAT78W"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:56:01.000-04:00",
+    "date_created": "2026-01-29T23:56:01.000-04:00",
+    "date_last_updated": "2026-01-29T23:56:06.000-04:00",
+    "date_of_expiration": "2026-01-30T23:56:01.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.49,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144059381684,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:56:01.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37706107815",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121679882039,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300355s07e46cc5fc"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 100,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121679882039,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 99.51,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 100,
+      "transaction_id": "PIXE18236120202601300355s07e46cc5fc"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.25,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:49:57.000-04:00",
+        "external_charge_id": "01KG6GB6YH8PQNH8ST13NVJFV6",
+        "id": "143381391199-001",
+        "last_updated": "2026-01-29T23:49:57.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:49:57.339-04:00",
+        "execution_id": "01KG6GB6XR85P5Q97JBN2X96X9"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:49:57.000-04:00",
+    "date_created": "2026-01-29T23:49:57.000-04:00",
+    "date_last_updated": "2026-01-29T23:50:00.000-04:00",
+    "date_of_expiration": "2026-01-30T23:49:57.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.25,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143381391199,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:49:57.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37706048349",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "PagSeguro Internet S.A."
+          }
+        },
+        "bank_transfer_id": 121735425968,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE085617012026013003495E20PZOPORK"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 50,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121735425968,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 49.75,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 50,
+      "transaction_id": "PIXE085617012026013003495E20PZOPORK"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.25,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:43:54.000-04:00",
+        "external_charge_id": "01KG6G04J3G8PWYBBG18FEK6NP",
+        "id": "144058711156-001",
+        "last_updated": "2026-01-29T23:43:54.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:43:54.444-04:00",
+        "execution_id": "01KG6G04HDECCT2XSPYXE4FXMT"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:43:54.000-04:00",
+    "date_created": "2026-01-29T23:43:54.000-04:00",
+    "date_last_updated": "2026-01-29T23:44:00.000-04:00",
+    "date_of_expiration": "2026-01-30T23:43:54.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.25,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144058711156,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:43:54.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37732084586",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121679780067,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300343s074aa98811"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 50,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121679780067,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 49.75,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 50,
+      "transaction_id": "PIXE18236120202601300343s074aa98811"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.25,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:33:13.000-04:00",
+        "external_charge_id": "01KG6FCJYNYEV8KH72YJHKC3S0",
+        "id": "144057875520-001",
+        "last_updated": "2026-01-29T23:33:13.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:33:13.823-04:00",
+        "execution_id": "01KG6FCJXXPWR70F75RBZHC6KX"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:33:13.000-04:00",
+    "date_created": "2026-01-29T23:33:13.000-04:00",
+    "date_last_updated": "2026-01-29T23:33:19.000-04:00",
+    "date_of_expiration": "2026-01-30T23:33:13.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.25,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144057875520,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:33:13.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37705853247",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121679639555,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300333s076fa3cddf"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 50,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121679639555,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 49.75,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 50,
+      "transaction_id": "PIXE18236120202601300333s076fa3cddf"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 7.35,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:22:52.000-04:00",
+        "external_charge_id": "01KG6ESMJ3CKYVYPB7J5CV5AVG",
+        "id": "143379712677-001",
+        "last_updated": "2026-01-29T23:22:52.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:22:52.876-04:00",
+        "execution_id": "01KG6ESMHCDYW263HV2HNETSKB"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:22:52.000-04:00",
+    "date_created": "2026-01-29T23:22:52.000-04:00",
+    "date_last_updated": "2026-01-29T23:22:57.000-04:00",
+    "date_of_expiration": "2026-01-30T23:22:52.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 7.35,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143379712677,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:22:52.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37705703627",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669873"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "ITAÚ UNIBANCO S.A."
+          }
+        },
+        "bank_transfer_id": 121735210094,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE60701190202601300322DY5ITRISE1D"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 1500,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121735210094,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 1492.65,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 1500,
+      "transaction_id": "PIXE60701190202601300322DY5ITRISE1D"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.49,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:20:45.000-04:00",
+        "external_charge_id": "01KG6ENQY6N03S7DBNCBYWCQ4Z",
+        "id": "144057332912-001",
+        "last_updated": "2026-01-29T23:20:45.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:20:45.264-04:00",
+        "execution_id": "01KG6ENQXCSYZJ9C4Y0S49H1D4"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:20:45.000-04:00",
+    "date_created": "2026-01-29T23:20:45.000-04:00",
+    "date_last_updated": "2026-01-29T23:20:50.000-04:00",
+    "date_of_expiration": "2026-01-30T23:20:45.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.49,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144057332912,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:20:45.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37731795962",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669873"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Caixa Econômica Federal"
+          }
+        },
+        "bank_transfer_id": 121679544441,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE003603052026013003203177ab133c3"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 100,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121679544441,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 99.51,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 100,
+      "transaction_id": "PIXE003603052026013003203177ab133c3"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 1.57,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:17:48.000-04:00",
+        "external_charge_id": "01KG6EGB3AWM1ZJVJJJ96VVSJ7",
+        "id": "144057250232-001",
+        "last_updated": "2026-01-29T23:17:48.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:17:48.276-04:00",
+        "execution_id": "01KG6EGB2GEE5DVYVCMQB2C880"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:17:48.000-04:00",
+    "date_created": "2026-01-29T23:17:48.000-04:00",
+    "date_last_updated": "2026-01-29T23:17:53.000-04:00",
+    "date_of_expiration": "2026-01-30T23:17:48.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 1.57,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144057250232,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:17:48.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37705648147",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669914"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "BANCO BRADESCO S.A."
+          }
+        },
+        "bank_transfer_id": 121735115642,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE60746948202601300317A1804sfVsQM"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 320,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121735115642,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 318.43,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 320,
+      "transaction_id": "PIXE60746948202601300317A1804sfVsQM"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 39.2,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T23:12:01.000-04:00",
+        "external_charge_id": "01KG6E5QYDHGPHYV7TW7YG8QXK",
+        "id": "143378956257-001",
+        "last_updated": "2026-01-29T23:12:01.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T23:12:00.984-04:00",
+        "execution_id": "01KG6E5QXNAJRVVMXXMCGPY9EY"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T23:12:01.000-04:00",
+    "date_created": "2026-01-29T23:12:01.000-04:00",
+    "date_last_updated": "2026-01-29T23:12:08.000-04:00",
+    "date_of_expiration": "2026-01-30T23:12:00.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 39.2,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143378956257,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T23:12:01.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37731659974",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121735063090,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300310s150e859b3b"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 8000,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121735063090,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 7960.8,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 8000,
+      "transaction_id": "PIXE18236120202601300310s150e859b3b"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.49,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T22:09:18.000-04:00",
+        "external_charge_id": "01KG6AJX7GW12X5W7YZZNK01FX",
+        "id": "143374465399-001",
+        "last_updated": "2026-01-29T22:09:18.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T22:09:18.074-04:00",
+        "execution_id": "01KG6AJX6R6998QMRM7XZ3HPW3"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T22:09:18.000-04:00",
+    "date_created": "2026-01-29T22:09:18.000-04:00",
+    "date_last_updated": "2026-01-29T22:09:28.000-04:00",
+    "date_of_expiration": "2026-01-30T22:09:17.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.49,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143374465399,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {},
+    "money_release_date": "2026-01-29T22:09:18.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37704605849",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "PAX",
+        "model": "Q92",
+        "serial_number": "Q92-1733187629"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Caixa Econômica Federal"
+          }
+        },
+        "bank_transfer_id": 121734177916,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE00360305202601300208c1b7f7da0c4"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121076446",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 100,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121734177916,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 99.51,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 100,
+      "transaction_id": "PIXE00360305202601300208c1b7f7da0c4"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 5.88,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T22:08:06.000-04:00",
+        "external_charge_id": "01KG6AGQPK46CEH4CGBYXCN8YS",
+        "id": "144052201204-001",
+        "last_updated": "2026-01-29T22:08:06.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T22:08:06.876-04:00",
+        "execution_id": "01KG6AGQNSD1HYP12SFVRX00QR"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T22:08:06.000-04:00",
+    "date_created": "2026-01-29T22:08:06.000-04:00",
+    "date_last_updated": "2026-01-29T22:08:12.000-04:00",
+    "date_of_expiration": "2026-01-30T22:08:06.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 5.88,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144052201204,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T22:08:06.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37704585681",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Banco do Brasil S.A."
+          }
+        },
+        "bank_transfer_id": 121734198450,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE0000000020260130020739834367329"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 1200,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121734198450,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 1194.12,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 1200,
+      "transaction_id": "PIXE0000000020260130020739834367329"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 24.5,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T21:52:45.000-04:00",
+        "external_charge_id": "01KG69MKW8F0C8AVQW0P164021",
+        "id": "143373276819-001",
+        "last_updated": "2026-01-29T21:52:45.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T21:52:45.457-04:00",
+        "execution_id": "01KG69MKVHGZ0NSCRMWAPWWHN5"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T21:52:45.000-04:00",
+    "date_created": "2026-01-29T21:52:45.000-04:00",
+    "date_last_updated": "2026-01-29T21:52:53.000-04:00",
+    "date_of_expiration": "2026-01-30T21:52:45.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 24.5,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143373276819,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T21:52:45.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37730390576",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+          }
+        },
+        "bank_transfer_id": 121733938462,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE18236120202601300151s157e4bf736"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 5000,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121733938462,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 4975.5,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 5000,
+      "transaction_id": "PIXE18236120202601300151s157e4bf736"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.29,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T21:47:59.000-04:00",
+        "external_charge_id": "01KG69BW8645YD11XJVYV353GW",
+        "id": "144050407074-001",
+        "last_updated": "2026-01-29T21:47:59.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T21:47:59.121-04:00",
+        "execution_id": "01KG69BW7GBQMPC4B5ER38BPVH"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T21:47:59.000-04:00",
+    "date_created": "2026-01-29T21:47:59.000-04:00",
+    "date_last_updated": "2026-01-29T21:48:04.000-04:00",
+    "date_of_expiration": "2026-01-30T21:47:58.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.29,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144050407074,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T21:47:59.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37730315520",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "BANCO C6 S.A."
+          }
+        },
+        "bank_transfer_id": 121678234653,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE31872495202601300147iK0lBZqhGn8"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 60,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121678234653,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 59.71,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 60,
+      "transaction_id": "PIXE31872495202601300147iK0lBZqhGn8"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.49,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T21:32:15.000-04:00",
+        "external_charge_id": "01KG68F34QNHS5CS83SM13QCF0",
+        "id": "143371267145-001",
+        "last_updated": "2026-01-29T21:32:15.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T21:32:15.905-04:00",
+        "execution_id": "01KG68F33XM06GB6SGKAEE8Q71"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T21:32:15.000-04:00",
+    "date_created": "2026-01-29T21:32:15.000-04:00",
+    "date_last_updated": "2026-01-29T21:32:24.000-04:00",
+    "date_of_expiration": "2026-01-30T21:32:15.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.49,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143371267145,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T21:32:15.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37703879971",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "BANCO C6 S.A."
+          }
+        },
+        "bank_transfer_id": 121677958167,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE31872495202601300131UG7NoyXWkXr"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 100,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121677958167,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 99.51,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 100,
+      "transaction_id": "PIXE31872495202601300131UG7NoyXWkXr"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.98,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T20:58:52.000-04:00",
+        "external_charge_id": "01KG66HYJVWN2EC9HJVRFH5C19",
+        "id": "143367951257-001",
+        "last_updated": "2026-01-29T20:58:52.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T20:58:52.392-04:00",
+        "execution_id": "01KG66HYHYSVZ2YCB0KJFWWA5Q"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T20:58:52.000-04:00",
+    "date_created": "2026-01-29T20:58:52.000-04:00",
+    "date_last_updated": "2026-01-29T20:59:02.000-04:00",
+    "date_of_expiration": "2026-01-30T20:58:52.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.98,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143367951257,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T20:58:52.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37729270910",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669915"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Banco Inter S.A."
+          }
+        },
+        "bank_transfer_id": 121677241747,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE00416968202601300058qTW2dVwD0nI"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 200,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121677241747,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 199.02,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 200,
+      "transaction_id": "PIXE00416968202601300058qTW2dVwD0nI"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.98,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T20:48:58.000-04:00",
+        "external_charge_id": "01KG65ZTM9TM6H03P1AY3EXZFD",
+        "id": "143366733345-001",
+        "last_updated": "2026-01-29T20:48:58.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T20:48:58.518-04:00",
+        "execution_id": "01KG65ZTKH83F85QH6B75CP5ZB"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T20:48:58.000-04:00",
+    "date_created": "2026-01-29T20:48:58.000-04:00",
+    "date_last_updated": "2026-01-29T20:49:05.000-04:00",
+    "date_of_expiration": "2026-01-30T20:48:58.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.98,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 143366733345,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T20:48:58.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37729039276",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669873"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Caixa Econômica Federal"
+          }
+        },
+        "bank_transfer_id": 121732660868,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE00360305202601300048d2e53f47629"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 200,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121732660868,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 199.02,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 200,
+      "transaction_id": "PIXE00360305202601300048d2e53f47629"
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "ip_address": "177.27.18.4",
+      "items": [
+        {
+          "description": "Produto de ECLIPSE 2006",
+          "quantity": "1",
+          "title": "Produto de ECLIPSE 2006",
+          "unit_price": "500"
+        }
+      ],
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T20:39:19.509-04:00",
+        "execution_id": "01KG65E55EWP8T045HM9CVCABC"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T20:39:20.000-04:00",
+    "date_created": "2026-01-29T20:39:19.000-04:00",
+    "date_last_updated": "2026-01-29T20:39:28.000-04:00",
+    "date_of_expiration": null,
+    "deduction_schema": null,
+    "description": "Produto de ECLIPSE 2006",
+    "differential_pricing_id": null,
+    "external_reference": "INSTORE-ca4b69a8-458c-46cd-b1d8-e7de04ea9d98",
+    "fee_details": [],
+    "financing_group": null,
+    "id": 143365926763,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "2007",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {},
+    "money_release_date": "2026-01-29T20:39:20.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37702684421",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "email": "cuplino@gmail.com",
+      "entity_type": null,
+      "first_name": null,
+      "id": "795396097",
+      "identification": {
+        "number": "02376690722",
+        "type": "CPF"
+      },
+      "last_name": null,
+      "operator_id": null,
+      "phone": {
+        "number": null,
+        "extension": null,
+        "area_code": null
+      },
+      "type": null
+    },
+    "payment_method": {
+      "id": "account_money",
+      "issuer_id": "2007",
+      "type": "account_money"
+    },
+    "payment_method_id": "account_money",
+    "payment_type_id": "account_money",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": null,
+        "operating_system": null,
+        "version": null
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": null,
+        "manufacturer": "PAX",
+        "model": "Q92",
+        "serial_number": "Q92-1733187629"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTRA_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": null,
+            "long_name": null,
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": null,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": null
+          }
+        },
+        "bank_transfer_id": null,
+        "e2e_id": null,
+        "financial_institution": null,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": null
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121076446",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 500,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": null,
+      "external_resource_url": null,
+      "financial_institution": null,
+      "installment_amount": 0,
+      "net_received_amount": 500,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 500,
+      "transaction_id": null
+    },
+    "shipping_cost": 0
+  },
+  {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "tracking_id": "platform:v1-blacklabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": true,
+    "brand_id": null,
+    "build_version": "3.140.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.78,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2026-01-29T20:24:36.000-04:00",
+        "external_charge_id": "01KG64K6D0NH2S56NNXK1GPKXG",
+        "id": "144041743456-001",
+        "last_updated": "2026-01-29T20:24:36.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "proc-svc-charges",
+          "source_detail": "processing_fee_charge"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee",
+        "update_charges": []
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2026-01-29T20:24:36.009-04:00",
+        "execution_id": "01KG64K6CA35HDJ12QYDRZGFB2"
+      }
+    },
+    "collector_id": 2980173132,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2026-01-29T20:24:36.000-04:00",
+    "date_created": "2026-01-29T20:24:36.000-04:00",
+    "date_last_updated": "2026-01-29T20:24:39.000-04:00",
+    "date_of_expiration": "2026-01-30T20:24:35.000-04:00",
+    "deduction_schema": null,
+    "description": "Pago Bank Transfer Pix",
+    "differential_pricing_id": null,
+    "external_reference": null,
+    "fee_details": [
+      {
+        "amount": 0.78,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 144041743456,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {
+      "integration": "",
+      "payment_intent_id": ""
+    },
+    "money_release_date": "2026-01-29T20:24:36.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "37728388612",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "id": "2979867369"
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "instore",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "QR",
+        "sub_unit": "qr",
+        "unit": "wallet"
+      },
+      "device": {
+        "initiation_mode": "dynamic_qr",
+        "manufacturer": "NEWLAND",
+        "model": "N950",
+        "serial_number": "N950NCC904669914"
+      },
+      "linked_to": "point",
+      "location": {
+        "source": "store",
+        "state_id": "BR-RJ"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_alias": null,
+            "account_holder_name": null,
+            "account_id": 2980173132,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": null,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 2979867369,
+            "branch": null,
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "long_name": "Caixa Econômica Federal"
+          }
+        },
+        "bank_transfer_id": 121676451349,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "is_end_consumer": null,
+        "merchant_category_code": null,
+        "qr_code": null,
+        "ticket_url": null,
+        "transaction_id": "PIXE00360305202601300024cada5afb7e8"
+      },
+      "type": "INSTORE"
+    },
+    "pos_id": "121009825",
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": "76097330",
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 160,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 121676451349,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 159.22,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 160,
+      "transaction_id": "PIXE00360305202601300024cada5afb7e8"
+    },
+    "shipping_cost": 0
+  }
+]

@@ -195,6 +195,11 @@ export async function processarListaPOS(lista: any[], integracao: any) {
                 payload.valor = element.transaction_amount || 0;
                 payload.data = dayjs(element.date_created).toDate();
 
+
+                if (element?.sub_type === 'INTRA_PSP' && element?.payment_method?.type !== 'account_money') {
+                    // Pular para o prox elemento
+                    return;
+                }
                 if (element?.point_of_interaction?.type === 'POINT') {
                     payload.pos_tipo = 'MP_POINT';
                     payload.pos_identificacao = element.point_of_interaction.device.serial_number || 'NOT_IDENTIFIED';

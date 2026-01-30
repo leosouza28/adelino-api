@@ -18,6 +18,7 @@ import { MercadoPagoPayments } from './integrations/mercadopago/mp-payments';
 import { IntegracoesModel } from './models/integracoes.model';
 import { RecebimentosPOSModel } from './models/recebimentos-pos.model';
 import { POSModel } from './models/pos.model';
+import fs from 'fs';
 
 dayjs.locale('pt-br');
 
@@ -161,16 +162,19 @@ async function start() {
             //     false
             // )
 
-            // NEW MAGO -> BONSUCESSO CARTELA
-            // MAGO LOCACOES -> VB BONSUCESSO
-            // ECLIPSE -> BOTAFOGO
-            // CELSO -> BOTAFOGO A ALVIN
+            // NEW MAGO -> BONSUCESSO CARTELA -> 62975483000105
+            // MAGO LOCACOES LTDA -> VB BONSUCESSO -> 44179287000134
+            // ECLIPSE 2006 -> BOTAFOGO -> 61681788000133
+            // CELSO DA SILVA EVENTOS (RAVE ECLIPSE) -> BOTAFOGO A ALVIN -> 34154936000199
 
 
             try {
+
+
                 // let empresa_alterar_nome = await EmpresasModel.findOne({ documento: "61681788000133" })
                 // if (empresa_alterar_nome) {
-                //     let novo_nome = 'BOTAFOGO';
+                //     // let novo_nome = 'BOTAFOGO A ALVIN - HAVE ECLIPSE';
+                //     let novo_nome = 'BOTAFOGO - ECLIPSE 2006';
                 //     let empresa_id_string = empresa_alterar_nome._id.toString();
                 //     await EmpresasModel.updateOne(
                 //         {
@@ -236,6 +240,16 @@ async function start() {
                 //     logDev("Nome da empresa alterado com sucesso para:", novo_nome);
                 // }
 
+
+                // let integracao = await IntegracoesModel.findOne({ sku: "newmago_mp_payments" });
+                // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoes_mp_payments" });
+                // let mp = new MercadoPagoPayments();
+                // await mp.init(integracao!._id.toString());
+                // let data = '2026-01-30';
+                // logDev(`Processando recebimentos do dia ${data}`);
+                // let response = await mp.getRecebimentos(data, data);
+                // fs.writeFileSync(__dirname + '/mp-response-eclipse.json', JSON.stringify(response, null, 2));
+                // await processarListaPOS(response, integracao!);
 
                 // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoesltda_mp_payments" });
                 // let mp = new MercadoPagoPayments();
