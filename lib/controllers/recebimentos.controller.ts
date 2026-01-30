@@ -1,17 +1,10 @@
-import { NextFunction, Request, Response } from "express"
-import { GATEWAYS_PIX, RECEBIMENTO_CLASSIFICACAO, RecebimentosPixModel } from "../models/recebimentos-pix.model"
-import { errorHandler, logDev } from "../util";
 import dayjs from "dayjs";
-import { PixModel } from "../models/pix.model";
-import { SicoobIntegration } from "../integrations/sicoob";
+import { NextFunction, Request, Response } from "express";
 import { LOJAS_TIPO_COMERCIO, LojasModel } from "../models/lojas.model";
-import { INTEGRACOES_BANCOS, IntegracoesModel } from "../models/integracoes.model";
-import { EfiIntegration } from "../integrations/efi";
-import { processarListaPixs } from "./cronjobs.controller";
-import { BradescoIntegration } from "../integrations/bradesco";
-import { ItauIntegration } from "../integrations/itau";
-import { SantanderIntegration } from "../integrations/santander";
+import { PixModel } from "../models/pix.model";
+import { RECEBIMENTO_CLASSIFICACAO, RecebimentosPixModel } from "../models/recebimentos-pix.model";
 import { RecebimentosPOSModel } from "../models/recebimentos-pos.model";
+import { errorHandler, logDev } from "../util";
 
 export default {
     atualizarRecebimento: async (req: Request, res: Response, next: NextFunction) => {
@@ -115,6 +108,15 @@ export default {
             }
             if (!!req.query?.status) filter['status'] = String(req.query.status);
 
+            if (req?.query?.empresas) {
+                let empresas_array = String(req.query.empresas).split(',');
+                // Verifica se o usuário tem essas empresas no req.usuario.empresas (controle de acesso)
+                if (req.usuario?.empresas && Array.isArray(req.usuario.empresas)) {
+                    let empresas_permitidas = req.usuario.empresas.map(e => String(e._id));
+                    filter['empresa._id'] = { $in: empresas_array.filter(e => empresas_permitidas.includes(e)) };
+                }
+            }
+
             let total_valor_query = 0;
             let total_vendas_query = 0;
             let total_por_forma_pagamento: any[] = [];
@@ -210,9 +212,16 @@ export default {
                     { 'pos_identificacao': { $regex: String(req.query.busca), $options: 'i' } }
                 ]
             }
-            if(!!req.query?.forma_pagamento && req?.query?.forma_pagamento != 'TODOS') filter['forma_pagamento'] = String(req.query.forma_pagamento);
+            if (!!req.query?.forma_pagamento && req?.query?.forma_pagamento != 'TODOS') filter['forma_pagamento'] = String(req.query.forma_pagamento);
 
-            logDev("Filtro Recebimentos POS: ", filter);
+            if (!!req.query?.empresas) {
+                let empresas_array = String(req.query.empresas).split(',');
+                // Verifica se o usuário tem essas empresas no req.usuario.empresas (controle de acesso)
+                if (req.usuario?.empresas && Array.isArray(req.usuario.empresas)) {
+                    let empresas_permitidas = req.usuario.empresas.map(e => String(e._id));
+                    filter['empresa._id'] = { $in: empresas_array.filter(e => empresas_permitidas.includes(e)) };
+                }
+            }
 
             lista = await RecebimentosPOSModel.find(filter).sort({ data: -1 }).skip(skip).limit(perpage).lean();
             total = await RecebimentosPOSModel.countDocuments(filter);

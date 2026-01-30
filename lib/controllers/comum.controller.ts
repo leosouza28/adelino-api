@@ -548,8 +548,24 @@ export default {
     },
     getListaPOS: async (req: Request, res: Response, next: NextFunction) => {
         try {
-            let { } = req.query;
-            let lista = await POSModel.find({ 'empresa._id': String(req.empresa._id) }).sort({ nome: 1 });
+            let { empresas, q } = req.query;
+            let filter: any = { 'empresa._id': String(req.empresa._id) }
+
+            let empresas_array = String(empresas).split(',');
+            // Verifica se o usuário tem essas empresas no req.usuario.empresas (controle de acesso)
+            if (req.usuario?.empresas && Array.isArray(req.usuario.empresas)) {
+                let empresas_permitidas = req.usuario.empresas.map(e => String(e._id));
+                filter['empresa._id'] = { $in: empresas_array.filter(e => empresas_permitidas.includes(e)) };
+            }
+
+            if (q && String(q).trim().length > 0) {
+                filter['$or'] = [
+                    { pos_identificacao: { $regex: String(q).trim(), $options: 'i' } },
+                ]
+            }
+
+            let lista = await POSModel.find(filter).sort({ pos_identificacao: 1 });
+
             res.json({ lista, total: lista.length });
         } catch (error) {
             errorHandler(error, res);

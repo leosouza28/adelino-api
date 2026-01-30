@@ -13,6 +13,11 @@ import { PerfisModel } from './models/perfis.model';
 import { USUARIO_MODEL_STATUS, USUARIO_MODEL_TIPO_TELEFONE, USUARIO_NIVEL, UsuariosModel } from './models/usuarios.model';
 import routes from './routes';
 import { logDev } from './util';
+import { processarListaPOS } from './handlers/sync-integracoes';
+import { MercadoPagoPayments } from './integrations/mercadopago/mp-payments';
+import { IntegracoesModel } from './models/integracoes.model';
+import { RecebimentosPOSModel } from './models/recebimentos-pos.model';
+import { POSModel } from './models/pos.model';
 
 dayjs.locale('pt-br');
 
@@ -145,9 +150,9 @@ async function start() {
             console.log(`Server is running on port ${PORT}`);
             // await addEmpresasToAdmin();
             // await criarEmpresaNova(
-            //     'NEW MAGO ENT LTDA',
-            //     '62975483000105',
-            //     '021002',
+            //     'CELSO DA SILVA EVENTOS',
+            //     '34154936000199',
+            //     '021004',
             //     'SANDRO ROCHA',
             //     '99999999999',
             //     'sandro',
@@ -155,52 +160,84 @@ async function start() {
             //     '1234',
             //     false
             // )
-            // startDB();
 
-            // let empresa_mago = await EmpresasModel.findOne({ documento: '44179287000134' });
-            // await IntegracoesModel.updateOne(
-            //     {
-            //         sku: "magolocacoes_mp_payments",
-            //     },
-            //     {
-            //         $set: {
-            //             nome: "MercadoPago Payments POS - Mago Locacoes",
-            //             banco: INTEGRACOES_BANCOS.MERCADO_PAGO_PAYMENTS_POS,
-            //             client_id: '4642639874306409',
-            //             client_secret: 'HWRBVZynWQKBt7hXGVZ6TY2JIvFE75mR',
-            //             access_token: "APP_USR-4642639874306409-120608-92d86fecb2044613c5f5e64e833880db-2980173132",
-            //             public_key: "APP_USR-94cd39dc-f714-46db-b266-25050ae0ad5d",
-            //             bearer_token: `Bearer APP_USR-4642639874306409-120608-92d86fecb2044613c5f5e64e833880db-2980173132`,
-            //             empresa: {
-            //                 _id: empresa_mago!._id,
-            //                 nome: empresa_mago!.nome,
-            //             }
-            //         }
-            //     },
-            //     {
-            //         upsert: true
-            //     }
-            // )
+            // NEW MAGO -> BONSUCESSO CARTELA
+            // MAGO LOCACOES -> VB BONSUCESSO
+            // ECLIPSE -> BOTAFOGO
+            // CELSO -> BOTAFOGO A ALVIN
 
 
             try {
-                // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoes_mp_payments" });
-                // let mp = new MercadoPagoPayments();
-                // await mp.init(integracao!._id.toString());
-                // let times = 3;
-                // for (let i = 0; i < times; i++) {
-                //     logDev(`Iniciando passagem ${i + 1} de ${times} para recebimentos de POS...`);
-                //     let dias_para_tras = 7;
-                //     for (let i = 0; i <= dias_para_tras; i++) {
-                //         let data = dayjs().add(-i, 'day').format("YYYY-MM-DD");
-                //         logDev(`Processando recebimentos do dia ${data}`);
-                //         let response = await mp.getRecebimentos(data, data);
-                //         await processarListaPOS(response, integracao!);
-                //     }
+                // let empresa_alterar_nome = await EmpresasModel.findOne({ documento: "61681788000133" })
+                // if (empresa_alterar_nome) {
+                //     let novo_nome = 'BOTAFOGO';
+                //     let empresa_id_string = empresa_alterar_nome._id.toString();
+                //     await EmpresasModel.updateOne(
+                //         {
+                //             _id: empresa_id_string
+                //         },
+                //         {
+                //             $set: {
+                //                 nome: novo_nome,
+                //                 nome_fantasia: novo_nome,
+                //             }
+                //         }
+                //     )
+                //     await IntegracoesModel.updateOne(
+                //         {
+                //             'empresa._id': empresa_id_string,
+                //         },
+                //         {
+                //             $set: {
+                //                 'empresa.nome': novo_nome,
+                //             }
+                //         }
+                //     )
+                //     await PerfisModel.updateMany(
+                //         {
+                //             'empresa._id': empresa_id_string,
+                //         },
+                //         {
+                //             $set: {
+                //                 'empresa.nome': novo_nome,
+                //             }
+                //         }
+                //     )
+                //     await UsuariosModel.updateMany(
+                //         {
+                //             'empresas._id': empresa_id_string,
+                //         },
+                //         {
+                //             $set: {
+                //                 'empresas.$.nome': novo_nome,
+                //             }
+                //         }
+                //     )
+                //     await RecebimentosPOSModel.updateMany(
+                //         {
+                //             'empresa._id': empresa_id_string,
+                //         },
+                //         {
+                //             $set: {
+                //                 'empresa.nome': novo_nome,
+                //             }
+                //         }
+                //     )
+                //     await POSModel.updateMany(
+                //         {
+                //             'empresa._id': empresa_id_string,
+                //         },
+                //         {
+                //             $set: {
+                //                 'empresa.nome': novo_nome,
+                //             }
+                //         }
+                //     )
+                //     logDev("Nome da empresa alterado com sucesso para:", novo_nome);
                 // }
 
 
-                // let integracao = await IntegracoesModel.findOne({ sku: "newmago_mp_payments" });
+                // let integracao = await IntegracoesModel.findOne({ sku: "magolocacoesltda_mp_payments" });
                 // let mp = new MercadoPagoPayments();
                 // await mp.init(integracao!._id.toString());
                 // let times = 3;
@@ -239,14 +276,6 @@ async function start() {
                 //     let response = await bradescoIntegracao.getRecebimentos(data, data);
                 //     await processarListaPixs(response, integracao!)
                 // }
-
-                // let integracao = await IntegracoesModel.findOne({sku: "sicoobadelino"});
-                // let sicoob = new SicoobIntegration();
-                // let response = await sicoob.init(integracao!._id.toString());
-                // await sicoob.getWebhooks();
-                // await sicoob.setWebhook();
-                // await sicoob.getWebhooks();
-
 
             } catch (error) {
                 console.log('@@@', error);
@@ -345,7 +374,19 @@ function detectFetchAndBody(req: express.Request, res: express.Response, next: e
 }
 
 
-// ClientID:
-// hOqTuUjZJzLZiHGOTxUPqYVo9cIKuAGf
-// ClientSecret:
-// QwYJhHAgbXhjFfPB
+// MAGO LOCACOES
+// PK
+// APP_USR-c1d534d6-54ee-43d2-aa29-49da159bbd0d
+// ATKON
+// APP_USR-5055251177435748-013014-0ee6d361c5e4863503c8e8d250d055ef-3037452907
+// CID
+// 5055251177435748
+// CST
+// 95BP6n7vX48LpawsjDHNW96qgdK1ozsP
+
+
+// CELSO 
+// APP_USR-27b97b21-108f-4aa2-9476-ce27bd0bdc6a
+// APP_USR-4015958212212223-013014-c5750e6b3527cb361f702e1a09f47011-3037580089
+// 4015958212212223
+// XV7WP1oTUmK8wc2tVKHpY8zs4iv6GufB
